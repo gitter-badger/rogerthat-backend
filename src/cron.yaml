@@ -1,0 +1,44 @@
+cron:
+- description: Service API callback backlog processing
+  url: /cron/rpc/process_service_api_callback
+  schedule: every 1 minutes
+
+- description: Statistics runner
+  url: /cron/rpc/statistics
+  schedule: every 10 minutes
+
+- description: Android GCM outstanding kicks
+  url: /cron/rpc/outstanding_kicks
+  schedule: every 10 minutes
+  
+- description: Keep datastore clean
+  url: /cron/rpc/cleanup
+  schedule: every 15 minutes
+
+- description: Rpc API Result backlog retention
+  url: /cron/rpc/cleanup_rpc_api_result
+  schedule: every 15 minutes
+
+- description: Rpc CAPI Call backlog retention
+  url: /cron/rpc/cleanup_rpc_capi_call
+  schedule: every 15 minutes
+
+- description: Service API Result backlog retention
+  url: /cron/rpc/cleanup_service_api_result
+  schedule: every 15 minutes
+
+- description: Cleanup TempBlob
+  url: /cron/rpc/cleanup_tmp_blobs
+  schedule: every day 00:00
+  
+- description: Log offload
+  url: /cron/log_retention
+  schedule: every day 01:00
+  
+- description: Service statistics email
+  url: /cron/rpc/service_statistics_email
+  schedule: every monday 05:00
+    
+- description: Unread Messages reminder
+  url: /admin/cron/rpc/unread_messages_reminder
+  schedule: every monday 10:00

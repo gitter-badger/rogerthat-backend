@@ -1,0 +1,227 @@
+<html>
+<head>
+<meta name="viewport" content="width=device-width">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>{{ title|e }}</title>
+<style>
+/* -------------------------------------
+        GLOBAL
+------------------------------------- */
+* {
+    font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+    font-size: 100%;
+    line-height: 1.6em;
+    color: #58595b;
+    margin: 0;
+    padding: 0;
+}
+img {
+    max-width: 500px;
+    width: 100%;
+}
+body {
+    -webkit-font-smoothing: antialiased;
+    height: 100%;
+    -webkit-text-size-adjust: none;
+    width: 100% !important;
+}
+/* -------------------------------------
+        ELEMENTS
+------------------------------------- */
+a {
+    color: #5bc4bf;
+}
+.btn-primary {
+    margin-bottom: 10px;
+    width: auto !important;
+    width: 100%;
+    margin-right: 20px;
+    margin-left: 20px;
+}
+.btn-primary td {
+    background-color: #5bc4bf;
+    border-radius: 25px;
+    font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-size: 14px;
+    text-align: center;
+    vertical-align: top;
+}
+.btn-primary td a {
+    background-color: #5bc4bf;
+    border: solid 1px #5bc4bf;
+    border-radius: 25px;
+    border-width: 10px 20px;
+    display: inline-block;
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: bold;
+    line-height: 2;
+    text-decoration: none;
+}
+.last {
+    margin-bottom: 0;
+}
+.first {
+    margin-top: 0;
+}
+.padding {
+    padding: 10px 0px 0px 0px;
+}
+td.avatar {
+    vertical-align: top;
+}
+td.avatar img {
+    width: 40px;
+    height: 40px;
+}
+
+/* -------------------------------------
+        BODY
+------------------------------------- */
+table.body-wrap {
+    padding: 20px;
+    width: 100%;
+}
+table.body-wrap .container {
+    border: 1px solid #f0f0f0;
+    background-color: white;
+}
+/* -------------------------------------
+        TYPOGRAPHY
+------------------------------------- */
+h1,
+h2,
+h3,
+h4 {
+    color: #58595b;
+    font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-weight: 200;
+    line-height: 1.2em;
+}
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    margin-top: 40px;
+}
+h2 {
+    font-size: 14px;
+    font-weight: bold;
+    margin-left: 10px;
+}
+h3 {
+    font-size: 14px;
+    margin-top: 5px;
+    margin-left: 20px;
+}
+h4 {
+    font-size: 12px;
+    font-style: italic;
+    margin-top: 5px;
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+p,
+ul,
+ol {
+    font-size: 14px;
+    font-weight: normal;
+    margin-bottom: 20px;
+}
+ul li,
+ol li {
+    margin-left: 5px;
+    list-style-position: inside;
+}
+/* ---------------------------------------------------
+        RESPONSIVENESS
+------------------------------------------------------ */
+/* Set a max-width, and make it display as block so it will automatically stretch to that width, but will also shrink down on a phone or something */
+.container {
+    clear: both !important;
+    display: block !important;
+    Margin: 0 auto !important;
+    max-width: 600px !important;
+}
+/* Set the padding on the td rather than the div for Outlook compatibility */
+.body-wrap .container {
+    padding: 20px;
+}
+/* This should also be a block element, so that it will fill 100% of the .container */
+.content {
+    display: block;
+    margin: 0 auto;
+    max-width: 600px;
+}
+/* Let's make sure tables in the content area are 100% wide */
+.content table {
+    width: 100%;
+}
+
+
+/* ---------------------------------------------------
+        ELLIPSIZE
+------------------------------------------------------ */
+
+.ellipsis {
+    overflow: hidden;
+    height: 44px;
+    word-wrap: break-word;
+    word-break: break-word;
+}
+
+.ellipsis:before {
+    content:"";
+    float: left;
+    width: 5px;
+    height: 44px;
+}
+
+.ellipsis > *:first-child {
+    float: right;
+    width: 100%;
+    margin-left: -5px;
+}
+
+.ellipsis:after {
+    content: "\02026";
+
+    box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+
+    float: right; position: relative;
+    top: -22px; left: 100%;
+    width: 2.7em; margin-left: -2.7em;
+    padding-right: 5px;
+
+    text-align: right;
+
+    background: -webkit-gradient(linear, left top, right top,
+        from(rgba(255, 255, 255, 0)), to(white), color-stop(50%, white));
+    background: -moz-linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
+    background: -o-linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
+    background: -ms-linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
+    background: linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
+}
+</style>
+</head>
+<body bgcolor="#f2f2f2">
+    <table class="body-wrap">
+        <tr>
+            <td></td>
+            <td>
+                <!-- content -->
+                <div class="container">
+                    <table style="width: 100%;">
+                        <tr>
+                            <td>
+                                <p>{{ message }}</p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

@@ -1,0 +1,17 @@
+Prezado,
+
+Estas são as estatísticas da última semana para o seu serviço{% if service %} {{ service|escape }}{% endif %}.
+
+Usuários:
+Hoje: {{ users.today }} usuários.
+ Nos últimos 7 dias, você ganhou {{ users.week.gained }} e perdeu {{ users.week.lost }} usuários.
+ Nos últimos 30 dias, você ganhou {{ users.month.gained }} e perdeu {{ users.month.lost }} usuários.
+{% if usage_length > 0 %}
+Uso nos últimos 7 dias:
+{% for stat in usage %}{{ stat.name }}: {{ stat.count }}
+{% endfor %}
+{% endif %}
+
+Obrigado por usar Rogerthat!
+
+- Equipe Rogerthat https://rogerth.at/

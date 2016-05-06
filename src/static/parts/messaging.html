@@ -1,0 +1,62 @@
+<div id="messagingContainer" class="span-18 last">
+	<div id="tmprenderingarea" class"mcoutofscreen"></div>
+	<div id="newmessage"></div>
+	<div id="newIncommingMessagePlaceholder" style="display: none" ></div>
+	<div id="lastMessagePlaceholder" class="span-18 last mccenter">
+		<a id="older_messages" class="action-link">older messages</a>
+	</div>
+	<div id="newmessage_widget" class="messaging_widget" style="display: none">
+        <button class="mcmessagingcontrolbutton newmessage_send" type="button">send</button>
+		<div id="errormessage" style="display: none;"></div>
+		<div id="recipients" class="recipients">
+			<input type="text" id="to" placeholder="add recipients">
+			<div id="newmessage_members" class="newmessage_members"></div>
+		</div>
+		<div class="messagebox">
+			<textarea id="newmessage_message" placeholder="enter message"></textarea>
+			<div class="charsleft mcgreen"><span id="charsleft">500</span> characters left</div>
+		</div>
+        <div id="new_button_area" class="new_button_area"></div>
+		<div class="newmessage_buttons" id="newmessage_buttons"></div>
+	</div>
+
+    <div id="new_button_widget" style="display: none;" class="messagebuttonwidget">
+		 <label> Add quick answers </label><input id="new_button_caption" type="text" />
+		<div id="new_button_widget_tooltip" class="messagebuttonwidgettooltip">press enter to add the button to the message</div>
+	</div>
+
+	<div id="button_widget" style="display: none;" class="messagebutton mcclickable">
+		<span class="mcbuttontext"></span>
+		<img src="/static/images/badge_delete.png" class="messagebutton_badge_delete" style="display: none"/>
+	</div>
+
+	
+
+
+
+
+
+
+
+	<div id="button_details_dialog">
+		Add a magic action to the result button:<br>
+		We support making a phone call, showing a map or opening a webpage.<br> 
+		Some examples:<br>
+		<img src="/static/images/phone.png"/>Make phone call:<span class="selected">tel://+99123123123</span><br>
+		<img src="/static/images/map.png"/>Get driving directions:<span class="selected">geo://51.333334,53.533355</span> <a id="open_address_lookup_dialog" class="action-link">lookup gps</a><br>
+		<img src="/static/images/www.png"/>Browse to web page:<span class="selected">https://rogerth.at</span><br>
+		<input id="magic_action" type="text" placeholder="enter magic action" style="width: 100%"></input><br>
+		<span id="magic_action_error" class="mcerror" style="display: none">The magic action is not valid!</span>		
+		<hr>
+		<input id="sender_selection" type="checkbox"><label for="sender_selection">Add this reply button as your selection</label>
+	</div>
+	<div id="address_lookup_dialog">
+		<input id="address" type="text" placeholder="enter address" style="width: 220px;"/>&nbsp;<a id="lookup_address" class="action-link">lookup</a><br>
+		<span id="address_result" class="mcblue"></span><br>
+		<a id="map_result" target="_blank" class="link"></a><br>
+		<span id="address_error" class="mcerror"></span>
+	</div>
+	<div id="button_confirmation_dialog">
+		<span id="button_confirmation_text"/>
+	</div>
+</div>

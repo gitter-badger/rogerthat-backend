@@ -1,0 +1,221 @@
+<div id="serviceMenuContainer">
+	<script type="text/javascript" src="/static/js/service_menu.js"></script>
+	<div id="editor">
+		<div id="canvas">
+			<div id="scrollable">
+				<iframe id="canvas_branding" style="display: none;" scrolling="no"></iframe>
+				<div id="title" class="rt-cs-dark">Service menu</div>
+				<table id="menu">
+					<tr>
+						<td id="0x0" class="rt-cs-reserved">
+							<div>
+							    <img src="/static/images/menu_empty.png" style="display:none;"/>
+							    <i class="fa fa-question-circle" style="color: #646464"></i><br>
+                                <span>Reserved</<span>
+							</div>
+						</td>
+						<td id="1x0" class="rt-cs-reserved">
+							<div>
+							    <img src="/static/images/menu_empty.png" style="display:none;"/>
+                                <i class="fa fa-question-circle" style="color: #646464"></i><br>
+								<span>Reserved</span>
+							</div>
+						</td>
+						<td id="2x0" class="rt-cs-reserved">
+							<div>
+							    <img src="/static/images/menu_empty.png" style="display:none;"/>
+								<i class="fa fa-question-circle" style="color: #646464"></i><br>
+								<span>Reserved</span>
+							</div>
+						</td>
+						<td id="3x0" class="rt-cs-reserved">
+							<div>
+							    <img src="/static/images/menu_empty.png" style="display:none;"/>
+								<i class="fa fa-question-circle" style="color: #646464"></i><br>
+								<span>Reserved</span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td id="0x1" class="rt-cs-dark-empty">
+							<div>
+                                <img src="/static/images/menu_empty.png" style="display:none;"/>
+                                <i class="fa fa-question-circle" style="color: #646464"></i><br>
+                                <span>Empty</span>
+							</div>
+						</td>
+						<td id="1x1" class="rt-cs-dark-empty">
+							<div>
+                                <img src="/static/images/menu_empty.png" style="display:none;"/>
+                                <i class="fa fa-question-circle" style="color: #646464"></i><br>
+                                <span>Empty</span>
+							</div>
+						</td>
+						<td id="2x1" class="rt-cs-dark-empty">
+							<div>
+                                <img src="/static/images/menu_empty.png" style="display:none;"/>
+                                <i class="fa fa-question-circle" style="color: #646464"></i><br>
+                                <span>Empty</span>
+							</div>
+						</td>
+						<td id="3x1" class="rt-cs-dark-empty">
+							<div>
+                                <img src="/static/images/menu_empty.png" style="display:none;"/>
+                                <i class="fa fa-question-circle" style="color: #646464"></i><br>
+                                <span>Empty</span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td id="0x2" class="rt-cs-dark-empty">
+							<div>
+                                <img src="/static/images/menu_empty.png" style="display:none;"/>
+                                <i class="fa fa-question-circle" style="color: #646464"></i><br>
+                                <span>Empty</span>
+							</div>
+						</td>
+						<td id="1x2" class="rt-cs-dark-empty">
+							<div>
+                                <img src="/static/images/menu_empty.png" style="display:none;"/>
+                                <i class="fa fa-question-circle" style="color: #646464"></i><br>
+                                <span>Empty</span>
+							</div>
+						</td>
+						<td id="2x2" class="rt-cs-dark-empty">
+							<div>
+                                <img src="/static/images/menu_empty.png" style="display:none;"/>
+                                <i class="fa fa-question-circle" style="color: #646464"></i><br>
+                                <span>Empty</span>
+							</div>
+						</td>
+						<td id="3x2" class="rt-cs-dark-empty">
+							<div>
+                                <img src="/static/images/menu_empty.png" style="display:none;"/>
+                                <i class="fa fa-question-circle" style="color: #646464"></i><br>
+                                <span>Empty</span>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div id="pages"><img src="/static/images/current_page.png" /><img src="/static/images/other_page.png" /></div>
+		</div>
+		<img id="trash" src="/static/images/trash_can.png" width="100px" height="100px"/>
+	</div>
+	<div id="menu_identity">
+		Identity:<br>
+		<select></select>
+		&nbsp;
+		<a id="edit_service_identity" class="action-link">Edit</a>
+	</div>
+	<div id="instructions">
+		Instructions:
+		<ul>
+			<li>Click an empty cell to create a new menu item.</li>
+			<li>Move an item by dragging it to an empty spot.</li>
+			<li>Delete an item by dragging it to the trash can (trash can appears when you start dragging).</li>
+		</ul>
+		Menu configuration:
+		<table id="configuration">
+			<tr>
+				<td>Label <b>About</b></td>
+				<td><input id="about_label" type="text" /></td>
+			</tr>
+			<tr>
+				<td>Label <b>History</b></td>
+				<td><input id="messages_label" type="text" /></td>
+			</tr>
+			<tr>
+				<td>Label <b>Call</b></td>
+				<td><input id="call_label" type="text" /></td>
+			</tr>
+			<tr>
+				<td>Label <b>Recommend</b></td>
+				<td><input id="share_label" type="text" /></td>
+			</tr>
+		</table>
+		Menu item details:
+		<table>
+			<thead>
+				<tr>
+					<th>Page</th>
+					<th>Label</th>
+					<th>Tag</th>
+				</tr>
+			</thead>
+			<tbody id="details">
+			</tbody>
+		</table>
+	</div>
+	<div id="editDialog" style="display: none;">
+		Menu icon: <a id="edit_icon" class="action-link">select from library</a><br>
+        <a id="edit_icon" class="action-link" title="Change icon">
+            <i class="fa" style="font-size: 50px;"></i><img id="icon" width="50" height="50"/>
+        </a>
+		<br>
+		<table>
+			<tr><td class="td-label">Icon color:</td><td><input id="color" name="color" type="text" value="000000">&nbsp;&nbsp;<span id="color_preview" style="background-color: #000;">&nbsp;&nbsp;&nbsp;</span>&nbsp;<a href="http://www.colorpicker.com/" target="_blank">help</a>&nbsp;<span id="color_error" class="mcerror" style="display: none;">* invalid color</span></td></tr>
+			<tr><td class="td-label">Menu label:</td><td><input type="text" id="label" /></td></tr>
+			<tr id="row_tag"><td class="td-label">Poke tag:</td><td><input type="text" id="tag" /></td></tr>
+            <tr id="row_roles">
+                <td class="td-label">Visible for:</td>
+                <td>
+                    <div id="roles" style="float: left">Everyone</div>
+                    <a href="#" id="set_roles" style="float: right" class="action-link">Edit</a>
+                </td>
+            </tr>
+			<tr>
+				<td class="td-label">Action:</td>
+				<td>
+					<input type="radio" name="behavior" id="radio_start_flow" value="radio_start_flow" />
+					<label for="radio_start_flow">Start flow</label>
+					<br>
+					<input type="radio" name="behavior" id="radio_default_screen" value="radio_default_screen" />
+					<label for="radio_default_screen">Show content / HTML5 app</label>
+                    <br>
+                    <input type="radio" name="behavior" id="radio_broadcast_settings" value="radio_broadcast_settings" />
+                    <label for="radio_broadcast_settings">Broadcast settings</label>
+                    <br>
+                    <input type="radio" name="behavior" id="radio_web_callback" value="radio_web_callback" />
+                    <label for="radio_web_callback">Web callback (advanced)</label>
+				</td>
+			</tr>
+			<tr behavior="start_flow" style="display: none">
+				<td class="td-label">Flow:</td><td><select id="static_flow"></select></td>
+			</tr>
+            <tr behavior="default_screen" style="display: none">
+                <td class="td-label">Content:</td><td><select id="default_screen"></select></td>
+            </tr>
+            <tr behavior="default_screen" style="display: none">
+            	<td colspan="2">
+            		<input id="requires_wifi" type="checkbox"><label for="requires_wifi">Requires Wi-Fi</label>
+            		<div class="helptext">If checked the HTML5 app will only be accessible when connected to a Wi-Fi network.</div>
+            	</td>
+            </tr>
+            <tr behavior="default_screen" style="display: none">
+            	<td colspan="2">
+            		<input id="run_in_background" type="checkbox"><label for="run_in_background">Run in background</label>
+            		<div class="helptext">If checked the HTML5 app keeps running when it is moved into the background.</div>
+            	</td>
+            </tr>
+            <tr behavior="broadcast_settings" style="display: none">
+                <td class="td-label">Branding:</td><td><select id="broadcast_branding"></select></td>
+            </tr>
+		</table>
+	</div>
+	<div id="createIconDialog" style="display: none">
+		<div id="iconsContainer">
+			<table id="icons">
+			</table>
+		</div>
+	</div>
+    <div id="selectRolesDialog" style="display: none">
+        <div>
+            <label><input id="checkboxEveryone" type="checkbox" /> Everyone</label>
+        </div>
+        <br />
+        <hr />
+        <div id="rolesContainer">
+        </div>
+    </div>
+</div>

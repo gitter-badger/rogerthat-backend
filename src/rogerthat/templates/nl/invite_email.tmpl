@@ -1,0 +1,17 @@
+{{ profile.name }} wil met u communiceren via een innovatieve smartphone app.
+
+Stap 1. Installeer de {{ app.name }} app gratis:
+{{ BASE_URL }}/install?a={{ app.app_id }}&email
+
+Stap 2. Koppel met {{ profile.name }}:
+{{ short_url }}{% if secret %}?s={{ secret }}{% endif %}
+
+
+
+{% if message %}{{ profile.name }} voegde een persoonlijke boodschap toe aan deze uitnodiging:
+{{ message }}
+
+{% endif %}{% if consts.INCLUDE_ROGERTHAT_DOT_NET %}
+
+Voor meer informatie over {{ app.name }} en andere producten gebaseerd op Rogerthat, bezoek:
+http://www.rogerthat.net{% endif %}

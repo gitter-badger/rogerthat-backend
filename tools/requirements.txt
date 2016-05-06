@@ -1,0 +1,11 @@
+cffi==1.5.2
+cryptography==1.2.3
+enum34==1.1.2
+idna==2.0
+ipaddress==1.0.16
+pyOpenSSL==0.14
+pyasn1==0.1.9
+pycparser==2.14
+pycrypto==2.6.1
+six==1.10.0
+wsgiref==0.1.2

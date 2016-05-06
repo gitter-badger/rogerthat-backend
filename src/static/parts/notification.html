@@ -1,0 +1,49 @@
+<div id="notificationsContainer" class="mc-page-container span-18">
+	<script type="text/javascript" src="/static/js/notifications.js"></script>
+    <div id="controls" class="span-18">
+    	<div class="span-1">
+	        <input id="toggleCheckboxes" type="checkbox">&nbsp;
+    	</div>
+    	<div class="span-17 last">
+    		<a id="markRead">mark as read</a>&nbsp;&nbsp;
+    		<a id="markUnread">mark as unread</a>&nbsp;&nbsp;
+    		<a id="refresh">refresh</a>&nbsp;&nbsp;
+    		<a id="delete">delete ...</a>&nbsp;&nbsp;
+	    	<a id="new">new message...</a>
+    	</div>
+    </div>
+    <hr />
+	<div id="messages" class="span-18">
+		<div id="loading" class="loading">loading</div>
+	</div>
+	<div class="span-18 last stick-right">
+		<a id="moreNotifications">more</a>
+	</div>
+	<div id="sendDialog" style="display: none;">
+		<form>
+			<span class="mcblue">Add recipients:</span><br/>
+			<div id="mobiles"></div>
+			<input id="search_recipient" style="width: 400px;" title="Search friends by entering their email address" class="jq_watermark"/><span id="add_recipients_error" style="display: none; color: red">add recipients!</span>
+			<br>
+			<span class="mcblue">Notification message:</span><span id="cleft" class="mcgreen stick-right" style="font-size: smaller;">1000 characters left</span>
+			<textarea rows="3" cols="20" style="height: 100px;width: 400px;" id="notificationMessage" title="Add message" class="jq_watermark"></textarea>
+			<span id="add_message_error" style="display: none; color: red">add message!</span>
+			<br>
+			<input id="foreground" type="checkbox"><label class="mcblue mclabel" for="foreground">Popup on mobile device</label><br/>
+			<br>
+			<div class="mcblue">Add quick reply buttons separated by a semicolon:</div> 
+			<input id="buttons" title="yes;no;maybe" class="jq_watermark" style="width: 400px;"/><br>
+			<span style="font-size: smaller;">
+			Magic buttons:<br>
+			You can also add a button with an extra function. We support making a phone call, showing a map or opening a webpage.<br> 
+			Some examples:<br>
+			<img src="/static/images/phone.png"/>Make phone call:<span class="selected">call me|tel://+99123123123</span><br>
+			<img src="/static/images/map.png"/>Get driving directions:<span class="selected">directions|geo://51.333334,53.533355</span><br>
+			<img src="/static/images/www.png"/>Browse to web page:<span class="selected">show me|https://rogerth.at</span>
+			</span>
+		</form>
+	</div>
+	<div id="confirmDeleteDialog" style="display: none;">
+		Are you sure that you want to delete the selected messages ?
+	</div>
+</div>

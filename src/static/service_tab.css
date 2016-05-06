@@ -1,0 +1,511 @@
+#tab_services {
+	margin-left: 14px;
+}
+
+#tab_services > div.screen {
+	background-color: white;
+	width: 320px;
+	height: 546px;
+	float: left;
+}
+
+/* ------------------------------------------- Service toolbar ------------------------------------------------------ */
+#tab_services > div.screen > div.mc_screen > div.mc_toolbar {
+	height: 41px;
+	background-color: gray;
+	border-bottom: 1px #666 solid;
+}
+#tab_services > div.screen > div.mc_screen > div.mc_toolbar > button {
+	padding: 5px;
+	margin: 7px;
+}
+#tab_services > div.screen > div.mc_screen > div.mc_toolbar > button.mc_right_button {
+	float: right;
+}
+
+/* ------------------------------------------- Service toolbar ------------------------------------------------------ */
+div.svc_search_bar {
+	background-color: gray;
+	border-bottom: 1px #666 solid;
+	vertical-align: middle;
+}
+.svc_search_bar > div > .svc_search_textfield {
+	width: 100%;
+	font-size: 14px;
+	padding: 3px;
+}
+.svc_search_bar > div {
+	overflow: hidden;
+	padding-left: 4px;
+	padding-right: 4px;
+}
+.svc_search_bar > .svc_search_button {
+	float:right;
+	margin-top: 4px;
+}
+
+#tab_services > div.screen > div.mc_screen > div.mc_screen_content {
+	height: 504px;
+	width: 320px;
+}
+
+#tab_services > div.screen > div.mc_screen > div.mc_screen_content > div.mc_screen_centered {
+	top: 30%;
+	position: relative;
+	text-align: center;
+}
+
+#tab_services #svc_list, #tab_services #svc_search, #tab_services #svc_menu {
+	border-right: 1px gray solid;
+}
+
+#tab_services #svc_list #svc_items {
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+/* ---------------------------------------------- Service inbox ----------------------------------------------------- */
+/* #tab_services > div.screen div.svc_inbox { height: 190px; overflow-y: auto; }
+ */#tab_services > div.screen div.svc_inbox > div.no_messages { font-style: italic; padding: 3px; text-align: center; }
+#tab_services > div.screen div.svc_inbox > div.inbox_message { 
+	cursor: pointer;	
+	border-bottom: 1px solid #C4C4C4;
+	clear: both; 
+}
+#tab_services > div.screen div.svc_inbox > div.inbox_message:hover { background-color: #C4C4C4; }
+#tab_services > div.screen div.svc_inbox > div.inbox_message > div.sender_avatar { 
+	padding: 2px; 
+	float: left;
+	width: 50px;
+	height: 50px; 
+}
+#tab_services > div.screen div.svc_inbox > div.inbox_message > div.inbox_message_details { 
+	height: 50px;
+	padding: 2px;
+}
+#tab_services > div.screen div.svc_inbox > div.inbox_message > div.inbox_message_details > div.inbox_message_timestamp {
+	float: right;
+	font-size: 14px;	
+}
+#tab_services > div.screen div.svc_inbox > div.inbox_message > div.inbox_message_details > div.inbox_message_recipients {
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+	font-size: 14px;	
+}
+#tab_services > div.screen div.svc_inbox > div.inbox_message > div.inbox_message_details > div.inbox_message_message {
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+	font-size: 16px;
+	font-weight: bold;
+}
+
+/* ---------------------------------------------- Service list ------------------------------------------------------ */
+#tab_services > div.screen div.mc_screen_container_content div.svc_service_list > div { clear: both; }
+#tab_services > div.screen div.serviceItem {
+	width: 320px;
+	height: 52px;
+	padding: 2px;
+	border-bottom: 1px solid #C4C4C4;
+}
+#tab_services > div.screen div.serviceItem:hover { background-color: #C4C4C4; }
+#tab_services > div.screen div.svc_selected div.serviceItem { background-color: #C4C4C4; }
+#tab_services > div.screen div.category { 
+	background-color: #E6E6E6;
+	text-align: center;
+	border-top: 1px gray solid;
+	border-bottom: 1px gray solid;
+	font-size: 14px;
+	padding: 3px;
+}
+#tab_services > div.screen div.serviceStatus {
+	float: right;
+	margin-top: 9px;
+}
+#tab_services > div.screen  div.serviceItem > div.serviceName {
+	line-height: 50px;
+	margin-left: 60px;
+	font-size: 18px;
+	cursor: pointer;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+#tab_services div.ui-progressbar.ui-widget.ui-widget-content.ui-corner-all {
+	width: 200px;
+	margin-left: 60px;
+	height: 10px;
+	-moz-border-radius: 0px !important;
+	border-radius: 0px !important;
+}
+
+#tab_services div.ui-progressbar.ui-widget.ui-widget-content.ui-corner-all > div.ui-progressbar-value.ui-widget-header.ui-corner-left {
+	width: 37%;
+	height: 8px;
+	margin: 0px;
+}
+
+/* --------------------------------------- Service menu screen ------------------------------------------------------ */
+#tab_services #svc_menu div.svc_menu { height: 504px; }
+
+#tab_services #svc_menu .svc_menu_branding {
+	width: 320px;
+}
+
+#tab_services #svc_menu .svc_menu_items > table td {
+	width: 80px;
+	height: 95px;
+	text-align: center;
+	vertical-align: top;
+	padding: 0px;
+}
+
+#tab_services #svc_menu .svc_menu_items > table td.smi_used_light {	color: black; }
+#tab_services #svc_menu .svc_menu_items > table td.smi_used_dark {	color: white; }
+
+#tab_services #svc_menu .svc_menu_items > table.dark td.selected {
+	background-color: rgba(255, 255, 255, 0.3);
+}
+
+#tab_services #svc_menu .svc_menu_items > table.light td.selected {
+	background-color: rgba(0, 0, 0, 0.3);
+}
+
+#tab_services #svc_menu .svc_menu_title {
+	text-align: center;
+	font-size: 18px;
+	line-height: 56px;
+}
+
+#tab_services #svc_menu .svc_menu_items > table td > div.item {
+	width: 80px;
+	height: 95px;
+	overflow: hidden;
+	cursor: pointer;
+	background-color: transparent;
+}
+
+#tab_services #svc_menu .svc_menu_items > table td > div.item > img {
+	margin-top: 10px;
+	width: 50px;
+	height: 50px;
+	border: none;
+}
+
+#tab_services #svc_menu .svc_menu_items > table td > div.item > div.smi_lbl {
+	line-height: 14px;
+	word-wrap: break-word;
+	font-size: 13px;
+}
+
+#tab_services #svc_menu .dark { color: white; }
+#tab_services #svc_menu .remove .dark { color: rgba(255, 255, 255, 0.7); }
+#tab_services #svc_menu td.smi_used_dark:active { background-color: rgba(255, 255, 255, 0.3); }
+#tab_services #svc_menu .dark .smi_lbl { color: white; text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.75); border-color: rgba(255, 255, 255, 0.4); }
+#tab_services #svc_menu .remove .light { color: rgba(0, 0, 0, 0.7); }
+#tab_services #svc_menu td.smi_used_light:active { background-color: rgba(0, 0, 0, 0.3); }
+#tab_services #svc_menu .light .smi_lbl { color: black; text-shadow: 0px 1px 2px rgba(255, 255, 255, 0.75); border-color: rgba(0, 0, 0, 0.4); }
+#tab_services #svc_menu .svc_pages { text-align: center; }
+#tab_services #svc_menu .svc_pages img { margin-left: 5px; margin-right: 5px; }
+#tab_services #svc_menu .svc_pages img.svc_other_menu_page { cursor: pointer; }
+
+/* -------------------------------------- Service wait screen ------------------------------------------------------- */
+#tab_services > div.screen div.mc_screen_waiting {
+	z-index: 10;
+	position: absolute;
+	top: 42px;
+	background-color: rgba(255, 255, 255, 0.7);
+}
+#tab_services > div.screen div.mc_screen_waiting div.mc_screen_progress_popup {
+	height: 62px;
+	background-color: black;
+	margin-top: 424px;
+	padding-top: 18px;
+}
+#tab_services > div.screen div.mc_screen_waiting div.mc_screen_progress_popup div.mc_screen_waiting_label {
+	text-align: center;
+	color: white;
+	margin-bottom: 2px;
+	font-size: 12px;
+}
+#tab_services > div.screen div.mc_screen_waiting div.mc_screen_progress_popup div.mc_screen_waiting_pb {
+	border: none !important;
+	background: white !important;
+}
+
+/* -------------------------------------- Service content screen ---------------------------------------------------- */
+#tab_services > div.screen div.mc_screen_container_content .hidden { display: none; }
+
+/* -------------------------------------- Service about screen ------------------------------------------------------ */
+#tab_services > div.screen div.mc_screen_container_content div.about div.service_avatar {
+	margin: 2px 3px 2px 2px;
+}
+#tab_services > div.screen div.mc_screen_container_content div.about div.service_details {
+	padding: 2px;
+}
+#tab_services > div.screen div.mc_screen_container_content div.about div.light {
+	color: black;
+}
+#tab_services > div.screen div.mc_screen_container_content div.about div.dark {
+	color: white;
+}
+#tab_services > div.screen div.mc_screen_container_content div.about div.service_details div.service_name {
+	font-size: 16px;
+	padding-left: 55px;
+	padding-right: 4px;
+}
+#tab_services > div.screen div.mc_screen_container_content div.about div.service_details div.service_email {
+	font-size: 14px;
+	padding-left: 55px;
+	padding-right: 4px;
+}
+#tab_services > div.screen div.mc_screen_container_content div.about iframe {
+	width: 320px;
+	margin-top: 10px;
+}
+#tab_services > div.screen div.mc_screen_container_content div.about div.service_description {
+	margin: 10px;
+	font-size: 14px;
+}
+
+
+/* ------------------------------------------- Service history ------------------------------------------------------ */
+#tab_services > div.screen div.mc_screen_container_content div.thread { 
+	height: 46px; 
+	border-bottom-width: 1px;
+	border-bottom-color: #C4C4C4;
+	border-bottom-style: solid;
+	cursor: pointer;
+	padding: 2px;
+}
+#tab_services > div.screen div.mc_screen_container_content div.thread:hover {
+	background-color: #C4C4C4;
+}
+#tab_services > div.screen div.mc_screen_container_content div.thread:hover div.thread_message_count {
+	background-color: white;
+	color: #C4C4C4;
+}
+#tab_services > div.screen div.mc_screen_container_content div.thread div.thread_recipients { 
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+	font-size: 14px;
+} 
+#tab_services > div.screen div.mc_screen_container_content div.thread div.thread_timestamp {
+	float: right;
+	font-size: 14px;
+	margin-right: 2px;
+}
+#tab_services > div.screen div.mc_screen_container_content div.thread div.thread_message { 
+	clear: left; 
+	margin-right: 3px; 
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+	font-size: 16px;
+}
+#tab_services > div.screen div.mc_screen_container_content div.thread div.thread_message.new {
+	font-weight: bold;
+} 
+#tab_services > div.screen div.mc_screen_container_content div.thread div.thread_message_count { 
+	float: right; 
+	font-size: 14px;
+	background-color: #C4C4C4;
+	color: white;
+	margin-right: 2px;
+	padding-left: 3px;
+	padding-right: 3px;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+}
+#tab_services > div.screen div.mc_screen_container_content div.thread div.thread_status { float: right; clear: right; }
+#tab_services > div.screen div.mc_screen_container_content div.more_threads { 
+	text-align: center;
+	font-size: 14px;
+	color: blue;
+	cursor: pointer;
+	padding: 10px;
+}
+
+/* ------------------------------------------- Service thread ------------------------------------------------------- */
+#tab_services > div.screen div.mc_screen_container_content div.thread_header {
+	height: 52px;
+	width: 310px; 
+	padding: 2px;
+	border-bottom: 1px solid #C4C4C4;
+}
+#tab_services > div.screen div.mc_screen_container_content div.thread_header div.thread_sender_avatar { float: left; }
+#tab_services > div.screen div.mc_screen_container_content div.thread_header div.thread_recipients { 
+	float: left; 
+	margin-left: 3px; 
+	font-size: 16px;
+}
+#tab_services > div.screen div.mc_screen_container_content div.thread_message_container { 
+	width: 310px; 
+	padding: 2px;
+	cursor: pointer; 
+	clear: both;
+	border-bottom: 1px solid #C4C4C4;
+}
+#tab_services > div.screen div.mc_screen_container_content div.thread_message_container:hover {
+	background-color: #C4C4C4;
+}
+#tab_services > div.screen div.mc_screen_container_content div.thread_message_container div.thread_message_timestamp { 
+	float: right;
+	font-size: 14px; 
+}
+#tab_services > div.screen div.mc_screen_container_content div.thread_message_container div.thread_message { font-size: 16px; }
+#tab_services > div.screen div.mc_screen_container_content div.thread_message_container div.thread_message.new { 
+	font-weight: bold;
+}
+#tab_services > div.screen div.mc_screen_container_content div.thread_message_container span.thread_message_answer {
+	padding: 2px; 
+	font-size: 16px; 
+	font-style: italic;
+	color: #888;     
+}
+
+/* ------------------------------------------- Service message ------------------------------------------------------ */
+#tab_services > div.screen div.mc_screen_container_content > iframe {
+	width: 320px;
+}
+
+/* ------------------------------------------- Service message ------------------------------------------------------ */
+#tab_services > div.screen div.mc_screen_container_content div.message {
+	height: 504px;
+	width: 320px;
+}
+#tab_services > div.screen div.mc_screen_container_content .dark { color: white; }
+#tab_services > div.screen div.mc_screen_container_content .light { color: black; }
+
+#tab_services > div.screen div.mc_screen_container_content div.message.light { background-color: #F0F0F0; }
+#tab_services > div.screen div.mc_screen_container_content div.message.dark { background-color: #101010; }
+
+#tab_services > div.screen div.mc_screen_container_content div.header {
+	min-height: 54px;
+}
+#tab_services > div.screen div.mc_screen_container_content div.header div.sender_avatar {
+	float: left;
+	margin: 2px 0px 0px 2px;
+}
+#tab_services > div.screen div.mc_screen_container_content div.header div.sender_name {
+	float: left;
+	margin: 2px 0px 0px 2px;
+	font-size: 16px;
+	width: 256px;
+}
+#tab_services > div.screen div.mc_screen_container_content div.header div.timestamp {
+	font-size: 14px;
+	margin-left: 2px;
+	float: left;
+}
+#tab_services > div.screen div.mc_screen_container_content div.message_text {
+	clear: left;
+	margin: 5px 2px 5px 2px;
+	padding: 5px;
+	background-color: white;
+	border: 2px solid #C4C4C4;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	font-size: 14px;
+}
+#tab_services > div.screen div.mc_screen_container_content div.message_buttons {
+	margin-top: 10px;
+}
+#tab_services > div.screen div.mc_screen_container_content button.message_button {
+	min-height: 30px;
+	width: 316px;
+	margin: 2px;
+	float: left;
+	clear: left;
+	font-size: 14px;
+}
+#tab_services > div.screen div.mc_screen_container_content button.message_button.positive {
+	background: #208120;
+	border-color: #18D518;
+}
+#tab_services > div.screen div.mc_screen_container_content button.message_button.positive:hover {
+	background: #2A9C2A;
+	color: white;
+}
+#tab_services > div.screen div.mc_screen_container_content button.message_button.negative {
+	background: #CA0000;
+	border-color: red;
+}
+#tab_services > div.screen div.mc_screen_container_content button.message_button.negative:hover {
+	background: red;
+	color: white;
+}
+#tab_services > div.screen div.mc_screen_container_content div.message.acked button.message_button {	
+	width: 150px; 
+	margin: 2px 5px 2px 2px;
+}
+#tab_services > div.screen div.mc_screen_container_content div.message button[disabled=disabled].message_button { 
+	border-color: #727272;
+	background: #AFAFAF;
+	cursor: default;
+}
+#tab_services > div.screen div.mc_screen_container_content button.message_rt_button {
+	min-height: 30px;
+	width: 316px;
+	margin: 2px;
+	float: left;
+	clear: left;
+	background: #208120;
+	border-color: #18D518;
+	font-size: 14px;
+}
+#tab_services > div.screen div.mc_screen_container_content div.message.acked button.message_rt_button { 
+	width: 150px; 
+	margin: 2px 5px 2px 2px;
+}
+#tab_services > div.screen div.mc_screen_container_content div.message button[disabled=disabled].message_rt_button { 
+	border-color: #727272;
+	background: #AFAFAF;
+	cursor: default;
+}
+#tab_services > div.screen div.mc_screen_container_content div.member_avatar div.thumbnail-item-left {
+	margin-top: 2px;
+	margin-right: 2px;
+}
+#tab_services > div.screen div.mc_screen_container_content div.message iframe {
+	width: 320px;
+}
+#tab_services > div.screen div.mc_screen_container_content div.message div.message_form {
+	margin: 10px 10px 0px 10px;
+}
+#tab_services > div.screen div.mc_screen_container_content div.message div.message_form > input[type="text"] {
+	font-size: 14px;
+	width: 294px;
+	padding: 2px;
+}
+#tab_services > div.screen div.mc_screen_container_content div.message div.message_form > textarea {
+	font-size: 14px;
+	width: 288px;
+	height: 150px;
+	padding: 5px;
+	resize: none;
+}
+#tab_services > div.screen div.mc_screen_container_content div.message div.message_form > label { font-size: 14px; }
+.ui-menu .ui-menu-item a {
+	font-size: 16px;
+}
+#tab_services > div.screen div.mc_screen_container_content div.message div.message_form div.mcform_single_slider, 
+#tab_services > div.screen div.mc_screen_container_content div.message div.message_form div.mcform_range_slider {
+    text-align: center;
+    font-size: 14px;
+}
+
+
+/* 
+::-webkit-scrollbar {
+    width: 8px;
+}
+ 
+ 
+::-webkit-scrollbar-thumb {
+    border-radius: 6px;
+    -webkit-box-shadow: inset 0 0 4px rgba(0,0,0,1); 
+} */

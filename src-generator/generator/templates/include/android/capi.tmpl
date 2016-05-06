@@ -1,0 +1,10 @@
+android/rogerthat/src/main/java/{{ package.name|common_replace_dots }}/IClientRpc.java
+{{ LICENSE|safe  }}
+
+package {{ package.name }};
+
+public interface IClientRpc {
+{% for function in package.functions %}
+    {{ function.rtype.type }} {{ function.name }}({% for arg in function.args %}{{ arg.type|java_map_type }} {{ arg.name }}{% endfor %}) throws java.lang.Exception;
+{% endfor %}
+}

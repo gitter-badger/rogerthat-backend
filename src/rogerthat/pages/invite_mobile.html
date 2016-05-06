@@ -1,0 +1,37 @@
+{% extends "base_base_mobile_simple.html" %}
+
+{% block header %}
+<div data-role="header">
+		Application required:
+</div><!-- /header -->
+{% endblock %}
+{% block body %}
+<p style="text-align: center;"><strong>To continue please use {{ app.name }}.</strong></p>
+<a id="open" data-role="button">Use it</a>
+<p style="text-align: center;">or</p>
+<a id="install" data-role="button">Install from {{ appstore }}</a>	
+<iframe id="test" style="display: none;"></iframe>
+<script type="text/javascript">
+<!--
+$(window).load(function () {
+	var content = $("#content");
+	{% if auto_detect %}
+	var start = new Date().getTime();
+	setTimeout(function() {
+		content.fadeIn("slow");
+		if (new Date().getTime() - start < 2000) {
+			window.location = "{{ market }}";
+		}
+	}, 500);
+	$("#test").attr('src', "{{ app_url }}");
+	{% endif %}
+	$("#open").click(function () {
+		window.location = "{{ app_url }}";
+	});
+	$("#install").click(function () {
+		window.location = "{{ market }}";
+	});
+});
+-->
+</script>
+{% endblock %}

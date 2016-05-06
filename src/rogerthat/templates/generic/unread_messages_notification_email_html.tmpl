@@ -1,0 +1,167 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>{{ title|e }}</title>
+<style>
+/* -------------------------------------
+        GLOBAL
+------------------------------------- */
+* {
+    font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+    font-size: 100%;
+    line-height: 1.6em;
+    color: #58595b;
+    margin: 0;
+    padding: 0;
+}
+img {
+    max-width: 500px;
+    width: 100%;
+}
+body {
+    -webkit-font-smoothing: antialiased;
+    height: 100%;
+    -webkit-text-size-adjust: none;
+    width: 100% !important;
+}
+/* -------------------------------------
+        ELEMENTS
+------------------------------------- */
+a {
+    color: #5bc4bf !important;
+}
+
+/* -------------------------------------
+        TYPOGRAPHY
+------------------------------------- */
+h1,
+h2,
+h3,
+h4 {
+    color: #58595b;
+    font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-weight: 200;
+    line-height: 1.2em;
+}
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    margin-top: 40px;
+}
+h2 {
+    font-size: 14px;
+    font-weight: bold;
+    margin-left: 10px;
+}
+h3 {
+    font-size: 14px;
+    margin-top: 5px;
+    margin-left: 10px;
+    word-wrap: break-word;
+    word-break: break-word;
+}
+h4 {
+    font-size: 12px;
+    font-style: italic;
+    margin-top: 5px;
+    margin-left: 10px;
+}
+p,
+ul,
+ol {
+    font-size: 14px;
+    font-weight: normal;
+    margin-bottom: 20px;
+}
+ul li,
+ol li {
+    margin-left: 5px;
+    list-style-position: inside;
+}
+
+</style>
+</head>
+
+<body bgcolor="#f6f6f6">
+
+<!-- body -->
+<table style="padding: 10px; width: 100%; background-color: #f2f2f2;">
+    <tr>
+        <td></td>
+        <td style="clear: both !important; display: block !important; margin: 0 auto !important; max-width: 600px !important; border: 1px solid #f0f0f0; background-color: #FFFFFF; padding: 20px;">
+
+            <!-- content -->
+            <div style="display: block; margin: 0 auto; max-width: 600px;">
+                <table style="width: 100%;">
+                    <tr>
+                        <td>
+                            <p>{% translate language, 'dear_name', 'name=' + profile.name|e %},</p>
+                            <p>{{ email_reminder_intro }}</p>
+                            {% if has_mobiles %}
+                            <p>
+{% for cause_caption, cause in causes %}
+                                {% if loop.index > 0 %}<br>{% endif -%}
+                                <i><b>{{ cause_caption }}:</b></i> {{ cause }}
+{% endfor %}
+                            </p>
+                            {% endif %}
+                            <h1>{% translate language, 'email_reminder_message_summary' %}</h1>
+                            <table width="100%">
+{% for unread_message in unread_messages %}
+                                <tr style="margin-top: 20px;">
+                                    <td style="vertical-align: top;" rowspan="{% if unread_message.broadcast_type %}3{% else %}2{% endif %}">
+                                        <img style="width: 40px; height: 40px;" src="{{ unread_message.avatar }}">
+                                    </td>
+                                    <td>
+                                        <h2>{{ unread_message.name|e }}</h2>
+                                    </td>
+                                    <td nowrap="nowrap" style="text-align: right; vertical-align: bottom;">
+                                        <h4 style="margin: 2px 0px 0px 0px;">{{ unread_message.time|e }}</h4>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <h3>{{ unread_message.message|truncate(100, True)|e }}</h3>
+                                        {% if not unread_message.broadcast_type %}<br>{% endif %}
+                                    </td>
+                                </tr>
+    {% if unread_message.broadcast_type %}
+                                <tr>
+                                    <td colspan="2">
+                                        <h4>
+                                            - {% translate language, 'broadcast_reminder_explanation', 'broadcast_type=' + unread_message.broadcast_type|e %}
+                                        </h4>
+                                        <h4>
+                                            <a href="{{ unread_message.unsubscribe_link }}">{{ unread_message.unsubscribe_caption }}</a>
+                                        </h4>
+                                        <br>
+                                    </td>
+                                </tr>
+    {% endif %}
+{% endfor %}
+                            </table>
+                            <p></p>
+                            {% if has_mobiles %}
+                            <p>{{ outro }}</p>
+                            {% endif %}
+                            <!-- button -->
+                            <p>{{ unsubscribe_info }}</p>
+                            <!-- /button -->
+                            <p>{% translate language, 'Kind regards' %},</p>
+                            <p>{{ team }}.</p>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <!-- /content -->
+
+        </td>
+        <td></td>
+    </tr>
+</table>
+<!-- /body -->
+
+</body>
+</html>

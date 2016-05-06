@@ -1,0 +1,16 @@
+
+CODE GUIDELINES PYTHON
+----------------------
+
+* Objects must always inherit from 'object' (i.e. new-style objects)
+
+* Always use unicode when dealing with strings on transfer objects, or strings with user content
+  * Note, sometimes string must be used e.g. when dealing with certain external libraries
+    * e.g. set_cookie gave errors with unicode string
+  * Also, constant strings should be prepended with u e.g. u"string" u"""string""" u'string'
+
+* All code should be internationalizable. Apart from using unicode everywhere when dealing
+  with user content, the strings should come from a message map which can be translated.
+  Take care of positional arguments while translating
+
+

@@ -1,0 +1,92 @@
+div.top-menu {
+	z-index: 71;
+	float: left;
+	color: black;
+	position: fixed;
+	top: 46px;
+	left: 50%;
+	margin-left: -160px;
+}
+
+div.top-menu-item {
+	float: left;
+	height: 25px;
+	padding-top: 7px;
+	padding-left: 5px;
+	padding-right: 15px;
+}
+
+#tmi_services { width: 120px; }
+#tmi_friends { width: 140px; }
+
+div.top-menu-item > div { float: left; }
+
+div.top-menu-item.selected-link {
+	background: black;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	border-color: #86C500;
+	border-left-width: 4px;
+	border-style: solid;
+	border-top-width: 4px;
+	border-right-width: 4px;
+}
+
+div.top-menu-item.selected-link > div > a {
+	cursor: pointer;
+	color: #00A8FF;
+	padding-left: 33px;
+	padding-bottom: 4px;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+div.top-menu-item.link {
+	border-color: #567E02;
+	border-style: solid;
+	border-top-width: 1px;
+	padding-top: 10px;
+}
+
+div.top-menu-item.link.left-menu-item {
+	border-top-left-radius: 10px;
+	border-left-width: 1px;
+	padding-right: 19px;
+	padding-left: 8px;
+}
+
+div.top-menu-item.link.right-menu-item {
+	border-top-right-radius: 10px;
+	border-right-width: 1px;
+	padding-left: 9px;
+	padding-right: 18px;
+}
+
+div.top-menu-item.link > div > a {
+	cursor: pointer;
+	color: white;
+	padding-left: 33px;
+	padding-bottom: 4px;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.badge {
+	background: url(/static/images/badge.png) no-repeat 0 0;
+	width: 20px;
+	height: 20px;
+	color: white;
+	font-size: 10px;
+	font-weight: bolder;
+	padding-top: 2px;
+	text-align: center;
+	margin-left: 5px;
+}
+.badge.badge_2 {
+	background: url(/static/images/badge2.png) no-repeat 0 0;
+	width: 22px;
+}
+.badge.badge_3 {
+	background: url(/static/images/badge3.png) no-repeat 0 0;
+	width: 28px;
+}

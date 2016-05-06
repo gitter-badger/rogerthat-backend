@@ -1,0 +1,215 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>{{ name }}</title>
+<style>
+/* -------------------------------------
+        GLOBAL
+------------------------------------- */
+* {
+    font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+    font-size: 100%;
+    line-height: 1.6em;
+    color: #58595b;
+    margin: 0;
+    padding: 0;
+}
+img {
+    max-width: 500px;
+    width: 100%;
+}
+body {
+    -webkit-font-smoothing: antialiased;
+    height: 100%;
+    -webkit-text-size-adjust: none;
+    width: 100% !important;
+}
+/* -------------------------------------
+        ELEMENTS
+------------------------------------- */
+a {
+    color: #5bc4bf !important;
+}
+
+/* -------------------------------------
+        TYPOGRAPHY
+------------------------------------- */
+h1,
+h2,
+h3,
+h4 {
+    color: #58595b;
+    font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-weight: 200;
+    line-height: 1.2em;
+}
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    margin-top: 40px;
+}
+h2 {
+    font-size: 14px;
+    font-weight: bold;
+    margin-left: 10px;
+}
+h3 {
+    font-size: 14px;
+    margin-top: 5px;
+    margin-left: 10px;
+    word-wrap: break-word;
+    word-break: break-word;
+}
+h4 {
+    font-size: 12px;
+    font-style: italic;
+    margin-top: 5px;
+    margin-left: 10px;
+}
+p,
+ul,
+ol {
+    font-size: 14px;
+    font-weight: normal;
+    margin-bottom: 20px;
+}
+ul li,
+ol li {
+    margin-left: 5px;
+    list-style-position: inside;
+}
+
+.btn-primary {
+  width: auto !important;
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  margin-left: 20px;
+  margin-right: 20px;
+  background-color: #5bc4bf; 
+  border-radius: 25px;
+  font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+  font-size: 14px; 
+  text-align: center;
+  vertical-align: top; 
+  cursor: pointer;
+}
+.btn-primary  a {
+  background-color: #5bc4bf;
+  border: solid 1px #5bc4bf;
+  border-radius: 25px;
+  border-width: 10px 20px;
+  display: inline-block;
+  color: #ffffff !important;
+  font-weight: bold;
+  line-height: 2;
+  text-decoration: none;
+}
+
+.bg-green {
+  padding: 10px;
+  width: auto !important;
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  margin-left: 20px;
+  margin-right: 20px;
+  background-color: #32CD32;
+  border-radius: 25px;
+  font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+  font-size: 14px; 
+  text-align: center;
+  vertical-align: top; 
+}
+
+.txt-white {
+    color: #ffffff !important;
+    font-weight: bold;
+    line-height: 2;
+}
+
+.bg-red {
+  padding: 10px;
+  width: auto !important;
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  margin-left: 20px;
+  margin-right: 20px;
+  background-color: #FF0000;
+  border-radius: 25px;
+  font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+  font-size: 14px; 
+  text-align: center;
+  vertical-align: top; 
+}
+</style>
+</head>
+
+<body style="background-color: #f2f2f2;">
+    <div id="user_data" data="{{ data }}" app_email="{{ app_email }}" style="display: none;"></div>
+    <div class="clearfix" style="clear: both !important; display: block !important; margin: 0 auto !important; max-width: 600px !important; border: 1px solid #f0f0f0; background-color: #FFFFFF; padding: 20px;">
+     <p>{% translate language, 'dear_name', 'name=' + name|e %},</p>
+     
+     <p>{% translate language, 'Why do you wish to unsubscribe to this e-mail?' %}</p>
+     <textarea id="stop-using-reason" style="width: 100%; height: 100px; font-size: 0.8em;"></textarea>
+     <div class="btn-primary" id="unsubscribe-btn">
+         <a href="#">{% translate language, 'Submit' %}</a>
+     </div>
+     
+     <div >
+         <div class="deactivate-status-ok bg-green" style="display: none;">
+             <div class="txt-white">{% translate language, 'You are now unsubscribed.' %}</div>
+         </div>
+         
+         <div class="deactivate-status-unknown bg-red" style="display: none;">
+             <div class="txt-white">{% translate language, 'Failed to unregister' %}</div>
+             <div class="txt-white">{% translate language, 'An unknown error has occurred' %}</div>
+         </div>
+         
+         <div class="deactivate-status-error bg-red" style="display: none;">
+             <div class="txt-white">{% translate language, 'Failed to unregister' %}</div>
+             <div class="txt-white">{% translate language, 'Can not connect to server' %}</div>
+         </div>
+     </div>
+    </div>
+<script src="https://rogerth.at/static/js/jquery-1.6.1.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function() {
+        $("#unsubscribe-btn").click(function() {
+	        var email = $('#user_data').attr("app_email");
+	        var data = $('#user_data').attr("data");
+	        var reason = $("#stop-using-reason").val();
+	        
+	        $(".deactivate-status-ok").hide();
+	        $(".deactivate-status-unknown").hide();
+	        $(".deactivate-status-error").hide();
+	        
+	        $.ajax({
+	            url : "/mobi/rest/user/unsubscribe/deactivate",
+	            type : "POST",
+	            data : {
+	                data: JSON.stringify ({
+	                    email: email,
+	                    data: data,
+	                    reason : reason
+	                })
+	            },
+	            success : function(data, textStatus, XMLHttpRequest) {
+	                if(data === 1 || data === 2 || data === 3){
+	                    $(".deactivate-status-ok").show();
+	                } else {
+	                    $(".deactivate-status-unknown").show();
+	                }
+	            },
+	            error : function(data, textStatus, XMLHttpRequest) {
+	                $(".deactivate-status-error").show();
+	            }
+	        });
+        });
+    });
+</script>
+</body>
+</html>

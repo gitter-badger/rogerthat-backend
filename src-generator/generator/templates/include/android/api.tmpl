@@ -1,0 +1,19 @@
+android/rogerthat/src/main/java/{{ package.name|common_replace_dots }}/Rpc.java
+{{ LICENSE|safe  }}
+
+package {{ package.name }};
+
+public class Rpc {
+{% for function in package.functions %}
+    public static void {{ function.name }}(com.mobicage.rpc.IResponseHandler<{{ function.rtype.type }}> responseHandler{% for arg in function.args %},
+            {{ arg.type|java_map_type }} {{ arg.name }}{% endfor %}) throws Exception {
+        java.util.Map<java.lang.String, java.lang.Object> arguments = new java.util.LinkedHashMap<java.lang.String, java.lang.Object>();
+{% for arg in function.args %}        if ({{ arg.name }} == null) {
+            arguments.put("{{ arg.name }}", null);
+        } else {
+            arguments.put("{{ arg.name }}", {{ arg.name }}.toJSONMap());
+        }
+{% endfor %}        com.mobicage.rpc.Rpc.call("{{ package.name }}.{{ function.name }}", arguments, responseHandler);
+    }
+{% endfor %}
+}

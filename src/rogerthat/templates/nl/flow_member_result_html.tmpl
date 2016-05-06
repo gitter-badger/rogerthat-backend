@@ -1,0 +1,26 @@
+<html>
+	<body>
+Message flow: <span style="font-weight: bold;">{{ message_flow_name }}</span><br>
+Tag: <span style="font-weight: bold;">{{ tag }}</span><br>
+App: <span style="font-weight: bold;">{{ app_name }}</span><br>
+Gebruiker: <span style="font-weight: bold;">{{ name }} ({{ member }})</span><br>
+<br>
+{% for step in steps %}
+<table>
+	<tr>
+		<td style="vertical-align: top;">{{ forloop.counter }}:</td>
+		<td>{{ step.message|linebreaksbr }}</td>
+	</tr>
+{% if step.step_type == "form_step" and step.form_result %}
+	<tr>
+		<td>&nbsp;</td>
+		<td>Antwoord: <span style="font-weight: bold;">{{ step.display_value|linebreaksbr }}</span>
+	</tr>
+{% endif %}
+	<tr>
+		<td>&nbsp;</td>
+		<td>Knop: <span style="font-weight: bold;">{{ step.button }}</span>
+	</tr>
+</table>
+<br>
+{% endfor %}

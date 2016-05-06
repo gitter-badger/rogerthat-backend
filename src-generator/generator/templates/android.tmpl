@@ -1,0 +1,9 @@
+{{ DELIMITER }}
+{% for to in tos %}{% include "include/android/to.tmpl" %}
+{{ DELIMITER }}
+{% endfor %}{% for package in SC_API_packages %}{% include "include/android/capi.tmpl" %}
+{{ DELIMITER }}
+{% endfor %}{% for package in CS_API_packages %}{% include "include/android/api.tmpl" %}
+{{ DELIMITER }}
+{% endfor %}{% include "include/android/rpc.tmpl" %}
+{{ DELIMITER }}

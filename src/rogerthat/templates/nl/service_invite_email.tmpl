@@ -1,0 +1,13 @@
+Beste klant,
+
+Vanaf vandaag kun je de "{{ profile.name }} - App" gebruiken.
+Onze applicatie kan u vinden in de {{ app.name }} {% if app.type == app.APP_TYPE_CITY_APP %}City-App{% else %}app{% endif %}. De installatie op je smartphone gebeurt als volgt:
+
+Stap 1. Installeer de {{ app.name }} {% if app.type == app.APP_TYPE_CITY_APP %}City-App{% else %}app{% endif %} gratis:
+{{ BASE_URL }}/install?a={{ app.app_id }}&email"
+
+Stap 2. Open de {{ app.name }} {% if app.type == app.APP_TYPE_CITY_APP %}City-App{% else %}app{% endif %}, en zoek naar '{{ profile.name }}' onder '{% if app.type == app.APP_TYPE_CITY_APP %}{{ localized_organization_type }}{% else %}Diensten{% endif %}'
+
+{% if message %}{{ message }}
+
+{% endif %}{{ profile.name }}

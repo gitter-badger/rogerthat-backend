@@ -1,0 +1,17 @@
+* { font-family:Arial !important;  }
+body { background:url(/static/images/site/contbg.png) top left repeat-x fixed #004a76 ; }
+.med { width:24em !important;  float:left; position:relative; left:50%; margin-left:-12em !important;}
+.footer  {text-align:center; font-size:1em; color:#9c3; padding:2e 0px 30px 0px; width:100%; float:left;}
+.note2 { float:left; width:100%;  background:#000;  border-bottom:0.25em solid #fff;  text-align:center; font-weight:normal; font-size:1em; color:#fff; padding:1em 0px; }
+.note2 img {margin: 1em 1em 0;}
+.note2 label {font-size:1.5em; color:#fff; font-weight:bold; }
+.note2 label  img { border:none !important; width:2em;}
+.note2 span img{ border:1px solid #fff; height: 5em; }
+.note2 span { font-size:2em; color:#99cc33; font-weight:bold;}
+.note2 table { font-size:2em; color:#99cc33; font-weight:bold; width: auto; margin-left: auto; margin-right: auto;}
+.note2 p { font-size:1em; font-weight:normal;}
+.note2 p b { color:Yellow;}
+.note2 img.plug { border:none; margin: 0 0 0.5em -0.5em; height: 5em; }
+.note2 button {margin-top:1.5em; background:#91c22f url(/static/images/site/btn-bg.png) bottom left repeat-x scroll; border:1px solid #91c22f; padding:0.5em 1.5em; font-size:3em; font-weight:bold; color: #fff;}
+.note2 button:hover { color:#fff !important; }
+noscript { color:#fff; font-size:4em; } 

@@ -1,0 +1,92 @@
+body
+{
+    padding:0px; margin:0px;  float:left; width:100%; background:#fff; font-family:Arial; font-size:12px; color: white;   min-width:1000px; overflow-x: hidden; 
+}
+.center { width:100%; position:relative; background: none repeat scroll 0 0 red; }
+a:hover, .h_component span, button:hover { cursor:pointer;  }
+a img { border:none;}
+
+
+
+/********************start footer***********************/
+
+#footer { width:100%; text-align:center; position: absolute; bottom: 10px;} 
+#footer a { color:white; text-decoration:none;}
+#footer a:hover { color:#2fb2e3;}
+.market { width:auto; }
+.market a { margin-right:20px;  }
+
+/****************************************end footer**********************************************/
+
+
+/********************start home***********************/
+
+img.h_img { min-width:50%; min-height: 50%; top: 0px; bottom: 0px; left: 0px; right: 0px; margin: auto; display: block; }
+div.h_img_container { width: 200%; height: 200%; left: -50%; position: fixed; background: black; }
+.h_component     
+{   min-width:1000px;
+    float: left;
+    left: 0;
+    position: absolute;
+    top: 0px;
+    width:100%;
+    overflow:hidden;
+    }
+.h_component .center div { float:right; width:330px; margin-right: 100px;  margin-top:4%;}
+.h_component table { background:#fff; margin-bottom:20px; padding:10px; border:1px solid #c0e1ef;
+-moz-border-radius: 3px;
+border-radius: 3px; /* future proofing */
+width:100%;
+ -moz-box-shadow:     0 0 3px 0 #666666;
+  -webkit-box-shadow:  0 0 3px 0 #666666;
+  box-shadow:          0 0 3px 0 #666666;
+}
+
+.h_component table  td { vertical-align:top;}
+
+.h_component  p  { font-size:18px; color:#003058; }
+
+.h_component table h1 { font-size:25px; color:#666; margin-top:0px; text-shadow: none;}
+.h_component table h2 { font-size:18px; color:#666; padding:0px; margin:0px; margin-bottom:10px; text-shadow:none;}
+
+
+
+
+
+
+.h_component input[type="text"], .h_component input[type="email"], .h_component input[type="password"] { width:100%;  padding:3px; height:22px; border:1px solid #c0e1ef; background:#f5fcff; margin-bottom:5px;
+-moz-border-radius: 3px;
+border-radius: 3px; /* future proofing */
+box-sizing: border-box;
+-moz-box-sizing: border-box;
+-webkit-box-sizing: border-box;
+}
+
+
+.h_component button { float:right; border:none; padding:3px 10px; width:100%; top: -3px;
+-moz-border-radius: 3px;
+border-radius: 3px; /* future proofing */
+                       }
+.watermark_container { width:100%;}
+.h_component button.submit_b { background: #039cd3 url(../images/blue-btn.png) top left repeat-x; width:90%; border:1px solid #3798d9;
+                                text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25); }
+.h_component button.submit_y { background: #fd9d11 url(../images/yellow-btn.png) top left repeat-x; border:1px solid #ffb62b;
+                                text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5); }
+.h_component button.submit_b span { color:#fff; }
+.h_component button.submit_y span { color:#000; }
+.h_component button.submit_b span, .h_component button.submit_y span {
+	font-family:Lucida Grande, Arial;
+	font-size:12px;
+	font-weight:bold;
+	padding: 0px;
+}
+
+.h_component button.submit_b:hover { background: #039cd3; }
+.h_component button.submit_y:hover { background: #fd9d11; }
+
+.h_component label, .h_component span, .h_component a { font-size:11px; color:#666; text-decoration:none;}
+.h_component label:hover,  .h_component a:hover { color:#2fb2e3;}
+
+
+/****************************************end home**********************************************/
+

@@ -1,0 +1,72 @@
+<div id="serviceRolesContainer">
+    <style>
+        #table_members {
+            display: block;
+            max-height: 200px;
+            overflow: auto;
+        }
+
+        #table_members tr {
+            display: table;
+            width: 100%;
+            table-layout: fixed; /* even columns width , fix width of table too*/
+        }
+
+        #table_members td:nth-child(1) {
+            width: 60%;
+        }
+
+        #table_members td:nth-child(2) {
+            width: 20%;
+        }
+
+        #table_members td:nth-child(3) {
+            width: 20%;
+        }
+    </style>
+    <a id="create_new" class="action-link" style="float: right;">Create new role</a>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Created</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="table_body">
+        </tbody>
+    </table>
+    <div id="edit_role_dialog" style="display: none;">
+    	<table id="table_members">
+    		<thead>
+    			<tr>
+    				<th>User</th>
+    				<th>Identity</th>
+    				<th></th>
+    			</tr>
+    		</thead>
+            <tbody id="table_body_members">
+	        	<tr>
+	        	</tr>
+	        </tbody>
+    	</table>
+        <div>
+            <select id="service_identity"></select>
+            <input id="user_email" type="email" placeholder="Search user"/>
+            <a id="add_member" class="action-link">Add member</a>
+            <hr>
+            Note: if no identity is specified, the user is granted the role for all identities.
+        </div>
+    </div>
+    <div id="new_role_dialog"  style="display: none;">
+    	<label for="role_name">Name:</label><br>
+    	<input id="role_name" type="text"/><br><br>
+    	<label for="role_type">Type:</label><br>
+    	<select id="role_type">
+    		<option value="managed">Managed</option>
+    		<option value="synced">Synced</option>
+    	</select>
+    </div>
+</div>

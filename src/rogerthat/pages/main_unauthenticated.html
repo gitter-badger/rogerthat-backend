@@ -1,0 +1,376 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>Rogerthat {%if user %}-- {{ user.nickname }}{% endif %}</title>
+		<meta name="google" value="notranslate">
+		<meta name="google-site-verification" content="VP4noJ9Ywkvpnj5YJaKwF1BPZGTr3gu0ommJaPMql-A" />
+		<meta name="description" content="Fast, reliable, secure, cross-platform interactive communication between people and services." />
+		<meta name="keywords" content="roger,that,rogerthat,messenger,messaging,fast,reliable,secure,interactive,communication,people,services" />
+		{% block facebook_header %}
+		<meta property="og:title" content="Next generation social messaging"/>
+		<meta property="og:url" content="https://rogerth.at"/>
+		<meta property="og:image" content="https://rogerth.at/static/images/site/roge-logo.png"/>
+		<meta property="og:site_name" content="Rogerthat"/>
+		<meta property="og:description" content="Automate yourself and your friends with Rogerthat multiple choice messaging!"/>
+		{% endblock %}
+		{%if debug%}<script src='/_ah/channel/jsapi'></script>{%else%}<script src='https://talkgadget.google.com/talkgadget/channel.js'></script>{%endif%}
+		<link rel="stylesheet" href="/static/css/start-1.8.9/jquery-ui-1.8.9.custom.css" />
+		<link rel="stylesheet" href="/static/css/home.css" type="text/css" />
+		<!--[if IE]><script type="text/javascript" src="/static/js/json2.js"></script><![endif]-->
+		<script src="/static/js/jquery-1.6.1.min.js" type="text/javascript"></script>
+		<script src="/static/js/jquery-ui-1.8.13.custom.min.js" type="text/javascript"></script>
+		<script src="/static/js/jquery-ui-timepicker-addon.js" type="text/javascript"></script>
+		<script type="text/javascript" src="/static/js/ui.watermark.js"></script>
+		<script type="text/javascript" src="/static/js/stacktrace.js"></script>
+		<script type="text/javascript" src="/static/js/mc.js"></script>
+		<script type="text/javascript">
+<!--
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-24017291-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+
+var LOGIN_SUCCESS = 1;
+var LOGIN_FAIL_NO_PASSWORD = 2;
+var LOGIN_FAIL = 3;
+var LOGIN_TO_MANY_ATTEMPTS = 4;
+var LOGIN_ACCOUNT_DEACTIVATED = 5;
+var LOGIN_FAILED_SERVICE_DISABLED = 6;
+var SIGNUP_INVALID_EMAIL_DOMAIN = 6;
+
+$(window).load(function() {
+	if ( $.browser.msie && $.browser.version < 8 ) {
+		$(".forgot_my_password").removeAttr('href', '').click(function () {
+			mctracker.alert("Your browser is not supported. Please use Internet Explorer 8 or 9, Chrome, Firefox or Safari.");
+			return;
+		});
+	}
+
+	mctracker._processingDialog = $("#processingDialog").dialog({
+		autoOpen: false,
+		modal: false,
+		dragable: false,
+		resizable: false,
+		title: 'Processing ...',
+		width: 200,
+		height: 75
+	});
+
+	var cont = "{{ continue|safe }}";
+	var loginFailedDialog = $("#loginFailedDialog").dialog({
+		title: 'Login failed',
+		modal: true,
+		autoOpen: false,
+		close: function () {
+			$("#email").focus();
+		},
+		buttons: {
+			'Try again': function () {
+				loginFailedDialog.dialog('close');
+			}
+		}
+	});
+	var loginFailedToManyAttemptsDialog = $("#loginFailedToManyAttemptsDialog").dialog({
+		title: 'Login failed',
+		modal: true,
+		autoOpen: false,
+		close: function () {
+			$("#email").focus();
+		},
+		buttons: {
+			'Cancel': function () {
+				loginFailedToManyAttemptsDialog.dialog('close');
+			}
+		}
+	});
+
+	var loginFailedNoPasswordDialog = $("#loginFailedNoPasswordDialog").dialog({
+		title: 'Login failed',
+		modal: true,
+		autoOpen: false,
+		close: function () {
+			$("#signupbox_email").val($("#email").val());
+		},
+		buttons: {
+			'Ok': function () {
+				loginFailedNoPasswordDialog.dialog('close');
+			}
+		}
+	});
+
+	var loginFailedAccountDeactivatedDialog = $("#loginFailedAccountDeactivatedDialog").dialog({
+		title: 'Account deactivated',
+		modal: true,
+		autoOpen: false,
+		close: function () {
+		    $("#email").focus();
+		},
+		buttons: {
+			'Ok': function () {
+			    loginFailedAccountDeactivatedDialog.dialog('close');
+			}
+		}
+	});
+
+	$("#forgot_my_password").click(function () {
+		var loc = "/resetpassword?continue={{ continue|urlencode }}&email=" + encodeURIComponent($('#email').val());
+		window.location = loc;
+	});
+
+	$("#loginbox_login").button().click(function () {
+		if ( $.browser.msie && $.browser.version < 8 ) {
+			mctracker.alert("Your browser is not supported. Please use Internet Explorer 8 or 9, Chrome, Firefox or Safari.");
+			return;
+		}
+		var email = trim($("#email").val());
+		var password = $("#password").val();
+		var remember = $("#loginbox_keep_me_logged_in").prop('checked');
+		mctracker.call({
+			url: '/mobi/rest/user/login',
+			type: 'POST',
+			data: {
+				data: JSON.stringify({
+					email: email,
+					password: password,
+					remember: remember
+				})
+			},
+			success: function (data) {
+				if (data == LOGIN_SUCCESS) {
+					window.location = cont;
+				} else if (data == LOGIN_FAIL_NO_PASSWORD) {
+					loginFailedNoPasswordDialog.dialog('open');
+				} else if (data == LOGIN_TO_MANY_ATTEMPTS) {
+					loginFailedToManyAttemptsDialog.dialog('open');
+				} else if (data == LOGIN_ACCOUNT_DEACTIVATED) {
+                    loginFailedAccountDeactivatedDialog.dialog('open');
+                } else if(data == LOGIN_FAILED_SERVICE_DISABLED) {
+                    window.location = '/service_disabled';
+                } else {
+                    loginFailedDialog.dialog('open');
+                }
+			}
+		});
+	});
+	$("#password").keypress(function(event) {
+		if (event.which == 13) {
+			$("#loginbox_login").click();
+		}
+	});
+
+	var cont = "{{ continue|safe }}";
+	var signupFailureDialog = $("#signupFailureDialog").dialog({
+		title: 'Registration',
+		modal: true,
+		autoOpen: false,
+		close: function () {
+			$("#signupbox_name").focus();
+		},
+		buttons: {
+			Ok: function () {
+				signupFailureDialog.dialog('close');
+			}
+		}
+	});
+	var signupLoadOverflowDialog = $("#signupLoadOverflowDialog").dialog({
+		title: 'Registration',
+		modal: true,
+		autoOpen: false,
+		close: function () {
+			$("#signupbox_name").focus();
+		},
+		buttons: {
+			Ok: function () {
+				signupLoadOverflowDialog.dialog('close');
+			}
+		}
+	});
+	var signupInvalidEmailDomainDialog = $("#signupInvalidEmailDomainDialog").dialog({
+		title: 'Registration',
+		modal: true,
+		autoOpen: false,
+		close: function () {
+			$("#signupbox_name").focus();
+		},
+		buttons: {
+			Ok: function () {
+			    signupInvalidEmailDomainDialog.dialog('close');
+			}
+		}
+	});
+	var accountExistsDialog = $("#accountExistsDialog").dialog({
+		title: 'Registration',
+		modal: true,
+		autoOpen: false,
+		buttons: {
+			Login: function () {
+				$("#email").val($("#signupbox_email").val());
+				$("#password").focus();
+				accountExistsDialog.dialog('close');
+			},
+			"Reset password": function () {
+				window.location = "/resetpassword?continue={{ continue|urlencode }}&email=" + $("#signupbox_email").val();
+			},
+			Close: function () {
+				accountExistsDialog.dialog('close');
+			}
+		}
+	});
+	$("#signupbox_submit").button().click(function () {
+		if ( $.browser.msie && $.browser.version < 8 ) {
+			mctracker.alert("Your browser is not supported. Please use Internet Explorer 8 or 9, Chrome, Firefox or Safari.");
+			return;
+		}
+
+		var name = $("#signupbox_name").val();
+		var email = trim($("#signupbox_email").val()).toLowerCase();
+
+		mctracker.call({
+			url: "/mobi/rest/user/signup",
+			type: "POST",
+			data: {
+				data: JSON.stringify({
+					name: name,
+					email: email,
+					cont: cont
+				})
+			},
+			success: function (data) {
+				if (data == 1) {
+					// success
+					var dialog = $("<div></div")
+						.html("An email has been sent to <b>"+email+"</b> containing the following step of the registration process.<br><br>Please check your email in a couple of moments!")
+						.dialog({
+							title: 'Registration',
+							modal: true,
+							buttons: {
+								'Ok': function () {
+									window.location = "/";
+								}
+							}
+						});
+				} else if (data == 4) {
+					accountExistsDialog.dialog('open');
+				} else if (data == 5) {
+					signupLoadOverflowDialog.dialog('open');
+				} else if (data == 6) {
+				    signupInvalidEmailDomainDialog.dialog('open');
+				} else {
+					signupFailureDialog.dialog('open');
+				}
+			}
+		});
+	});
+	$("#signupbox_name").keypress(function(event) {
+		if (event.which == 13) {
+			$("#signupbox_email").focus();
+		}
+	});
+        $("#email, #password, #signupbox_name, #signupbox_email").watermark(undefined, {left:-3});
+});
+-->
+	</script>
+	</head>
+	<body {% if loading_enabled %}style="display:none;"{% endif %}>
+		<div class="content">
+			<div id="body">
+				<div class="h_img_container">
+					<img class="h_img" src="{{ bg_image_uri }}"  alt="home image" title="home image"/>
+				</div>
+				<div class="h_component">
+					<div class="center">
+						<div>
+							<img src="/static/images/rogerthat_full_logo.png">
+							<p>Bringing together people and services.</p>
+							<table>
+								<tr>
+									<td colspan="2"><input id="email" type="email" placeholder="Email" {% if email %}value="{{ email }}"{% endif %} /></td>
+								</tr>
+								<tr>
+									<td><input id="password" type="Password" placeholder="Password" /></td>
+									<td><button id="loginbox_login" class="submit_b"  type="submit"> Sign in </button></td>
+								</tr>
+								<tr>
+									<td colspan="2" >
+										<label class="remember">
+											<input id="loginbox_keep_me_logged_in" type="checkbox" name="remember_me" value="1"><span>Remember me</span>
+										</label>
+										<span>|</span> <a id="forgot_my_password" href="#">Forgot password?</a>
+									</td>
+								</tr>
+							</table>
+
+							<table>
+								<tr>
+									<td >
+										<h1>New to Rogerthat web?</h1>
+										<h2>Join for free today!</h2>
+									</td>
+								</tr>
+								<tr>
+									<td ><input id="signupbox_name" type="text" placeholder="Full name" /></td>
+								</tr>
+								<tr>
+									<td ><input id="signupbox_email" type="email" placeholder="Email" /></td>
+								</tr>
+								<tr>
+									<td><button id="signupbox_submit" class="submit_y"  type="submit"> Sign up </button></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="footer">
+				<p class="market">
+					<a href="http://itunes.apple.com/us/app/rogerth.at-messenger/id446796149?ls=1mt=8"><img src="/static/images/M_2.png" /></a>
+					<a href="https://market.android.com/details?id=com.mobicage.rogerth.at"><img src="/static/images/M_1.png" /></a>
+				</p>
+				<p>
+					&copy; 2011-2016
+					<a href="http://www.rogerthat.net/company/contact-mobicage/" target="_blank">MOBICAGE NV</a>
+					- All rights reserved worldwide. -
+					<a href="http://www.rogerthat.net/wp-content/uploads/2012/01/Mobicage_Privacy_Policy.pdf" target="_blank">Privacy Policy</a>
+					-
+					<a href="http://www.rogerthat.net/wp-content/uploads/2012/01/Mobicage_Terms_and_Conditions.pdf" target="_blank">Terms and Conditions</a>
+				</p>
+			</div>
+		</div>
+		<div id="loginFailedDialog" style="display: none;">
+			Invalid email / password combination!
+		</div>
+		<div id="loginFailedToManyAttemptsDialog" style="display: none;">
+			Too many failed login attempts!
+		</div>
+		<div id="loginFailedNoPasswordDialog" style="display: none;">
+			This is the first time you log in to Rogerthat Web.<br>
+			<br>
+			Enter your name and the same email address you used for registering Rogerthat on your mobile device.<br>
+			Then press the <b>Sign up</b> button.
+		</div>
+		<div id="signupFailureDialog" style="display: none;">
+			Both name and email address are required to start the registration process.
+		</div>
+		<div id="accountExistsDialog" style="display: none;">
+			This email address is already registered.<br>
+			<br>
+			How do you want to proceed ?
+		</div>
+		<div id="signupLoadOverflowDialog" style="display: none;">
+			The Rogerthat servers are overloaded with signup requests. Please try again later!
+		</div>
+		<div id="loginFailedAccountDeactivatedDialog" style="display: none;">
+			You have deactivated your account.<br>
+			<br>
+			For support contact: <b>support@mobicage.com</b>.
+		</div>
+		<div id="signupInvalidEmailDomainDialog" style="display: none;">
+			Invalid email domain!
+		</div>
+	</body>
+</html>	

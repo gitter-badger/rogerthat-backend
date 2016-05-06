@@ -1,0 +1,12 @@
+    {
+        'package': '{{ to.package }}',
+        'name': '{{ to.name }}',
+        'fields': [
+{% for field in to.fields %}
+            {
+                'type': '{{field.type}}',
+                'is_array': {%if field.collection_type%}True{%else%}False{% endif %},
+                'name': '{{field.name}}'
+            },{% endfor %}
+        ]
+    },

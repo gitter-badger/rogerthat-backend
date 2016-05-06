@@ -1,0 +1,10 @@
+{% extends "base_base_mobile_simple_no_javascript.html" %}
+
+{% block body %}
+<p>{{ app.name }} est actuellement soutenu sur iPhone et Android.</p>
+<p>Installez l'application <b>"{{ app.name }}"</b> sur ​​votre téléphone et passez à l'étape 2 dans votre {{ invitation_kind }}.</p>
+<p>
+  <a href="{{ app.ios_appstore_web_uri }}" target="_blank"><img src="/static/images/M_2.png" /></a>
+  <a href="{{ app.android_market_web_uri }}" target="_blank"><img src="/static/images/M_1.png" /></a>
+</p>
+{% endblock %}

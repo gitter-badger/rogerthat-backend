@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div class="span-18 last screen" id="mainContainer">
+		<div id="installer">
+			Unfortunately we do not yet support Rogerthat in your browser Internet Explorer.<br>
+			But no worries, we have a solution.<br>
+			<br>
+			By installing the "Google Frame" plugin in your browser, you will be able to enjoy the functionality of Rogerthat.<br>
+			<!--FYI URL is dead and chrome frame is discontinued-->
+			You can find more information about Google Frame on <a href="http://www.google.com/chromeframe?user=true">http://www.google.com/chromeframe</a><br>
+			<button id="install">Install Google Frame</button>
+		</div>
+   		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"></script>
+		<script type="text/javascript">
+<!--
+
+$(window).load(function () {
+	$("#install").button().click(function () {
+		alert("The installer for Google Frame will be shown directly after closing this alert. When the installation is finished, close all Internet Explorer windows and restart Internet Explorer to begin using the Rogerthat website.");
+		CFInstall.check({
+			mode: "popup",
+			url: "http://google.com/chromeframe?user=true"
+		});
+		$("#installer").empty().text("Close all Internet Explorer windows and restart Internet Explorer to begin using the Rogerthat website.");
+	});
+});
+
+-->
+		</script>
+	</div>
+{% endblock %}

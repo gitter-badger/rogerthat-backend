@@ -1,0 +1,17 @@
+{{ profile.name }} wants to communicate with you using an innovative smartphone app.
+
+Step 1. Install the {{ app.name }} app:
+{{ BASE_URL }}/install?a={{ app.app_id }}&email
+
+Step 2. Subscribe to {{ profile.name }}:
+{{ short_url }}{% if secret %}?s={{ secret }}{% endif %}
+
+
+
+{% if message %}{{ profile.name }} added a personal note to his invitation request:
+{{ message }}
+
+{% endif %}{% if consts.INCLUDE_ROGERTHAT_DOT_NET %}
+
+For more information about {{ app.name }} and other Rogerthat based products, please visit:
+http://www.rogerthat.net{% endif %}

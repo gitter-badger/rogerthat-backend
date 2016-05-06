@@ -1,0 +1,23 @@
+<html>
+  <body>
+    <p>{{ from_name }} raadt u aan om die mobiele dienst van {{ service_name }} te gebruiken in de {{ app_name }} klantendiensten app.</p>
+    <p>
+      <ul>
+        <li>
+          Stap 1. Installeer de {{ app_name }} app gratis:<br>
+          <a href="{{ BASE_URL }}/install?a={{ app_id }}&email">{{ BASE_URL }}/install</a><br><br>
+        </li>
+        <li>
+          Stap 2. Voeg {{ service_name }} toe aan uw diensten:<br>
+          <a href="{{ share_url }}">{{ share_url }}</a>
+        </li>
+      </ul>
+    </p>
+    <p>&nbsp;</p>
+    {% if consts.INCLUDE_ROGERTHAT_DOT_NET %}
+    <p>
+    Voor meer informatie over {{ app_name }} en andere producten gebaseerd op Rogerthat, bezoek:<br>
+    <a href="http://www.rogerthat.net">http://www.rogerthat.net</a>
+    </p>{% endif %}
+  </body>
+</html>

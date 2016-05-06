@@ -1,0 +1,13 @@
+Dear,
+
+Starting today, you can use the '{{ profile.name }} App'.
+Our app runs in the {{ app.name }} {% if app.type == app.APP_TYPE_CITY_APP %}City App{% else %}app{% endif %}. The installation on your smartphone works as follows:
+
+Step 1. Install the {{ app.name }} {% if app.type == app.APP_TYPE_CITY_APP %}City-App{% else %}app{% endif %} for free:
+{{ BASE_URL }}/install?a={{ app.app_id }}&email
+
+Step 2. Open the {{ app.name }} {% if app.type == app.APP_TYPE_CITY_APP %}City-App{% else %}app{% endif %}, and search for '{{ profile.name }}' in '{% if app.type == app.APP_TYPE_CITY_APP %}{{ localized_organization_type }}{% else %}Services{% endif %}'.
+
+{% if message %}{{ message }}
+
+{% endif %}{{ profile.name }}

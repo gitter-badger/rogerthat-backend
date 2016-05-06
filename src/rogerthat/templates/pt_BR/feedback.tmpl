@@ -1,0 +1,21 @@
+*********************** INFORMAÇÕES DO USUÁRIO ***********************
+Tipo: {{ type_ }}
+Assunto: {{ subject }}
+Descrição:
+{{ message }}
+
+********************** INFORMAÇÕES SOBRE O USUÁRIO ***********************
+E-mail: {{ email }}
+Nome: {{ profile_info.name }}
+Link do Avatar: {{ BASE_URL }}/unauthenticated/mobi/cached/avatar/{{ profile_info.avatarId }}
+Número de amigos: {{ friend_count }}Número de mensagens: {{ message_count }}
+Informações do dispositivo móvel: 
+{% for mobile in mobiles %}
+* conta: {{ mobile.account }}
+* tipo: {{ mobile.type }}
+* descrição: {{ mobile.description }}
+* hardware: {{ mobile.hardwareModel }}
+* códigopaís: {{ mobile.countrycode }}
+* Númerotelefone: {{ mobile.phoneNumber }}
+* Versãooperativa: {{ mobile.operatingVersion }}
+{% endfor %}Registros de erro: {{ BASE_URL }}/mobiadmin/errors?user={{ email }}&timestamp={{ timestamp }}

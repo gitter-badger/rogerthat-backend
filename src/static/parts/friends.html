@@ -1,0 +1,24 @@
+<div id="friendsContainer" class="span-18 last">
+	<script type="text/javascript" src="/static/js/friends.js"></script>
+    <div class="topbar">
+		<h2>Privacy settings:</h2>
+		<input id="chkMyFriendsCanSeeMyRelations" type="checkbox"/>
+		<label for="chkMyFriendsCanSeeMyRelations">My friends can see my relations</label>
+		<div class="topgrop">
+			<label>Friends of your friends:</label><br>
+			<span id="fof"></span>
+		</div>	
+    </div>
+    
+    <br>
+	<div id="fcfriends" class="span-18 last"></div>
+	<div id="inviteLocationSharing" style="display: none;">
+		<input type="hidden" id="inviteLocationSharingFriend"/>
+		Enter invite text (leave blank for default):<br>
+		<textarea rows="5" cols="40" id="friendShareLocationInviteText" title="Add personal invitation note here." class="jq_watermark"></textarea><br>
+		<span id="friendShareLocationInviteError" style="color: red;"></span>
+	</div>
+	<div id="removeFriendDialog" style="display: none;">
+		Are you sure that you want to remove <span id="friendToRemove"></span> from your friendslist ?
+	</div>
+</div>

@@ -1,0 +1,69 @@
+<html>
+	<head>
+		<style>
+		.note { width: 100%; text-align: center; margin-top: 50px;}
+	    .note img { margin-right:0px; }
+	    .note a { text-decoration:none; color:#99CC33; }
+	    .note a:hover { text-decoration:none; color:#00A0FF ; }
+	    .note span {color: #00A0FF; font-size: 30px; font-weight: normal;}
+	    .note p {font-size: 20px;}
+	    body { width: 100%; }
+	    </style>
+	</head>
+	<body>
+		<div class="note">
+		{% if user %}
+			<span>
+				Registration is in progress. Please wait ...
+			</span>
+			<script src="/static/js/jquery-1.6.1.min.js" type="text/javascript"></script>
+			<script type="text/javascript">
+<!--
+var hasMobiles = {{hasMobiles}};
+var userAgent = "{{ua}}";
+var email = "{{ user.email }}";
+
+var register = function () {
+	$.ajax({
+		url: '/mobi/rest/devices/mobiles/register',
+		type: 'POST',
+		data: {
+			data: "{}"
+		},
+		success: function (data) {
+			if (userAgent == 'android') {
+				FinishRegistrationCallback.finishRegistration(email, data.account, data.password);		
+			} else if (userAgent == 'ios') {
+				var url = 'rgrthtreg://'+email+'/'+data.account+'/'+data.password;
+				window.location = url;
+			}
+		},
+		error: function () {
+			alert("Registration failed. Please try again!");
+		}
+	});		
+};
+
+$(window).load(function () {
+	register();
+});
+-->
+			</script>
+		{% else %}
+			<p>Rogerthat re-uses the account systems of Facebook and Google
+so you do not need to remember yet another username password combination.</p>		
+			<span>
+				Login using your<br>
+				<a href="/login_facebook?continue={{ location|urlencode }}"><img src="/static/images/site/f.png" alt="FaceBook"/>acebook</a><br>
+		        or<br>
+		        <a href="/login_google?continue={{ location|urlencode }}"><img src="/static/images/site/g.png" alt="google"/>oogle</a><br>
+		        account to get started!<br>
+			</span>
+	        <br>
+			<p> 
+				<b>Note:</b> if you would not own a facebook or google account, just use the links above to create one for free.<br>
+			</p>
+		{% endif %}
+		</div>
+	</body>
+</html>

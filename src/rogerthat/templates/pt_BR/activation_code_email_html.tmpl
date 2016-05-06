@@ -1,0 +1,12 @@
+<html><body>Prezado{% if name %} {{ name|escape }}{% endif %},<br>
+<br>
+Este é seu código de ativação para o aplicativo {{ app.name }}:<br>
+<br>
+<span style="font-size: xx-large;">{{ pin }}</span><br>
+<br>
+Retorne ao aplicativo {{ app.name }} no seu dispositivo móvel e insira este código de ativação para continuar.<br>
+<br>
+Obrigado por usar o aplicativo {{ app.name }}!<br>
+<br>
+- Equipe {{ app.name }} <br>
+</body></html>

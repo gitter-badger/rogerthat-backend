@@ -1,0 +1,70 @@
+.ui-widget { font-size: 13px; }
+
+.ui-widget-content {
+	background:#004A76  !important;
+    -moz-border-radius: 7px !important;
+    border-radius:7px !important;
+    border:3px solid #fff !important;
+}
+
+.ui-widget-content  .ui-widget-content  { border:none !important;}
+                      
+.ui-widget-content * 
+{
+    -moz-border-radius: 0px !important;
+    border-radius:0px !important;
+    
+    
+    }
+    
+.ui-widget-overlay {
+    background: none repeat scroll 0 0 #000000 !important;
+    opacity: 0.7 !important;
+    height: 100%  !important;
+    position: fixed  !important;
+    width: 100%  !important;
+    z-index: 1001  !important;
+    
+    }
+    
+.active-title { color:#FFF !important;}
+
+                 
+#wizard {   height:auto !important;}
+.ui-widget-content .footer { width:70%;}
+.ui-widget-content .footer .span-6 { display:none;}
+.ui-widget-content .footer .stick-right {  text-align: left;}
+/*
+.ui-widget-content .footer .ui-button {
+    background: url("/static/images/site/btn2-bg.png") repeat-x scroll left bottom #1291DD !important;
+    border: 1px solid #1291DD;
+    color: #FFFFFF;
+    float: left;
+    padding: 5px 10px;
+}
+.ui-widget-content .footer .ui-button span {
+    font-size: 12px !important;
+    line-height: 12px !important;
+    padding: 0 !important; }
+                      
+*/
+.ui-dialog-titlebar   {   background:url("/static/images/site/top-bg.png") repeat-x scroll left top #446000 !important;   border: 1px solid #95C631 !important;
+                          
+                          -moz-border-radius-topleft: 3px !important;
+                      border-top-left-radius:3px !important;
+
+                      -moz-border-radius-topright: 3px !important;
+                      border-top-right-radius:3px !important;
+                          
+                          }
+.ui-dialog-titlebar .ui-state-hover { background:#548e00 !important; border:1px solid #fff  !important;}
+#captcha { background:#fff !important;}
+
+#securityVerification, #install, .ui-widget-content #details, #link, #addFriendsDialog, .ui-draggable .ui-dialog-content, .ui-dialog-content{ color:#fff  !important; } 
+.active-title { margin-bottom:20px;}
+
+#wizardBody #secret, #wizardBody #detailsErrorMessage, #wizardBody  #captchaErrorMessage { color:#f0ff00 !important;}
+#key {color:#66ff00 !important; }
+.secrt { width:100% !important;  }
+.secrt  label { font-size:22px; font-weight:bold; color:#ff6000; }
+#qrcode { margin-bottom:10px;}

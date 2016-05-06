@@ -1,0 +1,8 @@
+<!-- service menu item with branding -->
+<div id="{{container_id}}" class="span-18 last">
+	<script type="text/javascript" src="/static/js/smi_branding.js"></script>
+	<script type="text/javascript">
+		mctracker.registerLoadCallback("{{container_id}}", brandingScript("{{container_id}}", "{{service_email}}", "{{branding}}"));
+	</script>
+	<iframe class="smiBranding" style="display: none;" scrolling="no"></iframe>
+</div>

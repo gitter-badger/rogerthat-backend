@@ -1,0 +1,25 @@
+<!-- service page -->
+<div id="{{container_id}}" class="span-18 last serviceUsersContainer">
+    <script type="text/javascript" src="/static/js/service_users.js"></script>
+  <script type="text/javascript">
+    <!--
+    mctracker.registerLoadCallback("{{ container_id }}", serviceUsersScript("{{ container_id }}", "{{ service_identity }}", "{{ cursor }}"));
+    -->
+  </script>
+  <div class="breadcrumbs"><a id="identities" class="action-link">All identities</a> &gt; {{ service_identity_name }}<div>
+  <br>
+  <a id="reload" class="action-link">Reload</a>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:50px;"></th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>&nbsp;</th>
+      </tr>
+    </thead>
+    <tbody id="table_body">
+    </tbody>
+  </table>
+  <a id="more" class="action-link">More</a>
+</div>

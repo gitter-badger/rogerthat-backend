@@ -1,0 +1,34 @@
+<h4>History</h4>
+{{if history == null}}
+<p>No prospect has been assigned to this customer yet.</p>
+<p>You can create one or search for an existing prospect on the <a href="/internal/shop/prospects">prospects page</a>.</p>
+{{else}}
+    {{if history.length}}
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <td><b>Time</b></td>
+            <td><b>Status</b></td>
+            <td><b>Reason</b></td>
+            <td><b>Type</b></td>
+            <td><b>Manager</b></td>
+            <td><b>Comment</b></td>
+        </tr>
+    </thead>
+    <tbody>
+        {{each(i, h) history}}
+        <tr>
+            <td>${h.datetime}</td>
+            <td>${h.status}</td>
+            <td>${h.reason}</td>
+            <td>${h.type}</td>
+            <td>${h.executed_by}</td>
+            <td>${h.comment}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+    {{else}}
+<p>No history has been recorded yet for this customer.</p>
+    {{/if}}
+{{/if}}

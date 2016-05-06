@@ -1,0 +1,24 @@
+{% extends "base_base_mobile_simple_no_javascript.html" %}
+
+{% block body %}
+<table cellpadding="5" style="background: none !important;">
+<tr>
+<td colspan="2">
+<p class="mob-top">
+<img src="/unauthenticated/mobi/avatar/{{ profile_info.avatarId }}" width="50px" height="50px" style="float: left; margin-right: 10px;">
+<b>{{ profile_info.name }}</b><br> <label>Olá, você acaba de escanear minha ID no aplicativo {{ app.name }}.</label><br> <br>
+<span>Siga esses passos para se conectar comigo:</span>
+</p></td>
+</tr>
+<tr>
+<td width="10px">
+<h2>Passo 1:</h2></td>
+<td width="100%"><a class="link-button" href="{{ install_url }}">Instalar aplicativo {{ app.name }}.</a></td>
+</tr>
+<tr>
+<td>
+<h2>Passo 2:</h2></td>
+<td>Escanear minha ID novamente usando o aplicativo {{ app.name }}.</td>
+</tr>
+</table>
+{% endblock %}

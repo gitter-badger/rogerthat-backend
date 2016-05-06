@@ -1,0 +1,24 @@
+<div id="feedbackContainer">
+	<script type="text/javascript" src="/static/js/feedback.js"></script>
+    <div class="topbar">
+	    <label>
+			Hi <span id="username"></span>,<br><br>
+			Thank you for taking the time to provide us with some feedback about Rogerthat.<br>
+			If possible provide your feedback in English.<br>
+	    </label>
+		<br>
+	    <div class="topgrop feed">
+			<input id="type_fr" name="type" type="radio" value="feature request" checked><label for="type_fr">Suggestion</label>
+			<input id="type_problem" name="type" type="radio" value="problem"><label for="type_problem">Problem</label><br>
+			<br>
+			<input id="subject" type="text" placeholder="Add subject ..." style="padding-left:5px; padding-right:5px;"><br>
+			<textarea id="message" placeholder="Describe suggestion or problem ..."></textarea><br>
+			<button id="submit">Send feedback</button><span id="error" class="mcerror"></span>
+	    </div>
+   </div>
+	<div id="thankyou" style="display: none;">
+		Thank you very much for your feedback.<br>
+		<br>
+		The Rogerthat team.
+	</div> 
+</div>

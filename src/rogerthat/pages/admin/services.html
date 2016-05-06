@@ -1,0 +1,89 @@
+<html>
+<body>
+    <script src="/static/js/jquery-1.6.1.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+<!--
+{% if result %}
+$(window).load(function () {
+	alert("{{result}}");
+});
+{% endif %}
+-->
+</script>
+    <h1>Convert to service</h1>
+    Email address of wanna be service user:
+    <br>
+    <form method="post" action="/mobiadmin/convert_to_service">
+        <input type="text" name="email" value="{{ cts_email }}" />
+        <br>
+        <input type="checkbox" name="mobidick" value="CHECKED" {{ cts_checked }}/>
+        mobidick<br>
+        <input type="submit" value="submit" />
+    </form>
+    <hr>
+    <h1>Create trial service</h1>
+    <form method="post" action="/mobiadmin/create_trial_service">
+        Rogerthat account (email address) of service owner:<br>
+        <input type="text" name="owner" value="{{ ctr_owner }}" />
+        <br>Email address of wanna be service user:<br>        
+        <input type="text" name="email" value="{{ ctr_email }}" />
+        <br> Name of the service:<br>
+        <input type="text" name="name" value="{{ ctr_name }}" />
+        <br> Description of the service:<br>
+        <input type="text" name="description" value="{{ ctr_description }}" />
+        <br>
+        <input type="submit" value="submit" />
+    </form>
+    <hr>
+    <h1>Release trial service</h1>
+    <form method="post" action="/mobiadmin/release_trial_service">
+        Email address of to be released service:<br>
+        <input type="text" name="email" value="{{ rtr_email }}" />
+        <br> Qualified identifier of to be released service:<br>
+        <input type="text" name="qi" value="{{ rtr_qi }}" />
+        <br>
+        <input type="submit" value="submit" />
+    </form>
+    <hr>
+    <h1>Service monitoring</h1>
+    <form method="post" action="/mobiadmin/set_service_monitoring">
+        Email address of the service:<br>
+        <input type="text" name="email" value="{{ ssm_email }}" />
+        <br>
+        <input type="submit" name="enable_monitoring" value="enable" />
+        <input type="submit" name="disable_monitoring" value="disable" />
+    </form>
+    <hr>
+    <h1>Service Category</h1>
+    <form method="post" action="/mobiadmin/set_service_category">
+        Email address of the service:<br>
+        <input type="text" name="email" value="{{ ssc_email }}" /><br>
+        New category of the service:<br>
+        <select name="category_id">
+            {% for cat in ssc_categories %}
+                <option value="{{ cat.id }}">{{ cat.name }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <input type="submit" value="submit" />
+    </form>
+    <hr>
+    <h1>New beacon for service identity user</h1>
+    <form method="post" action="/mobiadmin/new_beacon_for_service_identity_user">
+        UUID:<br />
+        <input type="text" style="width:300px;" name="uuid" value="f7826da6-4fa2-4e98-8024-bc5b71e0893e" /><br />
+        Major:<br />
+        <input type="text" name="major" /><br />
+        Minor:<br />
+        <input type="text" name="minor" /><br />
+        Tag:<br />
+        <input type="text" name="tag" /><br />
+        Service:<br />
+        <input type="text" name="service" /><br />
+        Identity:<br />
+        <input type="text" name="identity" value="+default+" /><br />
+        <input type="submit" value="submit" />
+    </form>
+
+</body>
+</html>

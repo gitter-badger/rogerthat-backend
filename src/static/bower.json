@@ -1,0 +1,20 @@
+{
+  "name": "libraries",
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "cropper": "~2.2.5",
+    "components-font-awesome": "~4.5.0"
+  }
+}

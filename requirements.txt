@@ -1,0 +1,7 @@
+Pillow==2.6.1
+PyYAML==3.11
+lxml==3.4.1
+ply==3.4
+python-dateutil==2.3
+six==1.8.0
+wsgiref==0.1.2

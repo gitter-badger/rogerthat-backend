@@ -1,0 +1,87 @@
+android/rogerthat/src/main/java/com/mobicage/rpc/CallReceiver.java
+{{ LICENSE|safe  }}
+
+package com.mobicage.rpc;
+
+public class CallReceiver {
+
+{% for package in SC_API_packages %}    public static volatile {{ package.name }}.IClientRpc {{ package.name|common_camelcase }}IClientRpc = null;
+{% endfor %}
+    public static IJSONable processCall(final RpcCall call) throws Exception {
+        String function = call.function;{% for package in SC_API_packages %}{% for function in package.functions %}
+        if ("{{ package.name }}.{{ function.name}}".equals(function)) {
+            return {{ package.name|common_camelcase }}IClientRpc.{{ function.name }}({% for arg in function.args %}Parser.{{ arg.type|common_camelcase:"True" }}(call.arguments.get("{{ arg.name }}"){% endfor %}));
+        }{% endfor %}{% endfor %}
+        return null;
+    }
+
+}
+
+{{ DELIMITER }}
+android/rogerthat/src/main/java/com/mobicage/rpc/Parser.java
+{{ LICENSE|safe }}
+
+package com.mobicage.rpc;
+
+import java.util.Map;
+
+public class Parser {
+
+    public static Void parseAsVoid(Object result) {
+        return null;
+    }
+{% for to in tos %}
+    @SuppressWarnings("unchecked")
+    public static {{ to.full_name }} {{ to.full_name|common_camelcase:"True" }}(Object value) throws IncompleteMessageException {
+        if (value == null)
+            return null;
+        return new {{ to.full_name }}((Map<String, Object>) value);
+    }
+{% endfor %}
+}
+
+{{ DELIMITER }}
+android/rogerthat/src/main/java/com/mobicage/rpc/PriorityMap.java
+{{ LICENSE|safe }}
+
+package com.mobicage.rpc;
+
+import java.util.HashSet;
+import java.util.Set;
+
+public class PriorityMap {
+    private final static Set<String> sPrioritySet = new HashSet<String>();
+
+    static {{% for package in CS_API_packages %}{% for function in package.functions %}
+        sPrioritySet.add("{{ package.name }}.{{ function.name }}");{% endfor %}{% endfor %}
+    }
+
+    public static boolean hasPriority(String function) {
+        return sPrioritySet.contains(function);
+    }
+
+}
+
+{{ DELIMITER }}
+android/rogerthat/src/main/java/com/mobicage/rpc/ResponseReceiverHandler.java
+{{ LICENSE|safe }}
+
+package com.mobicage.rpc;
+
+public class ResponseReceiverHandler {
+
+    @SuppressWarnings("unchecked")
+    public static void handle(final RpcResult rpcr, final IResponseHandler<?> responseHandler) throws IncompleteMessageException {
+        final java.lang.String function = responseHandler.getFunction();{% for package in CS_API_packages %}{% for function in package.functions %}
+        if ("{{ package.name }}.{{ function.name }}".equals(function)) {
+            final Response<{{ function.rtype.type }}> resp = new Response<{{ function.rtype.type }}>();
+            resp.setError(rpcr.error);
+            resp.setSuccess(rpcr.success);
+            resp.setCallId(rpcr.callId);
+            if (rpcr.success)
+                resp.setResult(Parser.{{ function.rtype.type|common_camelcase:"True" }}(rpcr.result));
+            ((IResponseHandler<{{ function.rtype.type }}>) responseHandler).handle(resp);
+        }{% endfor %}{% endfor %}
+    }
+
+}

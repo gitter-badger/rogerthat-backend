@@ -1,0 +1,32 @@
+<style>
+.contact-card{
+    cursor: pointer;
+    padding: 5px 10px;
+    margin: 5px;
+    word-break: break-word;
+}
+.contact-card:hover{
+    background-color: #eee;
+}
+.contact-card:active{
+    background-color: #eee;
+}
+.contact-name{
+    font-weight: bold;
+}
+.contact-add-container {
+    margin: 0 10px;
+}
+</style>
+<h4>Contacts</h4>
+{{if !contacts.length}}
+<div>No contacts found for this customer.</div>
+{{else}}
+{{each(i, contact) contacts}}
+<div class="contact-card span3" data-contact-id="${contact.id}">
+    <span class="contact-name">${contact.first_name} ${contact.last_name}</span>
+    <div class="contact-email"><a href="mailto:${contact.email}" target="_blank"><i class="fa fa-envelope"></i></a> ${contact.email}</div>
+    <div class="contact-phone"><a href="tel:${contact.phone_number.replace('+', '00')}" target="_blank"><i class="fa fa-phone"></i> ${contact.phone_number}</a></div>
+</div>
+{{/each}}
+{{/if}}

@@ -1,0 +1,17 @@
+{% extends "base_base.html" %}
+
+{% block body %}
+
+<div class="note2">
+	<div class="med">
+		<span>Please login to access the requested resource.</span><br /><br />
+
+		<div>
+			{% include "signupbox.html" %}        
+		</div>
+</div>
+<style>
+	.med div { width: 300px; margin-left: auto; margin-right: auto; }
+</style>
+
+{% endblock %}

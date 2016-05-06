@@ -1,0 +1,480 @@
+{{ DELIMITER }}{% comment %}
+
+
+               MCTTransferObjects.h
+               ====================
+
+
+{% endcomment %}
+ios/src-gen/MCTTransferObjects.h
+{{ LICENSE|safe }}
+
+#import "MCTJSONUtils.h"
+
+// Forward declarations{% for to in tos %}
+@class {{ to|objc_make_to_name }};{% endfor %}
+
+
+@interface MCTTransferObject : NSObject
+- (id)errorDuringInitBecauseOfFieldWithName:(NSString *)fieldName;
+@end
+
+{% for to in tos %}
+///////////////////////////////////////////////////////////////////////////////////
+
+@interface {{ to|objc_make_to_name }} : MCTTransferObject <IJSONable>
+{% if to.fields %}{
+{% for field in to.fields %}    {{ field|objc_code_fieldtype_representation }}{{ field|objc_ivar_field_name }};
+{% endfor %}}
+
+{% for field in to.fields %}@property{{ field|objc_property_attribute }} {{ field|objc_code_fieldtype_representation }}{{ field|objc_property_field_name }};
+{% endfor %}{% endif %}
++ ({{ to|objc_make_to_name }} *)transferObject;
++ ({{ to|objc_make_to_name }} *)transferObjectWithDict:(NSDictionary *)dict;
+
+@end
+{% endfor %}
+{{ DELIMITER }}{% comment %}
+
+
+               MCTTransferObjects.m
+               ====================
+
+
+{% endcomment %}
+ios/src-gen/MCTTransferObjects.m
+{{ LICENSE|safe }}
+
+#import "MCTTransferObjects.h"
+
+@implementation MCTTransferObject
+
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"Transfer object of type [%@]:\n%@", [self class], [[(id)self dictRepresentation] description]];
+}
+
+- (id)errorDuringInitBecauseOfFieldWithName:(NSString *)fieldName
+{
+    ERROR(@"Cannot init %@. Bad field with name %@", [self class], fieldName);
+    return nil;
+}
+
+@end
+
+
+{% for to in tos %}
+///////////////////////////////////////////////////////////////////////////////////
+
+@implementation {{ to|objc_make_to_name }}
+
+{% for field in to.fields %}@synthesize {{ field|objc_property_field_name }} = {{ field|objc_ivar_field_name }};
+{% endfor %}
+- ({{ to|objc_make_to_name }} *)init
+{
+    if (self = [super init]) {{% for field in to.fields %}{% if field.collection_type %}
+        self.{{ field|objc_property_field_name }} = [NSMutableArray array];{% endif %}{% endfor %}
+        return self;
+    }
+}
+
+- ({{ to|objc_make_to_name }} *)initWithDict:(NSDictionary *)dict
+{
+    if ((dict == nil) || ![dict isKindOfClass:MCTDictClass])
+        return [self errorDuringInitBecauseOfFieldWithName:@"{{ field.name }}"];
+
+    if (self = [super init]) {{% for field in to.fields %}{% if field|objc_internal_type == "long" %}{% if field.default == MISSING %}
+        if (![dict containsLongObjectForKey:@"{{ field.name }}"])
+            return [self errorDuringInitBecauseOfFieldWithName:@"{{ field.name }}"];
+        self.{{ field|objc_property_field_name }} = [dict longForKey:@"{{ field.name }}"];{% else %}
+        self.{{ field|objc_property_field_name }} = [dict longForKey:@"{{ field.name }}" withDefaultValue:{{ field|objc_default_value|safe }}];{% endif %}
+{% elif field|objc_internal_type == "float" %}{% if field.default == MISSING %}
+        if (![dict containsFloatObjectForKey:@"{{ field.name }}"])
+            return [self errorDuringInitBecauseOfFieldWithName:@"{{ field.name }}"];
+        else
+            self.{{ field|objc_property_field_name }} = [dict floatForKey:@"{{ field.name }}"];{% else %}
+        self.{{ field|objc_property_field_name }} = [dict floatForKey:@"{{ field.name }}" withDefaultValue:{{ field|objc_default_value|safe }}];{% endif %}
+{% elif field|objc_internal_type == "string" %}{% if field.default == MISSING %}
+        self.{{ field|objc_property_field_name }} = [dict stringForKey:@"{{ field.name }}"];
+        if (self.{{ field|objc_property_field_name }} == nil)
+            return [self errorDuringInitBecauseOfFieldWithName:@"{{ field.name }}"];{% else %}
+        self.{{ field|objc_property_field_name }} = [dict stringForKey:@"{{ field.name }}" withDefaultValue:{{ field|objc_default_value|safe }}];{% endif %}
+        if (self.{{ field|objc_property_field_name }} == MCTNull)
+            self.{{ field|objc_property_field_name }} = nil;
+{% elif field|objc_internal_type == "bool" %}{% if field.default == MISSING %}
+        if (![dict containsBoolObjectForKey:@"{{ field.name }}"])
+            return [self errorDuringInitBecauseOfFieldWithName:@"{{ field.name }}"];
+        self.{{ field|objc_property_field_name }} = [dict boolForKey:@"{{ field.name }}"];{% else %}
+        self.{{ field|objc_property_field_name }} = [dict boolForKey:@"{{ field.name }}" withDefaultValue:{{ field|objc_default_value|safe }}];{% endif %}
+{% elif field|objc_internal_type == "to" %}{% if field.default == MISSING %}
+        NSDictionary *tmp_dict_{{ forloop.counter0 }} = [dict dictForKey:@"{{ field.name }}"];
+        if (tmp_dict_{{ forloop.counter0 }} == nil)
+            return [self errorDuringInitBecauseOfFieldWithName:@"{{ field.name }}"];{% else %}
+        NSDictionary *tmp_dict_{{ forloop.counter0 }} = [dict dictForKey:@"{{ field.name }}" withDefaultValue:{{ field|objc_default_value|safe }}];{% endif %}
+        if (tmp_dict_{{ forloop.counter0 }} == MCTNull)
+            self.{{ field|objc_property_field_name }} = nil;
+        else if (tmp_dict_{{ forloop.counter0 }} != nil) {
+            {{ field|objc_to_classname }} *tmp_to_{{ forloop.counter0 }} = [{{ field|objc_to_classname }} transferObjectWithDict:tmp_dict_{{ forloop.counter0 }}];
+            if (tmp_to_{{ forloop.counter0 }} == nil)
+                return [self errorDuringInitBecauseOfFieldWithName:@"{{ field.name }}"];
+            self.{{ field|objc_property_field_name }} = ({{ field|objc_to_classname }} *)tmp_to_{{ forloop.counter0 }};
+        }
+{% elif field|objc_internal_type == "list_of_to" %}{% if field.default == MISSING %}
+        NSArray *tmp_dict_array_{{ forloop.counter0 }} = [dict arrayForKey:@"{{ field.name }}"];
+        if (tmp_dict_array_{{ forloop.counter0 }} == nil)
+            return [self errorDuringInitBecauseOfFieldWithName:@"{{ field.name }}"];
+        if (tmp_dict_array_{{ forloop.counter0 }} == MCTNull)
+            return [self errorDuringInitBecauseOfFieldWithName:@"{{ field.name }}"];
+        else {{% else %}
+        NSArray *tmp_dict_array_{{ forloop.counter0 }} = [dict arrayForKey:@"{{ field.name }}" withDefaultValue:{{ field|objc_default_value|safe }}];
+        if (tmp_dict_array_{{ forloop.counter0 }} == MCTNull)
+            return [self errorDuringInitBecauseOfFieldWithName:@"{{ field.name }}"];
+        if (tmp_dict_array_{{ forloop.counter0 }} != nil) {{% endif %}
+            NSMutableArray *tmp_obj_array_{{ forloop.counter0 }} = [NSMutableArray arrayWithCapacity:[tmp_dict_array_{{ forloop.counter0 }} count]];
+            for (NSDictionary *tmp_dict in tmp_dict_array_{{ forloop.counter0 }}) {
+                {{ field|objc_to_classname }} *tmp_obj = [{{ field|objc_to_classname }} transferObjectWithDict:tmp_dict];
+                if (tmp_obj == nil)
+                    return [self errorDuringInitBecauseOfFieldWithName:@"{{ field.name }}"];
+                [tmp_obj_array_{{ forloop.counter0 }} addObject:tmp_obj];
+            }
+            self.{{ field|objc_property_field_name }} = tmp_obj_array_{{ forloop.counter0 }};
+        }
+{% elif field.collection_type %}{% if field.default == MISSING %}
+        NSArray *tmp_{{ field.type }}_array_{{ forloop.counter0 }} = [dict arrayForKey:@"{{ field.name }}"];
+        if (tmp_{{ field.type }}_array_{{ forloop.counter0 }} == nil)
+            return [self errorDuringInitBecauseOfFieldWithName:@"{{ field.name }}"];{% else %}
+        NSArray *tmp_{{ field.type }}_array_{{ forloop.counter0 }} = [dict arrayForKey:@"{{ field.name }}" withDefaultValue:{{ field|objc_default_value|safe }}];{% endif %}
+        for (id obj in tmp_{{ field.type }}_array_{{ forloop.counter0 }}) {{% if field|objc_internal_type == "list_of_string" %}
+            if (![obj isKindOfClass:MCTStringClass]){% elif field|objc_internal_type == "list_of_bool" %}
+            if (![obj isKindOfClass:MCTBooleanClass]){% elif field|objc_internal_type == "list_of_float" %}
+            if (!([obj isKindOfClass:MCTFloatClass] || [obj isKindOfClass:MCTLongClass])){% elif field|objc_internal_type == "list_of_long" %}
+            if (![obj isKindOfClass:MCTLongClass])
+                return [self errorDuringInitBecauseOfFieldWithName:@"{{ field.name }}"];
+            MCTlong l = [obj longValue];
+            if (l < MCT_MIN_LONG || l > MCT_MAX_LONG){% endif %}
+                return [self errorDuringInitBecauseOfFieldWithName:@"{{ field.name }}"];
+        }
+        self.{{ field|objc_property_field_name }} = tmp_{{ field.type }}_array_{{ forloop.counter0 }};
+{% endif %}{% endfor %}
+        return self;
+    }
+}
+
++ ({{ to|objc_make_to_name }} *)transferObject
+{
+    return [[{{ to|objc_make_to_name }} alloc] init];
+}
+
++ ({{ to|objc_make_to_name }} *)transferObjectWithDict:(NSDictionary *)dict
+{
+    return [[{{ to|objc_make_to_name }} alloc] initWithDict:dict];
+}
+
+- (NSDictionary *)dictRepresentation
+{
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+{% for field in to.fields %}{% if field|objc_internal_type == "long" %}
+    [dict setLong:self.{{ field|objc_property_field_name }} forKey:@"{{ field.name }}"];
+{% endif %}{% if field|objc_internal_type == "float" %}
+    [dict setFloat:self.{{ field|objc_property_field_name }} forKey:@"{{ field.name }}"];
+{% endif %}{% if field|objc_internal_type == "bool" %}
+    [dict setBool:self.{{ field|objc_property_field_name }} forKey:@"{{ field.name }}"];
+{% endif %}{% if field|objc_internal_type == "string" %}
+    [dict setString:self.{{ field|objc_property_field_name }} forKey:@"{{ field.name }}"];
+{% endif %}{% if field|objc_internal_type == "to" %}
+    [dict setDict:[self.{{ field|objc_property_field_name }} dictRepresentation] forKey:@"{{ field.name }}"];
+{% endif %}{% if field|objc_internal_type == "list_of_long" %}
+    // TODO: add checking that all members are indeed longs
+    [dict setArray:self.{{ field|objc_property_field_name }} forKey:@"{{ field.name }}"];
+{% endif %}{% if field|objc_internal_type == "list_of_float" %}
+    // TODO: add checking that all members are indeed floats
+    [dict setArray:self.{{ field|objc_property_field_name }} forKey:@"{{ field.name }}"];
+{% endif %}{% if field|objc_internal_type == "list_of_bool" %}
+    // TODO: add checking that all members are indeed bool
+    [dict setArray:self.{{ field|objc_property_field_name }} forKey:@"{{ field.name }}"];
+{% endif %}{% if field|objc_internal_type == "list_of_string" %}
+    // TODO: add checking that all members are indeed string
+    [dict setArray:self.{{ field|objc_property_field_name }} forKey:@"{{ field.name }}"];
+{% endif %}{% if field|objc_internal_type == "list_of_to" %}
+    if (self.{{ field|objc_property_field_name }} == nil) {
+        ERROR(@"nil value not supported for array field {{ to|objc_make_to_name }}.{{ field|objc_property_field_name }}");
+    } else if ([self.{{ field|objc_property_field_name }} isKindOfClass:MCTArrayClass]) {
+        // TODO: check type of fields
+        NSMutableArray *tmp_array = [NSMutableArray arrayWithCapacity:[self.{{ field|objc_property_field_name }} count]];
+        for ({{ field|objc_to_classname }} *obj in self.{{ field|objc_property_field_name }})
+            [tmp_array addObject:[obj dictRepresentation]];
+        [dict setArray:tmp_array forKey:@"{{ field.name }}"];
+    } else {
+        ERROR(@"expecting array field {{ to|objc_make_to_name }}.{{ field|objc_property_field_name }}");
+    }
+{% endif %}{% endfor %}
+    return dict;
+}
+
+@end
+{% endfor %}
+{{ DELIMITER }}{% comment %}
+
+
+               MCT_CS_API.h
+               ============
+
+
+{% endcomment %}
+ios/src-gen/MCT_CS_API.h
+{{ LICENSE|safe }}
+
+#import "MCTAbstractResponseHandler.h"
+#import "MCTTransferObjects.h"
+
+{% for package in CS_API_packages %}
+@interface {{ package.name|objc_package_classname }} : NSObject
+{% for function in package.functions %}
++ (void)CS_API_{{ function.name }}WithResponseHandler:(MCTAbstractResponseHandler *)responseHandler{% for argument in function.args %} and{{ argument.name|capfirst }}:({{ argument|objc_code_argtype_representation }}){{ argument.name|objc_cleanup_name }}{% endfor %};
+{% endfor %}
+@end
+
+///////////////////////////////////////////////////////////////////////////////////
+{% endfor %}
+{{ DELIMITER }}{% comment %}
+
+
+               MCT_CS_API.m
+               ============
+
+
+{% endcomment %}
+ios/src-gen/MCT_CS_API.m
+{{ LICENSE|safe }}
+
+#import "MCT_CS_API.h"
+#import "MCTComponentFramework.h"
+
+{% for package in CS_API_packages %}
+@implementation {{ package.name|objc_package_classname }}
+{% for function in package.functions %}
+
++ (void)CS_API_{{ function.name }}WithResponseHandler:(MCTAbstractResponseHandler *)responseHandler{% for argument in function.args %} and{{ argument.name|capfirst }}:({{ argument|objc_code_argtype_representation }}){{ argument.name|objc_cleanup_name }}{% endfor %}
+{
+    [[MCTComponentFramework commQueue] addOperationWithBlock:^{
+        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+{% for argument in function.args %}{% if argument|objc_internal_type == "long" %}
+        [dict setLong:{{ argument.name|objc_cleanup_name }} forKey:@"{{ argument.name }}"];
+{% endif %}{% if argument|objc_internal_type == "float" %}
+        [dict setFloat:{{ argument.name|objc_cleanup_name }} forKey:@"{{ argument.name }}"];
+{% endif %}{% if argument|objc_internal_type == "string" %}
+        [dict setString:{{ argument.name|objc_cleanup_name }} forKey:@"{{ argument.name }}"];
+{% endif %}{% if argument|objc_internal_type == "bool" %}
+        [dict setBool:{{ argument.name|objc_cleanup_name }} forKey:@"{{ argument.name }}"];
+{% endif %}{% if argument|objc_internal_type == "to" %}
+        [dict setDict:[{{ argument.name|objc_cleanup_name }} dictRepresentation] forKey:@"{{ argument.name }}"];
+{% endif %}{% if argument|objc_internal_type == "list_of_long" %}
+        [dict setArray:{{ argument.name|objc_cleanup_name }} forKey:@"{{ argument.name }}"];
+{% endif %}{% if argument|objc_internal_type == "list_of_float" %}
+        [dict setArray:{{ argument.name|objc_cleanup_name }} forKey:@"{{ argument.name }}"];
+{% endif %}{% if argument|objc_internal_type == "list_of_string" %}
+        [dict setArray:{{ argument.name|objc_cleanup_name }} forKey:@"{{ argument.name }}"];
+{% endif %}{% if argument|objc_internal_type == "list_of_bool" %}
+        [dict setArray:{{ argument.name|objc_cleanup_name }} forKey:@"{{ argument.name }}"];
+{% endif %}{% if argument|objc_internal_type == "list_of_to" %}
+        NSMutableArray *tmp_arr_{{ forloop.counter0 }} = [NSMutableArray arrayWithCapacity:[{{ argument.name|objc_cleanup_name }} count]];
+        for (id obj in {{ argument.name|objc_cleanup_name }}) {
+            [tmp_arr_{{ forloop.counter0 }} addObject:[obj dictRepresentation]];
+        }
+        [dict setArray:tmp_arr_{{ forloop.counter0 }} forKey:@"{{ argument.name|objc_cleanup_name }}"];
+{% endif %}{% endfor %}
+        [[MCTComponentFramework protocol] callToServerWithFunction:@"{{ package.name }}.{{ function.name }}" andArguments:dict andResponseHandler:responseHandler];
+    }];
+}
+{% endfor %}
+@end
+
+///////////////////////////////////////////////////////////////////////////////////
+{% endfor %}
+{{ DELIMITER }}{% comment %}
+
+
+               MCT_CallReceiver.h
+               ==================
+
+
+{% endcomment %}
+ios/src-gen/MCTCallReceiver.h
+{{ LICENSE|safe }}
+
+#import "MCTTransferObjects.h"
+#import "MCTRPCCall.h"
+
+{% for package in SC_API_packages %}
+@protocol {{ package.name|objc_package_classname }}_IClientRPC
+{% for function in package.functions %}
+- ({{ function.rtype|objc_code_rtype_representation }})SC_API_{{ function.name }}{% for argument in function.args %}{% if forloop.first %}With{% else %} and{% endif %}{{ argument.name|capfirst }}:({{ argument|objc_code_argtype_representation }}){{ argument.name|objc_cleanup_name }}{% endfor %};
+{% endfor %}
+@end
+
+
+{% endfor %}
+@interface MCTCallReceiver : NSObject
+{
+{% for package in SC_API_packages %}    id<{{ package.name|objc_package_classname }}_IClientRPC> __weak {{ package.name|objc_package_instancename }}_;
+{% endfor %}}
+
+{% for package in SC_API_packages %}@property(nonatomic, weak) id<{{ package.name|objc_package_classname }}_IClientRPC> {{ package.name|objc_package_instancename }};
+{% endfor %}
+
+- (id<IJSONable>)processIncomingCall:(MCTRPCCall *)call;
+
+@end
+
+{{ DELIMITER }}{% comment %}
+
+
+               MCT_CallReceiver.m
+               ==================
+
+
+{% endcomment %}
+ios/src-gen/MCTCallReceiver.m
+{{ LICENSE|safe }}
+
+#import "MCTCallReceiver.h"
+#import "MCTJSONUtils.h"
+
+@implementation MCTCallReceiver
+{% for package in SC_API_packages %}
+@synthesize {{ package.name|objc_package_instancename }} = {{ package.name|objc_package_instancename }}_;
+{% endfor %}
+
+- (id<IJSONable>)processIncomingCall:(MCTRPCCall *)call
+{
+    NSDictionary *dict = call.arguments;
+    NSRange match;
+{% for package in SC_API_packages %}
+    match = [call.function rangeOfString:@"{{ package.name }}."];
+    if (match.location == 0) {
+{% for function in package.functions %}
+        if ([call.function isEqualToString:@"{{ package.name }}.{{ function.name }}"]) {
+{% for argument in function.args %}{% if argument|objc_internal_type == "long" %}
+            if (![dict containsLongObjectForKey:@"{{ argument.name }}"])
+                goto processIncomingCallError;
+            MCTlong {{ argument.name|objc_cleanup_name }} = [dict longForKey:@"{{ argument.name }}"];
+{% endif %}{% if argument|objc_internal_type == "float" %}
+            if (![dict containsFloatObjectForKey:@"{{ argument.name }}"])
+                goto processIncomingCallError;
+            MCTFloat {{ argument.name|objc_cleanup_name }} = [dict floatForKey:@"{{ argument.name }}"];
+{% endif %}{% if argument|objc_internal_type == "string" %}
+            NSString *{{ argument.name|objc_cleanup_name }} = [dict stringForKey:@"{{ argument.name }}"];
+            if ({{ argument.name|objc_cleanup_name }} == nil)
+                goto processIncomingCallError;
+            if ({{ argument.name|objc_cleanup_name }} == MCTNull)
+                {{ argument.name|objc_cleanup_name }} = nil;
+{% endif %}{% if argument|objc_internal_type == "bool" %}
+            if (![dict containsBoolObjectForKey:@"{{ argument.name }}"])
+                goto processIncomingCallError;
+            BOOL {{ argument.name|objc_cleanup_name }} = [dict boolForKey:@"{{ argument.name }}"];
+{% endif %}{% if argument|objc_internal_type == "to" %}
+            NSDictionary *tmp_dict_{{ forloop.counter0 }} = [dict dictForKey:@"{{ argument.name }}"];
+            {{ argument|objc_to_classname }} *{{ argument.name|objc_cleanup_name }};
+            if (tmp_dict_{{ forloop.counter0 }} == nil)
+                goto processIncomingCallError;
+            if (tmp_dict_{{ forloop.counter0 }} == MCTNull)
+                {{ argument.name|objc_cleanup_name }} = nil;
+            else {
+                {{ argument.name|objc_cleanup_name }} = [{{ argument|objc_to_classname }} transferObjectWithDict:tmp_dict_{{ forloop.counter0 }}];
+                if ({{ argument.name|objc_cleanup_name }} == nil)
+                    goto processIncomingCallError;
+            }
+{% endif %}{% if argument|objc_internal_type == "list_of_string" %}
+            NSArray *{{ argument.name|objc_cleanup_name }} = [dict arrayForKey:@"{{ argument.name }}"];
+            if ({{ argument.name|objc_cleanup_name }} == nil)
+                goto processIncomingCallError;
+            for (id obj in {{ argument.name|objc_cleanup_name }})
+                if (![obj isKindOfClass:MCTStringClass])
+                    goto processIncomingCallError;
+{% endif %}{% if argument|objc_internal_type == "list_of_bool" %}
+            TODO {{ argument.name|objc_error }}
+{% endif %}{% if argument|objc_internal_type == "list_of_long" %}
+            TODO {{ argument.name|objc_error }}
+{% endif %}{% if argument|objc_internal_type == "list_of_float" %}
+            TODO {{ argument.name|objc_error }}
+{% endif %}{% if argument|objc_internal_type == "list_of_to" %}
+            TODO {{ argument.name|objc_error }}
+{% endif %}{% endfor %}
+            return [self.{{ package.name|objc_package_instancename }} SC_API_{{ function.name }}{% for argument in function.args %}{% if forloop.first %}With{% else %} and{% endif %}{{ argument.name|capfirst }}:{{ argument.name|objc_cleanup_name }}{% endfor %}];
+        }
+{% endfor %}
+        goto processIncomingCallError;
+
+    }
+{% endfor %}
+
+processIncomingCallError:
+    ERROR(@"Cannot process incoming call %@ for callid %@", call.function, call.callid);
+    return nil;
+}
+
+@end
+
+{{ DELIMITER }}{% comment %}
+
+
+               MCT_ResultParser.h
+               ==================
+
+
+{% endcomment %}
+ios/src-gen/MCTResultParser.h
+{{ LICENSE|safe }}
+
+@interface MCTResultParser : NSObject
+
++ (id)resultObjectFromResultDict:(NSDictionary *)resultDict forFunction:(NSString *)function;
+
+@end
+
+{{ DELIMITER }}{% comment %}
+
+
+               MCT_ResultParser.m
+               ==================
+
+
+{% endcomment %}
+ios/src-gen/MCTResultParser.m
+{{ LICENSE|safe }}
+
+#import "MCTResultParser.h"
+#import "MCTTransferObjects.h"
+
+@implementation MCTResultParser
+
++ (id)resultObjectFromResultDict:(NSDictionary *)resultDict forFunction:(NSString *)function
+{
+    NSRange match;
+{% for package in CS_API_packages %}
+    match = [function rangeOfString:@"{{ package.name }}."];
+    if (match.location == 0) {
+{% for function in package.functions %}
+        if ([function isEqualToString:@"{{ package.name }}.{{ function.name }}"]) {
+{% if function.rtype|objc_internal_type == "to" %}
+            {{ function.rtype|objc_to_classname }} *result = [{{ function.rtype|objc_to_classname }} transferObjectWithDict:resultDict];
+            if (result == nil)
+                goto resultParserError;
+            return result;
+{% else %}
+{{ function.rtype|objc_error }}
+{% endif %}
+        }
+{% endfor %}
+        goto resultParserError;
+    }
+{% endfor %}
+
+resultParserError:
+    ERROR(@"Error while parsing result for function %@\n%@", function, resultDict);
+    return nil;
+}
+
+@end
+
+{{ DELIMITER }}

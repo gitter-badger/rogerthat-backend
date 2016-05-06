@@ -1,0 +1,247 @@
+indexes:
+- kind: APIKey
+  properties:
+  - name: user
+  - name: mfr
+
+- kind: App
+  properties:
+  - name: type
+  - name: key_name
+    direction: desc
+
+- kind: BeaconDiscovery
+  properties:
+  - name: service_identity_user
+  - name: creation_time
+
+- kind: ChatMembers
+  ancestor: yes
+  properties:
+  - name: class
+  - name: __key__
+    direction: desc
+
+- kind: DSPicklePart
+  ancestor: yes
+  properties:
+  - name: version
+  - name: number
+
+- kind: Friend
+  properties:
+  - name: user
+  - name: friend
+
+- kind: FriendServiceIdentityConnection
+  properties:
+  - name: broadcast_type
+  - name: service_identity_email
+  - name: birthdate
+
+- kind: FriendServiceIdentityConnection
+  properties:
+  - name: disabled_broadcast_types
+  - name: service_identity_email
+
+- kind: FriendServiceIdentityConnection
+  properties:
+  - name: enabled_broadcast_types
+  - name: gender
+  - name: service_identity_email
+  - name: birthdate
+
+- kind: FriendServiceIdentityConnection
+  properties:
+  - name: enabled_broadcast_types
+  - name: service_identity_email
+  - name: birthdate
+
+- kind: FriendServiceIdentityConnection
+  properties:
+  - name: enabled_broadcast_types
+  - name: service_identity_email
+  - name: friend_name
+
+- kind: FriendServiceIdentityConnection
+  properties:
+  - name: service_identity_email
+  - name: birthdate
+
+- kind: FriendServiceIdentityConnection
+  properties:
+  - name: service_identity_email
+  - name: disabled_broadcast_types
+
+- kind: FriendServiceIdentityConnection
+  properties:
+  - name: service_identity_email
+  - name: friend_name
+
+- kind: FriendServiceIdentityConnection
+  ancestor: yes
+  properties:
+  - name: service_identity_email
+
+- kind: InstallationLog
+  ancestor: yes
+  properties:
+  - name: timestamp
+
+- kind: InstallationLog
+  ancestor: yes
+  properties:
+  - name: timestamp
+    direction: desc
+
+- kind: Location
+  properties:
+  - name: mobile
+  - name: fromTimestamp
+
+- kind: Location
+  properties:
+  - name: mobile
+  - name: fromTimestamp
+    direction: desc
+
+- kind: Location
+  properties:
+  - name: user
+  - name: fromTimestamp
+
+- kind: Message
+  properties:
+  - name: member_status_index
+  - name: creationTimestamp
+    direction: desc
+
+- kind: Message
+  properties:
+  - name: member_status_index
+  - name: sender_type
+  - name: creationTimestamp
+    direction: desc
+
+- kind: Message
+  properties:
+  - name: member_status_index
+  - name: sender_type
+  - name: timestamp
+    direction: desc
+
+- kind: Message
+  properties:
+  - name: member_status_index
+  - name: timestamp
+    direction: desc
+
+- kind: MessageFlowDesign
+  ancestor: yes
+  properties:
+  - name: deleted
+  - name: multilanguage
+    direction: desc
+  - name: name
+
+- kind: MessageFlowDesign
+  ancestor: yes
+  properties:
+  - name: multilanguage
+    direction: desc
+  - name: name
+
+- kind: MessageFlowDesign
+  ancestor: yes
+  properties:
+  - name: name
+
+- kind: Mobile
+  properties:
+  - name: registrationComplete
+  - name: timestamp
+
+- kind: Mobile
+  properties:
+  - name: status
+  - name: timestamp
+
+- kind: Mobile
+  properties:
+  - name: user
+  - name: status
+  
+- kind: Registration
+  properties:
+  - name: installation
+  - name: timestamp
+
+- kind: Registration
+  properties:
+  - name: installation
+  - name: timestamp
+    direction: desc
+
+- kind: RpcCAPICall
+  ancestor: yes
+  properties:
+  - name: method
+  - name: priority
+    direction: desc
+  - name: timestamp
+
+- kind: RpcCAPICall
+  ancestor: yes
+  properties:
+  - name: priority
+    direction: desc
+  - name: timestamp
+
+- kind: RpcCAPICall
+  ancestor: yes
+  properties:
+  - name: timestamp
+
+- kind: ServiceInteractionDef
+  ancestor: yes
+  properties:
+  - name: deleted
+  - name: service_identity
+  - name: timestamp
+    direction: desc
+
+- kind: ServiceInteractionDef
+  ancestor: yes
+  properties:
+  - name: deleted
+  - name: timestamp
+    direction: desc
+
+- kind: ServiceInteractionDef
+  ancestor: yes
+  properties:
+  - name: timestamp
+    direction: desc
+
+- kind: ServiceLocationTracker
+  ancestor: yes
+  properties:
+  - name: enabled
+  - name: service_identity_user
+  - name: until
+
+- kind: ServiceLog
+  properties:
+  - name: user
+  - name: timestamp
+    direction: desc
+
+- kind: ServiceRole
+  ancestor: yes
+  properties:
+  - name: name
+  
+- kind: TransferChunk
+  ancestor: yes
+  properties:
+  - name: number

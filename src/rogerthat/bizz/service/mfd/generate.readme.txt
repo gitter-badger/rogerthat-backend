@@ -1,0 +1,33 @@
+Go to a Linux ubuntu machine
+
+Install generateDS from http://dev.mobicage.com/fileshare/downloads/appengine-dev-tools/generateDS-2.7a.tar.gz
+Untar
+
+go into generateDS-2.7a directory 
+JABBER:
+./generateDS.py --external-encoding='utf-8' -o /testing/mobicagecloud/src/rogerthat/bizz/service/mfd/gen.py -s /testing/mobicagecloud/src/rogerthat/bizz/service/mfd/sub.py /testing/mobicagecloud/src/rogerthat/service/api/MessageFlow.1.xsd
+Ruben:
+./generateDS.py --external-encoding='utf-8' -o ../appengine/src/rogerthat/bizz/service/mfd/gen.py -s ../appengine/src/rogerthat/bizz/service/mfd/sub.py ../appengine/src/rogerthat/service/api/MessageFlow.1.xsd
+
+open sub.py replace
+import ??? as supermod
+with
+from rogerthat.bizz.service.mfd import gen as supermod
+
+
+open gen.py and add this import:
+from rogerthat.utils import xml_escape
+
+
+open gen.py and replace on multiple places:
+outfile.write(str(self.valueOf_).encode(ExternalEncoding))
+with
+outfile.write(unicode(xml_escape(self.valueOf_)).encode(ExternalEncoding))
+
+
+Both in gen.py and sub.py add a line
+#@PydevCodeAnalysisIgnore
+before the "Generated ... by generateDS.py"
+
+# @@xxx_skip_license@@
+after "#!/usr/bin/env python"

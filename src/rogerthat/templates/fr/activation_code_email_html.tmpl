@@ -1,0 +1,12 @@
+<html><body>Cher{% if name %} {{ name|escape }}{% endif %},<br>
+<br>
+C'est votre code d'activation pour l'application {{ app.name }}:<br>
+<br>
+<span style="font-size: xx-large;">{{ pin }}</span><br>
+<br>
+Retour à l'application {{ app.name }} sur ​​votre appareil mobile et entrez votre code d'activation pour continuer.<br>
+<br>
+Merci d'utiliser l'application {{ app.name }}!<br>
+<br>
+- L'équipe de {{ app.name }}<br>
+</body></html>

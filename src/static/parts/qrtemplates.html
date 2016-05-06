@@ -1,0 +1,60 @@
+<div id="qrTemplatesContainer" class="span-18 last">
+	<script type="text/javascript" src="/static/js/qrtemplates.js"></script>
+	<div id="uploadContainer">
+		<h3>Create new QR code template</h3>
+		<div class="span-17 last">
+			<iframe id="qrTemplatesHiddenUploadFrame" name="qrTemplatesHiddenUploadFrame" style="width: 0px; height: 0px; border: 0px; color: #fff; padding: 0px"></iframe>
+			<form id="upload" method="post" enctype="multipart/form-data" target="qrTemplatesHiddenUploadFrame" action="/mobi/service/qrtemplate/upload">
+				Description:<br>
+				<input id="description" name="description" type="text" style="width: 200px"><span id="description_error" class="mcerror" style="display: none;">* required field</span><br>
+				QR code body color:<br>
+				<input id="color" name="color" type="text" value="000000">&nbsp;&nbsp;<span id="color_preview" style="background-color: #000;">&nbsp;&nbsp;&nbsp;</span>&nbsp;<a href="http://www.colorpicker.com/" target="_blank">help</a>&nbsp;<span id="color_error" class="mcerror" style="display: none;">* invalid color</span><br>
+				Optional PNG template image (width: 348px - height: 343px):<br>
+				<div id="upload_button_container"><input id="file" type="file" name="file" accept="*.png" /></div>
+			</form>
+                        <button id="upload_button">Create QR code template</button>
+			<span id="upload_error" class="mcerror" style="display: none;"></span>
+		</div>
+	</div>
+	<br>&nbsp;<br>
+	<div id="qrTemplateListContainer">
+		<h3>Manage QR code templates</h3>
+		<div id="qr_template_list" class="span-17 last">
+		
+		</div>
+	</div>
+	<div id="createQRCodeDialog" style="display: none;">
+		<table>
+			<tr>
+				<td class="td-label">Identity:</td>
+				<td><select id="identities"></select></td>
+			</tr>
+			<tr>
+				<td class="td-label">Action description:</td>
+				<td><textarea id="cq_new_description" /><span id="description_required" class="mcerror"><br>* required field</span></td>
+			</tr>
+            <tr>
+                <td class="td-label">Action branding:</td>
+                <td><select id="cq_new_branding"></select></td>
+            </tr>
+			<tr>
+				<td class="td-label">Tag:</td>
+				<td><textarea id="cq_new_tag" /><span id="tag_required" class="mcerror"><br>* required field</span></td>
+			</tr>
+			<tr>
+				<td class="td-label">Behavior:</td>
+				<td>
+					<input type="radio" name="qrt_behavior" id="qrt_radio_web_callback" value="qrt_radio_web_callback" checked="true" />
+					<label for="qrt_radio_web_callback">Web callback (advanced)</label>
+					<br>
+					<input type="radio" name="qrt_behavior" id="qrt_radio_start_flow" value="qrt_radio_start_flow" />
+					<label for="qrt_radio_start_flow">Start flow</label>
+				</td>
+			</tr>
+			<tr id="qrt_behavior_start_flow" style="display:none">
+				<td class="td-label">Start flow:</td>
+				<td><select id="static_flow"></select></td>
+			</tr>
+		</table>
+	</div>
+</div>

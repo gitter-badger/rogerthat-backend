@@ -1,0 +1,32 @@
+<html>
+  <body>
+    <p>Cher,</p>
+    <p>{{ profile.name }} veut améliorer leurs services pour vous via l'application de service à la clientèle {{ app.name }}.<br>
+Vous pouvez utiliser l'application {{ app.name }} pour communiquer avec {{ profile.name }} et d'autres organisations qui font usage de {{ app.name }}.</p>
+    <p>
+      <ul>
+        <li>
+          Étape 1. Installez l'application {{ app.name }} gratuitement:<br>
+          <a href="{{ BASE_URL }}/install?a={{ app.app_id }}&email">{{ BASE_URL }}/install?a={{ app.app_id }}&email</a><br><br>
+        </li>
+        <li>
+          Étape 2. Abonnez-vous à {{ profile.name }}:<br>
+          <a href="{{ short_url }}{% if secret %}?s={{ secret }}{% endif %}">{{ short_url }}{% if secret %}?s={{ secret }}{% endif %}</a>
+        </li>
+      </ul>
+    </p>
+    <p>&nbsp;</p>
+    {% if message %}
+    <p>
+      {{ profile.name }} a ajouté une note personnelle à leur demande d'invitation:
+    </p>
+    <p style="background-color: #f0e68c; padding: 10px; margin-left: 20px; border-radius: 15px; margin-right: 20px; padding-left: 20px; -moz-border-radius: 15px;">
+      {{ message }}
+    </p>
+    {% endif %}{% if consts.INCLUDE_ROGERTHAT_DOT_NET %}
+    <p>
+    Pour plus d'informations à propos de {{ app.name }} ou d'autres produits Rogerthat, merci de visiter:<br>
+    <a href="http://www.rogerthat.net">http://www.rogerthat.net</a>
+    </p>{% endif %}
+  </body>
+</html>

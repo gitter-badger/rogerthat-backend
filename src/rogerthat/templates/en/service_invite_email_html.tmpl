@@ -1,0 +1,25 @@
+<html>
+  <body>
+	<p>Dear,</p>
+	<p>Starting today, you can use the '{{ profile.name }} App'.<br>
+Our app runs in the {{ app.name }} {% if app.type == app.APP_TYPE_CITY_APP %}City App{% else %}app{% endif %}. The installation on your smartphone works as follows:</p>
+    <p>
+      <ul>
+        <li>
+          Step 1. Install the {{ app.name }} {% if app.type == app.APP_TYPE_CITY_APP %}City-App{% else %}app{% endif %} for free:<br>
+          <a href="{{ BASE_URL }}/install?a={{ app.app_id }}&email">{{ BASE_URL }}/install?a={{ app.app_id }}&email</a><br><br>
+        </li>
+        <li>
+			Step 2. Open the {{ app.name }} {% if app.type == app.APP_TYPE_CITY_APP %}City-App{% else %}app{% endif %}, and search for '{{ profile.name }}' in '{% if app.type == app.APP_TYPE_CITY_APP %}{{ localized_organization_type }}{% else %}Services{% endif %}'.
+        </li>
+      </ul>
+    </p>
+    <p>&nbsp;</p>
+    {% if message %}
+    <p style="background-color: #f0e68c; padding: 10px; margin-left: 20px; border-radius: 15px; margin-right: 20px; padding-left: 20px; -moz-border-radius: 15px;">
+      {{ message }}
+    </p>
+    {% endif %}
+    <p>{{ profile.name }}</p>
+  </body>
+</html>

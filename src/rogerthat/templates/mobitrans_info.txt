@@ -1,0 +1,21 @@
+# This file contains a list of templates that are not to be translated
+# paths are relative to rogerthat/templates/<2-letter language>/
+
+feedback.tmpl
+reset_password.tmpl
+reset_password_html.tmpl
+service_disabled.tmpl
+service_disabled_html.tmpl
+service_enabled.tmpl
+service_enabled_html.tmpl
+signup.tmpl
+signup_html.tmpl
+trial_service_signup.tmpl
+trial_service_signup_html.tmpl
+somebody_tries_to_register_his_mobile_on_your_service_account_warning.tmpl
+somebody_tries_to_register_his_mobile_on_your_service_account_warning_html.tmpl
+web/base_base_mobile_simple_no_javascript.html
+web/message_query.tmpl
+web/service_about.tmpl
+web/service_page.tmpl
+web/smi_branding.tmpl

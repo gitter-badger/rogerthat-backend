@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+  <head>
+      <title>Rogerthat {%if user %}-- {{ user.nickname }}{% endif %}</title>
+      <meta name="google" value="notranslate">
+      <meta name="google-site-verification" content="VP4noJ9Ywkvpnj5YJaKwF1BPZGTr3gu0ommJaPMql-A" />
+      <meta name="description" content="Fast, reliable, secure, cross-platform interactive communication between people and services." />
+      <meta name="keywords" content="roger,that,rogerthat,messenger,messaging,fast,reliable,secure,interactive,communication,people,services" />      
+      {% block facebook_header %}
+      <meta property="og:title" content="Next generation social messaging"/>
+      <meta property="og:url" content="https://rogerth.at"/>
+      <meta property="og:image" content="https://rogerth.at/static/images/site/roge-logo.png"/>
+      <meta property="og:site_name" content="Rogerthat"/>
+      <meta property="og:description" content="Automate yourself and your friends with Rogerthat multiple choice messaging!"/>
+      {% endblock %}
+      {%if debug or appscale%}<script src='/_ah/channel/jsapi'></script>{%else%}<script src='https://talkgadget.google.com/talkgadget/channel.js'></script>{%endif%}
+    <link rel="stylesheet" href="/static/css/start-1.8.9/jquery-ui-1.8.9.custom.css" />
+    <link rel="stylesheet" href="/static/blueprint/screen.css" type="text/css" media="screen, projection" />  
+    <link rel="stylesheet" href="/static/blueprint/print.css" type="text/css" media="print" />
+      <link rel="stylesheet" href="/static/main.css" type="text/css" media="screen, projection" />
+    <link rel="stylesheet" href="/static/theme.css" type="text/css" media="screen, projection" />
+    {% block html_header %}{% endblock %}
+    <script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-24017291-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+    </script>
+  </head>
+  <body {% if loading_enabled %}style="display:none;"{% endif %}>
+    <!--[if IE]><script type="text/javascript" src="/static/js/json2.js"></script><![endif]-->
+    <script src="/static/js/jquery-1.6.1.min.js" type="text/javascript"></script>
+    <script src="/static/js/jquery-ui-1.8.13.custom.min.js" type="text/javascript"></script>
+    <script src="/static/js/jquery-ui-timepicker-addon.js" type="text/javascript"></script>
+    <script type="text/javascript" src="/static/js/ui.watermark.js"></script>
+    <script type="text/javascript" src="/static/js/stacktrace.js"></script>
+    <script type="text/javascript" src="/static/js/mc.js"></script>
+    <script type="text/javascript">
+<!--
+
+$(function(){
+    $("#processingBar").progressbar({value:100});
+    mctracker._processingDialog = $("#processingDialog").dialog({
+        autoOpen: false,
+        modal: false,
+        dragable: false,
+        resizable: false,
+        title: 'Processing ...',
+        width: 200,
+        height: 75
+    });
+    var footer = $("#footer");
+    var positionFooter = function(e) {
+        var win = $(window);
+        var doc = $(document);
+        var height = win.height();
+        footer.css('top', 0);
+        if (doc.height() > height) {
+            footer.css('position', '');
+            footer.css('top', '');    
+        } else {
+            footer.css('position', 'absolute');
+            footer.css('top', height - 60);
+        }
+    };
+    $(window).resize(positionFooter);
+    $(document).resize(positionFooter);
+    positionFooter();
+});
+-->
+    </script>
+
+
+ 
+{% block header %}{% endblock %}    
+      <div id="header" >
+        <div  class="med">
+          {% if not hide_header %}
+              <a id="logo" href="/" class="action-link">
+                <img src="/static/images/site/rogerthat-grey.png"
+                     style="width: 250px; padding-top: 23px; padding-left: 15px;" />
+            </a>
+            <!-- <span> beta</span> -->
+            <div id="log">
+              {% block session %}
+            {% if user %}
+                {% if user_services %}
+                    <select id="user_services" style="border: none; background-color: transparent; color: #8ebe2d;">
+                        <option value="{{ session_user.email }}">{{ session_user.email }}</option>
+                        {% for si in user_services %}
+                        <option value="{{ si.service_identity_user }}">{{ si.name }} &lt;{% if si.is_default %}{{ si.service_user }}{% else %}{{ si.service_identity_user }}{% endif %}&gt;</option>
+                        {% endfor %}
+                    </select>
+                    <span id="user_services_span" style="display: none;"></span>
+                    <script type="text/javascript">
+$(function () {
+    var select = $("#user_services");
+{% if session_service_identity_user %}
+    select.val('{{ session_service_identity_user.email }}');
+{% endif %}
+    // Span is used to size the select according to the width of the selected option
+    var span = $("#user_services_span");
+    $.each(['font-size', 'padding', 'font-family', 'border-bottom-left-radius', 'border-bottom-right-radius', 'border-top-left-radius', 'border-top-right-radius', 'word-spacing', 'border-image-width', 'box-sizing'], function (i, style) {
+        span.css(style, select.css(style));
+    });
+    
+    var size_select = function() {
+        span.show();
+        span.text($('option:checked', select).text());
+        select.width(span.width()+30); // 30 : the size of the down arrow of the select box
+        span.hide();
+    };
+       select.change(function () {
+			var account = select.val();
+			mctracker.call({
+			    url: '/mobi/rest/user/login_as',
+			    type: 'POST',
+			    data: {
+			        data: JSON.stringify({
+			            account: account
+			        })
+			    },
+                success: function(data) {
+                    if(data.success) {
+                        location.href = '/?user=' + encodeURIComponent(data.email);
+                    } else {
+                        location.href = '/service_disabled';
+                    }
+			    }
+			});
+			size_select();
+       });
+    size_select();
+});
+                    </script>
+                {% else %}
+                       {{ user.email }}
+                {% endif %}
+                {% if service_profile and service_profile.solution %}
+                <label>|</label>
+                <a href="/{{ service_profile.solution }}/">Dashboard</a>
+                {% endif %}
+                <label>|</label>
+                <a href="/logout">Log out</a>
+            {% else %}
+                {% include "loginbox.html" %}
+            {% endif %}
+            {% endblock %}
+            </div>
+        {% endif %}
+        </div>
+    </div>
+{% block body %}&nbsp;{% endblock %}
+
+{% block footer %}
+<div id="footer" class="span-24 last footer">
+    &copy; 2011-2016
+    <a href="http://www.rogerthat.net/company/contact-mobicage/" target="_blank">MOBICAGE NV</a>
+     - All rights reserved worldwide. - 
+     <a href="http://www.rogerthat.net/wp-content/uploads/2012/01/Mobicage_Privacy_Policy.pdf" target="_blank">Privacy Policy</a>
+      - 
+     <a href="http://www.rogerthat.net/wp-content/uploads/2012/01/Mobicage_Terms_and_Conditions.pdf" target="_blank">Terms and Conditions</a>
+</div>
+{% endblock %}
+      <div id="processingDialog">
+        <style>
+        .ui-progressbar-value { background-image: url(/static/images/pbar-ani.gif); }
+        </style>
+        <div id="processingBar"></div>
+    </div>
+    <div id="tooltipArea"></div>
+    {% block body_end %}{% endblock %}
+  </body>
+</html>

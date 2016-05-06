@@ -1,0 +1,49 @@
+			<div class="mcform">
+{{if message.form.type == "text_line" || message.form.type == "text_block" || message.form.type == "auto_complete"}}
+				{{if message.form.type == "text_block"}}<textarea{{else}}<input{{/if}}
+					id="${widgetId}"
+					type="text"
+					class="mcform_${message.form.type}"
+	{{if message.isLocked}}
+					disabled="true"
+	{{else}}
+					placeholder="${message.form.widget.place_holder}"
+	{{/if}}
+					maxlength="${message.form.widget.max_chars}"
+	{{if message.form.type == "text_block"}}
+					>${message.form.widget.value}</textarea>
+	{{else}}
+					value="${message.form.widget.value}" />
+	{{/if}}
+
+{{else message.form.type == "single_select" || message.form.type == "multi_select"}}
+	{{each(i, choice) message.form.widget.choices}}
+				<input
+					id="${widgetId}_${choice.value}"
+					type={{if message.form.type == "multi_select"}}"checkbox"{{else}}"radio"{{/if}}
+		{{if message.isLocked}}
+					disabled="true"
+		{{/if}}
+		{{if choice._selected}}
+					checked="true"
+		{{/if}}
+					value="${choice.value}"
+					encoded_value="${choice.encoded_value}"
+					name="${widgetId}" />
+				<label for="${widgetId}_${choice.value}">${choice.label}</label>
+				<br/>
+	{{/each}}
+
+{{else message.form.type == "date_select"}}
+				<label id="${widgetId}_label" />
+	{{if !message.isLocked}}
+				<br />
+				<div id="${widgetId}" />
+	{{/if}}
+
+{{else message.form.type == "single_slider" || message.form.type == "range_slider"}}
+				<label id="${widgetId}_label" class="mcform_${message.form.type}" />
+				<div id="${widgetId}" class="mcform_${message.form.type}"/>
+
+{{/if}}
+			</div>

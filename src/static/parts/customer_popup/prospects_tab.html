@@ -1,0 +1,103 @@
+<h4>Prospect</h4>
+{{if prospect.unassigned}}
+<p>No prospect has been assigned to this customer yet.</p>
+<p>You can create one or search for an existing prospect on the <a href="/internal/shop/prospects">prospects page</a>.</p>
+{{else}}
+<div class="row-fluid">
+    <div class="span2 text-right"><strong>Name</strong></div>
+    <div class="span9">
+        <div class="prospect-name">${prospect.name}</div>
+        <div class="edit hide">
+            <input type="text" class="span9 edit-prospect-name" value="${prospect.name}"/>
+        </div>
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="span2 text-right"><strong>Types</strong></div>
+    <div class="span9">
+        <div class="prospect-type pull-left">{{each(i,t) prospect.types}}${t}{{if i != prospect.types.length-1}}, {{/if}}{{/each}}</div>
+        <div>
+            <div class="hide edit pull-right">
+                <button class="btn btn-mini edit-prospect-type-btn"><i class="icon-pencil"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="span2 text-right"><strong>Categories</strong></div>
+    <div class="span9">
+        <div class="prospect-categories pull-left">
+            {{each(i,t) prospect.categories}}${t}{{if i !== prospect.categories.length-1}}, {{/if}}{{/each}}
+        </div>
+        <div>
+            <div class="hide edit pull-right">
+                <button class="btn btn-mini edit-prospect-categories-btn"><i class="icon-pencil"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="span2 text-right"><strong>Phone</strong></div>
+    <div class="span9">
+        <a href="tel:${prospect.phone}" class="prospect-phone" target="_blank">${prospect.phone}</a>
+        <div class="edit hide">
+            <input type="text" class="span9 edit-prospect-phone" value="${prospect.phone}" />
+        </div>
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="span2 text-right"><strong>Email</strong></div>
+    <div class="span9">
+        <div class="prospect-email"><a href="mailto:${prospect.email}">${prospect.email}</a></div>
+        <div class="edit hide">
+            <input type="email" class="span9 edit-prospect-email" value="${prospect.email}"/>
+        </div>
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="span2 text-right"><strong>Address</strong></div>
+    <div class="span9">
+        <div class="prospect-address">${prospect.address}</div>
+        <div class="edit hide">
+            <input type="text" class="span9 edit-prospect-address" value="${prospect.address}" />
+        </div>
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="span2 text-right"><strong>Website</strong></div>
+    <div class="span9">
+        <a href="${prospect.website}" class="prospect-website" target="_blank">${prospect.website}</a>
+        <div class="edit hide">
+            <input type="text" class="span9 edit-prospect-website" value="${prospect.website}" />
+        </div>
+    </div>
+
+{{if prospect.certainty}}
+ <div class="row-fluid">
+    <div class="span2 text-right"><strong>Subscription</strong></div>
+    <div class="span9" id="prospect-subscription">${prospect.probableSubscription} ${prospect.certainty}% certainty</div>
+     <div class="edit hide"></div>
+</div>
+{{/if}}
+<div class="row-fluid" id="prospect-comments">
+    <div class="span2 text-right"><strong>Comments</strong></div>
+    <div class="span9">
+    {{each(i,c) prospect.comments}}
+        <div class="prospect-comment">
+            <small><b>${c.creator}</b>, ${c.datetime}</small>
+            <div>${c.text}</div>
+        </div>
+    {{/each}}
+        <div class="edit hide">
+            <textarea rows="2" placeholder="New comment" class="input-block-level edit-prospect-comment"></textarea>
+        </div>
+    </div>
+</div>
+{{/if}}
+{{if !prospect.unassigned}}
+    <a class="btn" id="customer-prospect-task-history" href="#"
+       style="margin: 0 auto;display: block; width: 140px;"><i
+            class="fa fa-history"></i> Load task history</a>
+
+    <div id="customer-prospect-history-container"></div>
+{{/if}}

@@ -1,0 +1,92 @@
+<div id="servicePanelContainer" class="span-18 last">
+	<script type="text/javascript" src="/static/js/service.js"></script>
+	<div id="serviceStatusContainer">
+		<h3>Service status</h3>
+		<div class="span-17 last">
+			<div id="mobidick"><a id="mobidick_link" class="action-link">Use Mobidick sample service</a></div>
+			<span id="actionPoints">Actions required before your service can be enabled:</span>
+			<ul id="apiActionPoints"/><br>
+			<input id="chkEnabled" type="checkbox"/><label id="chkEnabledLabel" for="chkEnabled">Service enabled</label>
+		</div>
+	</div>
+	<br>&nbsp;<br>
+	<div id="apiKeysContainer">
+		<h3>Service API keys</h3>
+		<div class="span-17 last">
+			Manage your api keys for service requests:<br><br>
+			<span id="noAPIKeys" style="display: none;" class="mcerror">Generate your api key(s)!</span>
+			<ul id="apiKeys" /><br>
+			<button id="generateKey">Generate new API key</button>
+		</div>
+	</div>
+	<br>&nbsp;<br>
+	<div id="callbackRpcDetailsContainer">
+		<h3>Service callback configuration</h3>
+		<div class="span-17 last">
+			Configure how callbacks must be performed:<br><br>
+			<ul id="callBackMethods">
+				<li>
+					<input id="httpCallBackMethod" type="radio" name="callBackMethods"/>
+					<label for="httpCallBackMethod">HTTP(S)</label><br>
+					URI to which callbacks will be posted:<br>
+					<input id="httpCallBackURI" type="text" style="width: 400px" placeholder="https://service.example.com/callbackurl"><span id="httpCallBackURIWarning" class="mcwarning"/><br>
+				</li>
+				<li>
+					<input id="xmppCallBackMethod" type="radio" name="callBackMethods"/>
+					<label for="xmppCallBackMethod">XMPP</label><br>
+					Callbacks will be sent from jid <span id="callBackFromJid" style="font-family: monospace" class="mcdata"></span> to the following jid:<br>
+					<input id="xmppCallBackJid" type="text" style="width: 400px" placeholder="yourservice@jabber.org"><br>
+				</li>
+			</ul>
+			Service identifier key which is sent with every callback method: <a id="generateSIK" class="action-link">Regenerate</a><br>
+			<span id="httpCallBackSecret" style="font-family: monospace;"/><br>
+			
+			<span id="validationError" class="mcerror"/><br>
+			<button id="saveConfiguration">Save configuration</button> <button id="testConfiguration">Test configuration</button>
+			<hr>
+			Which callbacks do you want to receive ?<br><br>
+			<input id="cbFriendInviteResult" type="checkbox" code="1" /><label for="cbFriendInviteResult">friend.invite_result</label><br>
+			<input id="cbFriendInvited" type="checkbox" code="2" /><label for="cbFriendInvited">friend.invited</label><br>
+			<input id="cbFriendBrokeUp" type="checkbox" code="4" /><label for="cbFriendBrokeUp">friend.broke_up</label><br>
+			<input id="cbFriendUpdate" type="checkbox" code="8192" /><label for="cbFriendUpdate">friend.update</label><br>
+			<input id="cbFriendInReach" type="checkbox" code="512" /><label for="cbFriendInReach">friend.in_reach</label><br>
+			<input id="cbFriendOutOfReach" type="checkbox" code="1024" /><label for="cbFriendOutOfReach">friend.out_of_reach</label><br>
+			<input id="cbFriendIsInRoles" type="checkbox" code="2048" /><label for="cbFriendIsInRoles">friend.is_in_roles</label><br>
+			<input id="cbFriendLocationFix" type="checkbox" code="65536" /><label for="cbFriendLocationFix">friend.location_fix</label><br>
+			<input id="cbMessagingUpdateReceived" type="checkbox" code="8" /><label for="cbMessagingUpdateReceived">messaging.update (received)</label><br>
+			<input id="cbMessagingUpdateAcknowledged" type="checkbox" code="128" /><label for="cbMessagingUpdateAcknowledged">messaging.update (acknowledged)</label><br>
+			<input id="cbMessagingFormUpdateAcknowledged" type="checkbox" code="32" /><label for="cbMessagingFormUpdateAcknowledged">messaging.form_update (acknowledged)</label><br>
+			<input id="cbMessagingNewChatMessage" type="checkbox" code="4096" /><label for="cbMessagingNewChatMessage">messaging.new_chat_message</label><br>
+            <input id="cbMessagingChatDeleted" type="checkbox" code=32768 /><label for="cbMessagingChatDeleted">messaging.chat_deleted</label><br>
+			<input id="cbMessagingPoke" type="checkbox" code="16" /><label for="cbMessagingPoke">messaging.poke</label><br>
+			<input id="cbMessagingFlowResult" type="checkbox" code="64" /><label for="cbMessagingFlowResult">messaging.flow_member_result</label><br>
+            <input id="cbSystemApiCall" type="checkbox" code="256" /><label for="cbSystemApiCall">system.api_call</label><br>
+            <input id="cbSystemBrandingsUpdated" type="checkbox" code="524288" /><label for="cbSystemBrandingsUpdated">system.brandings_updated</label><br>
+		</div>
+	</div>
+	<br>&nbsp;<br>
+	<div id="serviceAdministratorsContainer">
+		<h3>Service administrators</h3>
+		<div class="span-17 last">
+			<ul id="serviceAdministrators"></ul>
+			<button id="addAdministrator">Add administrator</button>
+		</div>
+	</div>
+	<div id="addAdministratorDialog">
+		Enter administrator Rogerthat account (via name or email address):<br>
+		<input id="email" type="text" style="width: 200px"><span id="email_required" style="display: none;" class="mcerror">required field!</span><br>
+		Select role:
+		<select id="role"></select>
+	</div>
+	<div id="getNameForAPIKeyDialog">
+		Provide a name for the key:
+		<input id="keyName" type="text" style="width: 200px"><span id="name_required" style="display: none;" class="mcerror">required field!</span>
+	</div>
+	<div id="deleteAPIKey">
+		Are you sure you want to delete API key <span id="apiKeyNameLabel"/>. Future calls using this api key will fail.
+	</div>
+	<div id="interactiveLoggingDialog">
+		<textarea id="logWindow" style="width:370px; height:200px; font-family: monospace !important;"></textarea>
+	</div>
+</div>
+

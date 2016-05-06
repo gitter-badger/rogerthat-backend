@@ -1,0 +1,8 @@
+{{ DELIMITER }}
+mobidick/src/service_api_metadata.py
+# Transfer object definitions
+transfer_object_defs = [
+{%for to in tos%}{%include "include/service_api_metadata/to.tmpl" %}{%endfor%}
+]
+{{ DELIMITER }}
+# Rpc functions

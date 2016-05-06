@@ -1,0 +1,32 @@
+<html>
+  <body>
+    <p>Estimado,</p>
+    <p>{{ profile.name }} quiere mejorar sus servicios a través de la app de {{ app.name }} para servicio al cliente.<br>
+Usted puede utilizar la app de {{ app.name }} para comunicarse con {{ profile.name }} y otras organizaciones que utilizan {{ app.name }}.</p>
+    <p>
+      <ul>
+        <li>
+          Paso 1. Instalar la app {{ app.name }} gratis:<br>
+          <a href="{{ BASE_URL }}/install?a={{ app.app_id }}&email">{{ BASE_URL }}/install?a={{ app.app_id }}&email</a><br><br>
+        </li>
+        <li>
+          Paso 2. Subscribirse a {{ profile.name }}:<br>
+          <a href="{{ short_url }}{% if secret %}?s={{ secret }}{% endif %}">{{ short_url }}{% if secret %}?s={{ secret }}{% endif %}</a>
+        </li>
+      </ul>
+    </p>
+    <p>&nbsp;</p>
+    {% if message %}
+    <p> 
+         {{ profile.name }} añadida nota personal para su invitación:
+    </p>
+    <p style="background-color: #f0e68c; padding: 10px; margin-left: 20px; border-radius: 15px; margin-right: 20px; padding-left: 20px; -moz-border-radius: 15px;">
+      {{ message }}
+    </p>
+    {% endif %}{% if consts.INCLUDE_ROGERTHAT_DOT_NET %}
+    <p>
+    Para obtener más información acerca de {{ app.name }} y otros productos a base Rogerthat, por favor visite:<br>
+    <a href="http://www.rogerthat.net">http://www.rogerthat.net</a>
+    </p>{% endif %}
+  </body>
+</html>

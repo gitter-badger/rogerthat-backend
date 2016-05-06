@@ -1,0 +1,23 @@
+*********************** INFO FROM USER ***********************
+Type: {{ type_ }}
+Subject: {{ subject }}
+Description:
+{{ message }}
+
+********************** INFO ABOUT USER ***********************
+Email: {{ email }}
+Name: {{ profile_info.name }}
+Avatar link: {{ BASE_URL }}/unauthenticated/mobi/cached/avatar/{{ profile_info.avatarId }}
+Friend count: {{ friend_count }}
+Message count: {{ message_count }}
+Mobile info: 
+{% for mobile in mobiles %}
+* account: {{ mobile.account }}
+* type: {{ mobile.type }}
+* description: {{ mobile.description }}
+* hardware: {{ mobile.hardwareModel }}
+* countrycode: {{ mobile.countrycode }}
+* phoneNumber: {{ mobile.phoneNumber }}
+* operatingVersion: {{ mobile.operatingVersion }}
+{% endfor %}
+Error logs: {{ BASE_URL }}/mobiadmin/errors?user={{ email }}&timestamp={{ timestamp }}

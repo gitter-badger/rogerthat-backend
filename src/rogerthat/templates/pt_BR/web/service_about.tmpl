@@ -1,0 +1,28 @@
+<!-- service about page -->
+<div id="{{container_id}}" class="span-18 last">
+	<script type="text/javascript" src="/static/js/service_about.js"></script>
+	<script type="text/javascript">
+		mctracker.registerLoadCallback("{{container_id}}", serviceAboutScript("{{container_id}}", "{{service.email}}", "{{service_name}}", "{% if service.descriptionBranding %}{{service.descriptionBranding}}{% endif %}"));
+	</script>
+	<div class="servicesContainer span-18">
+		<div class="serviceHeader">
+			<div class="thumbnail-item-left serviceAvatar">
+				<img class="serviceAvatar" src="/unauthenticated/mobi/avatar/{{service.avatarId}}" />
+			</div>
+			<div class="serviceName span-4 last ellipsis name dark">{{service_name}}</div>
+			<br />
+			<div class="span-4 last ellipsis name dark">{{service.email}}</div>
+			<div class="span-4 last remove">
+				<a class="breakFriendShip action-link dark">disconnect</a>
+			</div>
+		</div>
+		<hr class="dark"/>
+		<div class="about dark">
+			<iframe class="serviceDescriptionBranding" {% if not service.descriptionBranding %}style="display: none"{% endif %} />
+			<div class="serviceDescription" {% if service.descriptionBranding %}style="display: none"{% endif %}>{% if service.description %}{{service.description}}{% endif %}</div>
+		</div>
+	</div>
+	<div class="removeServiceDialog" style="display: none;">
+		Tem certeza de que deseja se desconectar do <br>{{service_name}}</span>?
+	</div>
+</div>

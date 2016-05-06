@@ -1,0 +1,49 @@
+<div id="serviceLogsContainer">
+	<script type="text/javascript" src="/static/js/service_logs.js"></script>
+	<script type="text/javascript" src="/static/mfd/CodeMirror/lib/codemirror.js"></script>
+	<script type="text/javascript" src="/static/mfd/CodeMirror/mode/javascript/javascript.js"></script>
+	<a id="reload" class="action-link">Reload</a>
+	<table>
+		<thead>
+			<tr>
+				<th>Timestamp</th>
+				<th>Type</th>
+				<th>Status</th>
+				<th>Function</th>
+				<th>&nbsp;</th>
+			</tr>
+		</thead>
+		<tbody id="table_body">
+		</tbody>
+	</table>
+	<a id="more" class="action-link">More</a>
+	<div id="row_template" style="display: none;">
+	<!--
+		<tr>
+			<td class="log_timestamp"></td>
+			<td class="log_type"></td>
+			<td class="log_status"></td>
+			<td class="log_function"></td>
+			<td><div class="expander">+</div></td>
+		</tr>
+	-->	
+	</div>
+	<div id="request_details_template" style="display: none;">
+	<!--
+		<tr>
+			<td colspan="5" style="padding: 0px;">
+				<div class="details_header">
+					<div class="request_header">Request</div>
+					<div class="response_header">Response</div>
+				</div>
+				<div class="api_request">
+					<textarea></textarea>
+				</div>
+				<div class="api_response">
+					<textarea></textarea>
+				</div>
+			</td>
+		</tr>
+	-->	
+	</div>	
+</div>

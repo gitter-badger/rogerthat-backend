@@ -1,0 +1,76 @@
+android/rogerthat/src/main/java/{{ to.package|common_replace_dots }}/{{ to.name }}.java
+{{ LICENSE|safe  }}
+
+package {{ to.package }};
+
+import com.mobicage.rpc.IncompleteMessageException;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+public class {{ to.name }} implements com.mobicage.rpc.IJSONable {
+{% for field in to.fields %}
+    public {{ field.type|java_map_type }}{% if field.collection_type %}[]{% endif %} {{field.name}};{% endfor %}
+
+    public {{ to.name }}() {
+    }
+{% if to|java_has_complex_field %}
+    @SuppressWarnings("unchecked"){% endif %}
+    public {{ to.name }}(Map<String, Object> json) throws IncompleteMessageException {{% for field in to.fields %}
+        if (json.containsKey("{{ field.name }}")) {{% if field.collection_type %}
+            org.json.simple.JSONArray val_arr = (org.json.simple.JSONArray) json.get("{{ field.name }}");
+            if (val_arr == null) {
+                this.{{ field.name }} = null;
+            } else {
+                this.{{ field.name }} = new {{ field.type|java_map_type }}[val_arr.size()];
+                for (int i=0; i < val_arr.size(); i++) {{% if field.type|common_is_simple_type %}{% if field.type == "float" %}
+                    Object val = val_arr.get(i);
+                    if (val instanceof Float) {
+                        this.{{ field.name }}[i] = ((Float) val).floatValue();
+                    } else if (val instanceof Double) {
+                        this.{{ field.name }}[i] = new Float((Double) val).floatValue();
+                    } else {
+                        this.{{ field.name }}[i] = new Float((Long) val).floatValue();
+                    }{% else %}
+                    this.{{ field.name }}[i] = {{ field.type|java_cast:"val_arr.get(i)" }};{% endif %}{% else %}
+                    Object item = val_arr.get(i);
+                    if (item != null) {
+                        this.{{ field.name }}[i] = new {{ field.type }}((Map<String, Object>) item);
+                    }{% endif %}
+                }
+            }{% else %}
+            Object val = json.get("{{ field.name }}");{% if field.type|common_is_simple_type %}{% if field.type == "float" %}
+            if (val instanceof Float) {
+                this.{{ field.name }} = {{ field.type|java_cast:"val" }};
+            } else if (val instanceof Double) {
+                this.{{ field.name }} = new Float((Double) val).floatValue();
+            } else {
+                this.{{ field.name }} = new Float((Long) val).floatValue();
+            }{% else %}
+            this.{{ field.name }} = {{ field.type|java_cast:"val" }};{% endif %}{% else %}
+            this.{{ field.name }} = val == null ? null : new {{ field.type }}((Map<String, Object>) val);{% endif %}{% endif %}
+        } else {{% if field.default != MISSING %}
+            this.{{ field.name }} = {{ field|java_default_value|safe }};{% else %}
+            throw new IncompleteMessageException("{{ to.full_name }} object is missing field '{{ field.name }}'");{% endif %}
+        }{% endfor %}
+    }
+
+    @Override{% if to|java_has_list_field %}
+    @SuppressWarnings("unchecked"){% endif %}
+    public Map<String, Object> toJSONMap() {
+        Map<String, Object> obj = new LinkedHashMap<String, Object>();{% for field in to.fields %}{% if field.collection_type %}
+        if (this.{{ field.name }} == null) {
+            obj.put("{{ field.name }}", null);
+        } else {
+            org.json.simple.JSONArray arr = new org.json.simple.JSONArray();
+            for (int i=0; i < this.{{ field.name }}.length; i++) {
+                arr.add(this.{{ field.name }}[i]{% if not field.type|common_is_simple_type %}.toJSONMap(){% endif %});
+            }
+            obj.put("{{ field.name }}", arr);
+        }{% else %}{% if field.type|common_is_simple_type %}
+        obj.put("{{ field.name }}", this.{{ field.name }});{% else %}
+        obj.put("{{ field.name }}", this.{{ field.name }} == null ? null : this.{{ field.name }}.toJSONMap());{% endif %}{% endif %}{% endfor %}
+        return obj;
+    }
+
+}

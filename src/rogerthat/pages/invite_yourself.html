@@ -1,0 +1,29 @@
+{% extends "base_base.html" %}
+
+{% block facebook_header %}
+    <meta property="og:title" content="{{ user_profile.name }}'s personal {{ app.name }} invitation page."/>
+    <meta property="og:image" content="https://rogerth.at/invite?code={{ user_code }}"/>
+    <meta property="og:url" content="https://rogerth.at/q/i{{ user_code }}"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:site_name" content="{{ app.name }}"/>
+    <meta property="og:description" content="Connect with {{ user_profile.name }} through the {{ app.name }} app!"/>
+    <meta property="fb:app_id" content="{{ app.facebook_app_id }}"/>
+{% endblock %}
+
+{% block body %}
+<div class="note2">
+	<span>
+		Dear {{ user_profile.name }},<br>
+		this is your personal invitation page.<br>
+		<br>
+	</span>
+	<label>
+		Distribute the link to this page to your contacts to get in touch with them on {{ app.name }}.<br>
+		Short link to this page: <a href="{{ short_link }}" style="color: #9c3;" class="link">{{ short_link }}</a><br>
+		<br>
+		You can also distribute your id in {{ app.name }} shown below. Let people scan this with a barcode reader and they will get in touch with you!<br>
+	</label>
+	<img src="/invite?code={{ user_code }}" alt="{{ user_profile.name }}'s Rogerthat passport"/>
+</div>
+{% endblock %}
+

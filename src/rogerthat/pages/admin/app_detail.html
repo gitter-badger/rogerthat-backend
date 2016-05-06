@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Apps</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google" value="notranslate" />
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+<!-- Bootstrap -->
+<link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
+
+
+<style type="text/css">
+body {
+	margin: 10px;
+}
+</style>
+
+<script src="/static/js/jquery-1.10.0.min.js"></script>
+<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+<script src="/static/bootstrap/datepicker/js/bootstrap-datepicker.js"></script>
+<script src="/static/bootstrap/timepicker/js/bootstrap-timepicker.min.js"></script>
+<script src="/static/js/jquery.tmpl.min.js"></script>
+
+<script type="text/javascript">
+
+    var color_test = /^([a-fA-F0-9]{2})([a-fA-F0-9]{2})([a-fA-F0-9]{2})$/;
+
+    var POPUP_ADD_AUTO_CONNECTED_SERVICE = '<div id="addServiceIdentityModel" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">'
+        + '<div class="modal-header">'
+        + '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'
+        + '    <h3 id="myModalLabel">Add auto-connected service</h3>'
+        + '</div>'
+        + '<div class="modal-body">'
+        + '    <div id="emailControlGroup" class="control-group">'
+        + '        <label class="control-label" for="email">Email:</label>'
+        + '        <div>'
+        + '            <input type="text" name="email" id="email" class="span4" />'
+        + '            <span id="emailError" class="help-inline"></span>'
+        + '        </div>'
+        + '    </div>'
+        + '    Removable:</br> <input type="checkbox" name="removable" id="removable" value="removable" checked ></br><br>'
+        + '    Local:<br /><input type="text" name="local" id="local" class="span4" /><span class="help-block">Comma separated list of &lt;language&gt;-&lt;country&gt; codes</span><br>'
+        + '    <div id="serviceRoles" style="display: none">Service roles:<br>'
+        + '        <label class="checkbox"><input type="checkbox" id="checkboxEveryone" checked> Everyone</label>'
+        + '        <div id="serviceRolesContainer"></div>'
+        + '    </div>'
+        + '</div>'
+        + '<div class="modal-footer">'
+        + '    <button action="cancel" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>'
+        + '    <button action="submit" class="btn btn-primary">Submit</button>'
+        + '</div></div>';
+
+    var AUTO_CONNECTED_IDENTITY_TEMPLATE = '<tr>' //
+        + '  <td>${service_identity_email}</td>' //
+        + '  <td>${removable}</td>' //
+        + '  <td>${local}</td>' //
+        + '  <td>${roles}</td>' //
+        + '  <td><button action="remove" class="btn"><i class="icon-trash"></i></button></td>' //
+        + '</tr>';
+
+    var POPUP_ADD_ADMIN_SERVICE = '<div id="addAdminServiceModel" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">'
+        + '<div class="modal-header">'
+        + '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'
+        + '    <h3 id="myModalLabel">Add app admin service</h3>'
+        + '</div>'
+        + '<div class="modal-body">'
+        + '    <div id="emailControlGroup" class="control-group">'
+        + '        <label class="control-label" for="email">Email:</label>'
+        + '        <div>'
+        + '            <input type="text" name="email" id="email" class="span4" />'
+        + '            <span id="emailError" class="help-inline"></span>'
+        + '        </div>'
+        + '    </div>'
+        + '</div>'
+        + '<div class="modal-footer">'
+        + '    <button action="cancel" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>'
+        + '    <button action="submit" class="btn btn-primary">Submit</button>'
+        + '</div></div>';
+
+    var ADMIN_SERVICE_TEMPLATE = '<tr>' //
+        + '  <td>${service_email}</td>' //
+        + '  <td><button action="remove" class="btn"><i class="icon-trash"></i></button></td>' //
+        + '</tr>';
+        
+    var POPUP_ADD_BEACON_REGION = '<div id="addBeaconRegionModel" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">'
+        + '<div class="modal-header">'
+        + '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'
+        + '    <h3 id="myModalLabel">Add beacon region</h3>'
+        + '</div>'
+        + '<div class="modal-body">'
+        + '    <div id="uuidControlGroup" class="control-group">'
+        + '        <label class="control-label" for="uuid">UUID:</label>'
+        + '        <input type="text" name="uuid" id="uuid" class="span4" />'
+        + '    </div>'
+        + '    <div id="majorControlGroup" class="control-group">'
+        + '        <label class="control-label" for="major">Major:</label>'
+        + '        <input type="text" name="major" id="major" class="span4" />'
+        + '    </div>'
+        + '    <div id="uuidControlGroup" class="control-group">'
+        + '        <label class="control-label" for="minor">Minor:</label>'
+        + '        <input type="text" name="minor" id="minor" class="span4" />'
+        + '    </div>'
+        + '</div>'
+        + '<div class="modal-footer">'
+        + '    <button action="cancel" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>'
+        + '    <button action="submit" class="btn btn-primary">Submit</button>'
+        + '</div></div>';
+            
+    var BEACON_REGION_TEMPLATE = '<tr>' //
+        + '  <td>${uuid}</td>' //
+        + '  <td>${major}</td>' //
+        + '  <td>${minor}</td>' //
+        + '  <td><button action="remove" class="btn"><i class="icon-trash"></i></button></td>' //
+        + '</tr>';
+
+    var NEW_QR_TEMPLATE_TEMPLATE = '<tr validate="1">' //
+        + '  <td><input type="radio" name="qr_template_default"> <input type="hidden" name="qr_template_new" value="1" class="qr_template_new"> </td>'
+        + '  <td><input type="file" name="qr_template" class="qr_template" accept="image/png" /></td>' //
+        + '  <td><input type="text" name="qr_template_description" class="span4 qr_template_description"></td>' //
+        + '  <td><input type="text" name="qr_template_color" value="000000" class="span4 qr_template_color">&nbsp;&nbsp;'
+        + '<span class="update_qr_template_color_preview" style="background-color: #000;">&nbsp;&nbsp;&nbsp;</span>&nbsp;'
+        + '<span class="update_qr_template_color_error" style="color: #F00; display: none;">* invalid color</span><br</td>'
+        + '  <td><button action="remove" class="btn"><i class="icon-trash"></i></button></td>' //
+        + '</tr>';
+
+    var EXISTING_QR_TEMPLATE_TEMPLATE = '<tr validate="0">' //
+        + '  <td><input type="radio" ${qr_template_default} name="qr_template_default"> <input type="hidden" name="qr_template_new" value="0" class="qr_template_new"></td>'
+        + '  <td><img src="${qr_template_image}" width="100" height="100"/></td>' //
+        + '  <td><input disabled type="text" value="${qr_template_description}" class="span4"> <input type="hidden" name="qr_template_description" value="${qr_template_description}" class="qr_template_description"></td>' //
+        + '  <td><input disabled type="text" value="${qr_template_color}" class="span4"> <input type="hidden" name="qr_template_color" value="${qr_template_color}" class="qr_template_color">&nbsp;&nbsp;'
+        + '<span class="update_qr_template_color_preview" style="background-color: #${qr_template_color};">&nbsp;&nbsp;&nbsp;</span>&nbsp;'
+        + '  <td><button action="remove" class="btn"><i class="icon-trash"></i></button></td>' //
+        + '</tr>';
+{% raw %}
+
+	var TMPL_ALERT = '<div class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">'
+	    + '    <div class="modal-header">'
+	    + '        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'
+	    + '        <h3 id="myModalLabel">${header}</h3>'
+	    + '    </div>'
+	    + '    <div class="modal-body">'
+	    + '        <p>{{html body}}</p>'
+	    + '    </div>'
+	    + '    <div class="modal-footer">'
+	    + '        <button class="btn" data-dismiss="modal" aria-hidden="true">${closeBtn}</button>' //
+	    + '    </div>' //
+	    + '</div>';
+
+    var SERVICE_ROLES_TEMPLATE = '{{each roles}}' //
+        + '<label class="checkbox inline">' //
+        + '    <input type="checkbox" name="roles" value="${$value.id}" role_name="${$value.name}" checked="true"> ' //
+        + '    ${$value.name}' //
+        + '</label>' //
+        + '{{/each}}';
+
+{%- endraw %}
+
+    var autoConnectedServices = [];
+    var adminServices = [];
+    var beaconRegions = [];
+    var qrTemplates = [];
+    var qrTemplatesToDelete = [];
+
+    {% if result %}
+    $(window).load(function () {
+        alert("{{result}}");
+    });
+    {% endif %}
+
+    $(function() {
+
+        var showAlert = function(message, onClose, title, timeout) {
+            var html = $.tmpl(TMPL_ALERT, {
+                header : title || "Alert",
+                body : message,
+                closeBtn : "Close"
+            });
+            var modal = createModal(html);
+            var closed = false;
+            var close = function() {
+                if (!closed) {
+                    closed = true;
+                    onClose();
+                }
+            }
+            if (onClose) {
+                modal.on('hidden', close);
+            }
+            if (timeout) {
+                window.setTimeout(function() {
+                    if (!closed)
+                        modal.modal('hide');
+                }, timeout);
+            }
+        };
+
+	    var createModal = function(html, onShown) {
+	        var modal = $(html).modal({
+	            backdrop : true,
+	            keyboard : true,
+	            show : false
+	        }).on('hidden', function() {
+	            modal.remove(); // remove from DOM
+	        });
+
+	        if (onShown) {
+	            modal.on('shown', function() {
+	                onShown(modal);
+	            });
+	        }
+	        modal.modal('show');
+	        return modal;
+	    };
+
+	    var validateQRTemplates = function() {
+            var allOk = true;
+            var errorMsg = "";
+            var defaultQRTemplate = undefined;
+            $("#qr_templates tr").each(function(index) {
+                var tr = $(this);
+                if (tr.attr("validate") === "1") {
+	                if ($('.qr_template', tr).val() ? false : true) {
+	                    allOk = false;
+	                    errorMsg += "<li>QR Template at row: " + (index + 1) + " has no QR template</li>";
+	                }
+	                if ($('.qr_template_description', tr).val() === "") {
+	                    allOk = false;
+	                    errorMsg += "<li>QR Template at row: " + (index + 1) + " has no description</li>";
+	                }
+	                var color = $('.qr_template_color', tr).val();
+	                if (!color_test.test(color)) {
+	                    allOk = false;
+	                    errorMsg += "<li>QR Template at row: " + (index + 1) + " does not have a valid color</li>";
+	                }
+                }
+                if ($('[name="qr_template_default"]', tr).is(':checked')) {
+                    defaultQRTemplate = index;
+                }
+            });
+
+            if (!allOk) {
+                showAlert("<p>The following QR templates are invalid:</p><ul>" + errorMsg + "</ul>", undefined, "QR Templates invalid");
+                return false;
+            }
+
+            $("#qr_templates tr").each(function(index) {
+                var tr = $(this);
+                $('.qr_template', tr).attr("name", "qr_template_" + index);
+                $('.qr_template_description', tr).attr("name", "qr_template_description_" + index);
+                $('.qr_template_color', tr).attr("name", "qr_template_color_" + index);
+                $('.qr_template_new', tr).attr("name", "qr_template_new_" + index);
+            });
+            var qr_templates_count = $("#qr_templates tr").size();
+            if (qr_templates_count === 0) {
+                showAlert("You need to have at least 1 QR Template", undefined, "NO QR Templates");
+                return false;
+            }
+
+            if (defaultQRTemplate === undefined) {
+                showAlert("You need to select a default QR template", undefined, "Default QR Templates invalid");
+                return false;
+            }
+
+            $('[name="qr_templates_count"]').val(qr_templates_count);
+            $('[name="default_qr_template_index"]').val(defaultQRTemplate);
+            $('[name="qr_templates_to_delete"]').val(JSON.stringify(qrTemplatesToDelete));
+            return true;
+	    };
+
+	    var showNewEmptyApp = function() {
+	        $('button[action="submit"]').click(function() {
+	            if (!$("#update_core_branding").val()) {
+	                alert("Core branding is a required argument");
+	                return;
+	            }
+	            if (!validateQRTemplates()) {
+	                return;
+	            }
+                $('[name="auto_connected_services"]').val(JSON.stringify(autoConnectedServices));
+                $('[name="admin_services"]').val(JSON.stringify(adminServices));
+                $('[name="beacon_regions"]').val(JSON.stringify(beaconRegions));
+	            $("#update_upload").submit();
+	        });
+	        displayQRTemplates();
+	    };
+
+	    var showExistingApp = function(app_id) {
+
+	        $.ajax({
+	            url : "/mobiadmin/apps/get",
+	            type : "POST",
+	            data : {
+	                app_id : app_id
+	            },
+	            success : function(data) {
+	                if (!data.success) {
+	                    alert(data.errormsg);
+	                    return;
+	                }
+	                $("#update_app_id_hidden").val(data.app.id);
+	                $("#update_app_id").val(data.app.id);
+	                $("#update_name").val(data.app.name);
+	                $("#update_app_type").val(data.app.type).change(function(){
+                        if($(this).val() === "1"){ // city app
+                            $('#app_circles').show();
+                        }else{
+                            $('#app_circles').hide();
+                        }
+                    });
+	                $("#update_fb_app_id").val(data.app.facebook_app_id);
+	                $("#update_ios_app_id").val(data.app.ios_app_id);
+	                $("#update_android_app_id").val(data.app.android_app_id);
+	                $("#update_dashboard_email_address").val(data.app.dashboard_email_address);
+	                $("#update_contact_email_address").val(data.app.contact_email_address);
+	                $("#update_user_regex").text(data.app.user_regex);
+                    autoConnectedServices = data.app.auto_connected_services;
+                    displayAutoConnectedServices();
+                    adminServices = data.app.admin_services;
+                    displayAdminServices();
+	                qrTemplates = data.app.qr_templates;
+	                displayQRTemplates();
+	                
+	                beaconRegions = []
+	                $.each(data.app.beacon_regions, function(i, val) {
+	                    beaconRegions.push({"uuid": val.uuid,
+                            "major": val.has_major ? val.major : null,
+                            "minor": val.has_minor ? val.minor : null});
+                    });
+	                displayBeaconRegions();
+	                $("#update_beacon_major").val(data.app.beacon_major);
+	                $("#update_beacon_last_minor").val(data.app.beacon_last_minor);
+	                $("#demo").prop("checked", data.app.demo);
+                    $("#beta").prop("checked", data.app.beta);
+                    $("#mdp_client_id").val(data.app.mdp_client_id);
+                    $("#mdp_client_secret").val(data.app.mdp_client_secret);
+	            },
+	            error : function() {
+	                alert("Error occurred while gettting app info");
+	            }
+	        });
+
+	        $('button[action="submit"]').click(function() {
+	            $('[name="has_core_branding"]').val($("#update_core_branding").val() ? 1 : 0);
+                $('[name="auto_connected_services"]').val(JSON.stringify(autoConnectedServices));
+                $('[name="admin_services"]').val(JSON.stringify(adminServices));
+                $('[name="beacon_regions"]').val(JSON.stringify(beaconRegions));
+
+	            if (!validateQRTemplates()) {
+                    return;
+                }
+	            $("#update_upload").submit();
+	        });
+
+	        $('#add_auto_connected_service').click(function() {
+	            var html = $.tmpl(POPUP_ADD_AUTO_CONNECTED_SERVICE, {});
+	            var modalAutoConnectedService = createModal(html);
+
+	            $('button[action="submit"]', modalAutoConnectedService).click(function() {
+	                var tmpAutoConnectedService = {
+	                    service_identity_email : $("#email", modalAutoConnectedService).val(),
+	                    removable : $("#removable", modalAutoConnectedService).is(":checked")
+	                };
+
+	                // local
+	                tmpAutoConnectedService.local = [];
+	                var local = $("#local", modalAutoConnectedService).val().trim();
+	                if (local) {
+	                    tmpAutoConnectedService.local = local.split(",");
+	                    $.each(tmpAutoConnectedService.local, function(i, val) {
+	                        tmpAutoConnectedService.local[i] = $.trim(val);
+	                    });
+	                }
+
+	                // service roles
+	                if ($("#checkboxEveryone", modalAutoConnectedService).is(":checked")) {
+	                    tmpAutoConnectedService.service_roles = [];
+	                    tmpAutoConnectedService.service_role_names = [];
+	                } else {
+	                    var checkedRoleCheckboxes = $('#serviceRolesContainer input[type="checkbox"]:checked', modalAutoConnectedService);
+	                    tmpAutoConnectedService.service_roles = checkedRoleCheckboxes.map(function() {
+	                        return parseInt(this.value);
+	                    }).get();
+	                    tmpAutoConnectedService.service_role_names = checkedRoleCheckboxes.map(function() {
+	                        return this.attributes['role_name'].value;
+	                    }).get();
+	                }
+
+	                autoConnectedServices.push(tmpAutoConnectedService);
+	                displayAutoConnectedServices();
+	                modalAutoConnectedService.modal('hide');
+	            });
+
+	            var roleEveryoneClick = function () {
+	                var rolesCheckboxes = $("#serviceRolesContainer input", modalAutoConnectedService);
+	                var rolesLabels = $("#rolesContainer label", modalAutoConnectedService);
+	                if ( $("#checkboxEveryone", modalAutoConnectedService).prop('checked')) {
+	                    rolesCheckboxes.attr("disabled", "true");
+	                    rolesLabels.attr("disabled", "true");
+	                } else {
+	                    rolesCheckboxes.removeAttr("disabled");
+	                    rolesLabels.removeAttr("disabled");
+	                }
+	            };
+
+	            $("#checkboxEveryone", modalAutoConnectedService).click(roleEveryoneClick);
+
+	            $('#email', modalAutoConnectedService).focusout(function() {
+	                var serviceRolesContainer = $("#serviceRolesContainer", modalAutoConnectedService).empty();
+
+	                var emailInput = $(this);
+	                var email = emailInput.val().trim();
+	                if (email == '')
+	                    return;
+
+	                $.ajax({
+	                    url : "/mobiadmin/apps/get_service_roles",
+	                    type : "GET",
+	                    data : {
+	                        email : email
+	                    },
+	                    success : function(data) {
+	                        var emailControlGroup = $("#emailControlGroup", modalAutoConnectedService);
+	                        emailControlGroup.addClass(data.success ? "success" : "error");
+	                        emailControlGroup.removeClass(data.success ? "error" : "success");
+
+	                        var emailError = $("#emailError", modalAutoConnectedService);
+	                        emailError.text(data.success ? "" : data.errormsg);
+
+	                        if (data.success) {
+	                            emailInput.val(data.service_identity_email);
+
+	                            if (data.roles.length == 0) {
+	                                $("#serviceRoles", modalAutoConnectedService).hide();
+	                            } else {
+	                                serviceRolesContainer.append($.tmpl(SERVICE_ROLES_TEMPLATE, {
+	                                    roles : data.roles
+	                                }));
+	                                $("#serviceRoles", modalAutoConnectedService).show();
+	                            }
+	                            roleEveryoneClick();
+	                        }
+	                    }
+	                });
+	            });
+	        });
+	    };
+
+        var displayAutoConnectedServices = function() {
+            var elem = $("#auto_connected_services");
+            elem.empty();
+
+            $.each(autoConnectedServices, function(i, acs) {
+                var html = $.tmpl(AUTO_CONNECTED_IDENTITY_TEMPLATE, {
+                    service_identity_email : acs.service_identity_email,
+                    removable : acs.removable,
+                    local : acs.local.join(", "),
+                    roles : acs.service_role_names.join(", ") || "Everyone" 
+                });
+                elem.append(html);
+
+                $('button[action="remove"]', html).click(function() {
+                    var index = autoConnectedServices.indexOf(acs);
+                    if (index != -1) {
+                        autoConnectedServices.splice(index, 1);
+                        html.remove();
+                    }
+                });
+            });
+        };
+
+        $('#add_admin_service').click(function() {
+            var modal = createModal($.tmpl(POPUP_ADD_ADMIN_SERVICE, {}));
+
+            $('button[action="submit"]', modal).click(function() {
+                var email = $("#email", modal).val().trim();
+                adminServices.push(email);
+                displayAdminServices();
+                modal.modal('hide');
+            });
+        });
+        
+        $('#add_beacon_region').click(function() {
+            var modal = createModal($.tmpl(POPUP_ADD_BEACON_REGION, {}));
+
+            $('button[action="submit"]', modal).click(function() {
+                var uuid = $("#uuid", modal).val().trim();
+                var major = $("#major", modal).val().trim();
+                var minor = $("#minor", modal).val().trim();
+                
+                var errorMessages = [];
+                if (uuid == "") {
+                    errorMessages.push("UUID is required");
+                }
+                var major_f = null;
+                if (major != "") {
+	                major_f = parseInt(major);
+	                if (isNaN(major_f)) {
+	                    errorMessages.push("Major is an invalid number");
+	                }
+                }
+                var minor_f = null;
+                if (minor != "") {
+	                minor_f = parseInt(minor);
+	                if (isNaN(minor_f)) {
+	                    errorMessages.push("Minor is an invalid number");
+	                }
+                }
+                
+                if (errorMessages.length > 0) {
+                    alert(errorMessages.join("\n"))
+                    return;
+                }
+                
+                beaconRegions.push({"uuid": uuid,
+                                    "major": major_f,
+                                    "minor": minor_f});
+                displayBeaconRegions();
+                modal.modal('hide');
+            });
+        });
+
+        var displayAdminServices = function() {
+            var elem = $("#admin_services");
+            elem.empty();
+
+            $.each(adminServices, function(i, adminService) {
+                var html = $.tmpl(ADMIN_SERVICE_TEMPLATE, {
+                    service_email : adminService
+                });
+                elem.append(html);
+
+                $('button[action="remove"]', html).click(function() {
+                    var index = adminServices.indexOf(adminService);
+                    if (index != -1) {
+                        adminServices.splice(index, 1);
+                        html.remove();
+                    }
+                });
+            });
+        };
+        
+        var displayBeaconRegions = function() {
+            var elem = $("#beacon_regions");
+            elem.empty();
+            $.each(beaconRegions, function(i, beaconRegion) {
+                var html = $.tmpl(BEACON_REGION_TEMPLATE, {
+                    uuid : beaconRegion.uuid,
+                    major : beaconRegion.major,
+                    minor : beaconRegion.minor
+                });
+                elem.append(html);
+
+                $('button[action="remove"]', html).click(function() {
+                    var index = beaconRegions.indexOf(beaconRegion);
+                    if (index != -1) {
+                        beaconRegions.splice(index, 1);
+                        html.remove();
+                    }
+                });
+            });
+        };
+
+	    $('#add_qr_template').click(function() {
+	        var elem = $("#qr_templates");
+	        var html = $.tmpl(NEW_QR_TEMPLATE_TEMPLATE, {});
+	        elem.append(html);
+	        $('button[action="remove"]', html).click(function() {
+                html.remove();
+            });
+
+           $('[name="qr_template_color"]', html).keyup(function () {
+                var color = $(this).val();
+                if (color_test.test(color)) {
+                    $(".update_qr_template_color_preview", html).css('background-color', '#'+color);
+                    $(".update_qr_template_color_preview", html).show('slow');
+                    $(".update_qr_template_color_error", html).fadeOut('slow');
+                } else {
+                    $(".update_qr_template_color_preview", html).hide('slow');
+                    $(".update_qr_template_color_error", html).fadeIn('slow');
+                }
+            });
+	    });
+
+	    var displayQRTemplates = function() {
+	        var elem = $("#qr_templates");
+	        elem.empty();
+
+	        $.each(qrTemplates, function(i, qrTemplate) {
+	            var html = $.tmpl(EXISTING_QR_TEMPLATE_TEMPLATE, {
+	                qr_template_image : "/mobiadmin/apps/qr_template_example?key_name=" + encodeURIComponent(qrTemplate.key_name),
+	                qr_template_default : qrTemplate.is_default ? "checked" : "",
+	                qr_template_description : qrTemplate.description,
+	                qr_template_color : qrTemplate.body_color,
+	            });
+	            elem.append(html);
+
+	            $('button[action="remove"]', html).click(function() {
+	                qrTemplatesToDelete.push(qrTemplate.key_name);
+	                html.remove();
+	            });
+	        });
+	    };
+
+       {% if app %}
+          showExistingApp("{{ app.app_id }}");
+       {% else %}
+          showNewEmptyApp();
+       {% endif %}
+    });
+    </script>
+</head>
+<body>
+    <div>
+       <h2><a href="/mobiadmin/apps">Apps</a> - {% if app %}{{app.name}}{% else %}New App{% endif %}</h2>
+    </div>
+	<form id="update_upload" method="post" enctype="multipart/form-data" action="{% if app %}/mobiadmin/apps/update{% else %}/mobiadmin/apps/create{% endif %}">
+		<b>ID</b><br>
+		<input type="hidden" name="app_id_hidden" id="update_app_id_hidden" class="span4" >
+		<input type="text" name="app_id" value="{% if app_id %}{{ app_id }}{% endif %}" id="update_app_id" class="span4" {% if app %}disabled{% endif %}><br>
+		<b>Name</b><br>
+		<input type="text" name="name" value="{% if name %}{{ name }}{% endif %}" id="update_name"	class="span4"><br>
+		<b>Type</b><br>
+		<select id="update_app_type" name="app_type" value="{% if app_type %}{{ app_type }}{% endif %}" class="span4">
+{% for _type, _type_str in app_types %}
+			<option value="{{ _type }}" {% if app_type == _type or (not app_type and _type == 1) %} selected="selected" {% endif %}>{{ _type_str }}</option>
+{% endfor %}
+		</select><br>
+        <label class="checkbox" for="demo"><input type="checkbox" name="demo" id="demo">Demo app</label>
+        <label class="checkbox" for="beta"><input type="checkbox" name="beta" id="beta">Beta app</label>
+
+		<b>Core branding:</b><br />
+		<input type="hidden" name="has_core_branding">
+        <input type="hidden" name="auto_connected_services">
+        <input type="hidden" name="admin_services">
+        <input type="hidden" name="beacon_regions">
+		<input type="hidden" name="qr_templates_count">
+		<input type="hidden" name="default_qr_template_index">
+		<input type="hidden" name="qr_templates_to_delete">
+
+		<input id="update_core_branding" type="file" name="core_branding" accept="*.zip" /><br>
+		<b>Facebook app id:</b><br />
+		<input type="text" name="fb_app_id" value="{% if fb_app_id %}{{ fb_app_id }}{% endif %}" id="update_fb_app_id" class="span4" /><br />
+		<b>iOS app id:</b><br />
+		<input type="text" name="ios_app_id" value="{% if ios_app_id %}{{ ios_app_id }}{% endif %}" id="update_ios_app_id" class="span4" /><br />
+		<b>Android app id:</b><br />
+		<input type="text" name="android_app_id" value="{% if android_app_id %}{{ android_app_id }}{% endif %}" id="update_android_app_id" class="span4" /><br />
+		<b>Dashboard email address:</b><br />
+        <input type="text" name="dashboard_email_address" value="{% if dashboard_email_address %}{{ dashboard_email_address }}{% endif %}" id="update_dashboard_email_address" class="span4" /><br />
+        <b>Contact email address:</b><br />
+        <input type="text" name="contact_email_address" value="{% if contact_email_address %}{{ contact_email_address }}{% endif %}" id="update_contact_email_address" class="span4" /><br />
+        <b>MDP client ID</b><br>
+        <input type="text" name="mdp_client_id" value="{% if mdp_client_id %}{{ mdp_client_id }}{% endif %}" id="mdp_client_id"  class="span4"><br>
+        <b>MDP client secret</b><br>
+        <input type="text" name="mdp_client_secret" value="{% if mdp_client_secret %}{{ mdp_client_secret }}{% endif %}" id="mdp_client_secret"  class="span4"><br>
+		<b>User regex:</b><br />
+		<textarea rows="4" cols="50" type="text" name="user_regex" id="update_user_regex" class="span4">{% if user_regex %}{{ user_regex }}{% endif %}</textarea>
+		<br />
+		<b>QR Templates: (width: 348px - height: 343px)</b><br />
+		<table class="table table-bordered table-striped" style="width: 100%;">
+            <thead>
+                <tr style="text-align: left">
+                    <th class="span1">Default</th>
+                    <th class="span3">Template</th>
+                    <th class="span2">Description</th>
+                    <th class="span2">Color</th>
+                    <th class="span1"><a id="add_qr_template" class="btn btn-success">Add</a></th>
+                </tr>
+            </thead>
+            <tbody id="qr_templates"></tbody>
+        </table>
+
+		<b>Auto connected services:</b><br />
+		<table class="table table-bordered table-striped" style="width: 100%;">
+			<thead>
+				<tr style="text-align: left">
+					<th class="span3">Service identity email</th>
+					<th class="span1">Removable</th>
+					<th class="span2">Local</th>
+					<th class="span2">Roles</th>
+                    <th class="span1"><a id="add_auto_connected_service" class="btn btn-success">Add</a></th>
+				</tr>
+			</thead>
+			<tbody id="auto_connected_services"></tbody>
+		</table>
+
+        <b>Admin services:</b><br />
+        <table class="table table-bordered table-striped" style="width: 100%;">
+            <thead>
+                <tr style="text-align: left">
+                    <th class="span3">Service email</th>
+                    <th class="span1"><a id="add_admin_service" class="btn btn-success">Add</a></th>
+                </tr>
+            </thead>
+            <tbody id="admin_services"></tbody>
+        </table>
+        
+        <b>Beacon regions:</b><br />
+        <table class="table table-bordered table-striped" style="width: 100%;">
+            <thead>
+                <tr style="text-align: left">
+                    <th class="span3">UUID</th>
+                    <th class="span1">Major</th>
+                    <th class="span1">Minor</th>
+                    <th class="span1"><a id="add_beacon_region" class="btn btn-success">Add</a></th>
+                </tr>
+            </thead>
+            <tbody id="beacon_regions"></tbody>
+        </table>
+        
+        <b>Beacon major:</b><br />
+        <input type="text" name="beacon_major" value="{% if beacon_major %}{{ beacon_major }}{% endif %}" id="update_beacon_major" class="span4" /><br />
+        <b>Beacon last minor:</b><br />
+        <input type="text" disabled value="{% if beacon_last_minor %}{{ beacon_last_minor }}{% endif %}" id="update_beacon_last_minor" class="span4" /><br />
+        {% if all_apps %}
+        <b>App circles:</b><br />
+        <div class="app_circles">
+            {% for app in all_apps %}
+            <label class="checkbox">
+                <input type="checkbox" name="orderable_apps" value="{{ app.app_id }}"> {{ app.name }} ({{ app.app_id }})
+            </label>
+            {% endfor %}
+        </div>
+        {% endif %}
+	    <button action="submit" class="btn btn-primary">Submit</button>
+	</form>
+</body>
+</html>

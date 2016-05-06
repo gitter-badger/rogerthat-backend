@@ -1,0 +1,14 @@
+{{ from_name }} le recomienda conectarse a {{ service_name }} en {{ app_name }}.
+
+Paso 1. Instalar app {{ app_name }}:
+{{ BASE_URL }}/install?a={{ app_id }}&email
+
+Paso 2. Conectar a {{ service_name }}:
+{{ share_url }}
+
+{% if consts.INCLUDE_ROGERTHAT_DOT_NET %}
+
+
+
+Para obtener más información acerca de {{ app_name }} y otros productos a base Rogerthat, por favor visite:
+http://www.rogerthat.net{% endif %}

@@ -1,0 +1,27 @@
+{% extends "base_base_mobile_simple_no_javascript.html" %}
+
+{% block body %}
+<table cellpadding="5" style="background: none !important;">
+<tr>
+<td colspan="2">
+<p class="mob-top">
+<img src="/unauthenticated/mobi/avatar/{{ profile_info.avatarId }}" width="50px" height="50px" style="float: left; margin-right: 10px;">
+<b>{{ profile_info.name }}</b><br> <label>
+Hallo, je hebt net mijn id gescand in de {{ app.name }} app.</label><br> <br>
+<span>{{ app.name }} is momenteel ondersteund op iPhone en Android. Neem de volgende stappen om met mij te koppelen:</span>
+</p></td>
+</tr>
+<tr>
+<td width="10px">
+<h2>Stap 1:</h2></td>
+<td width="100%">Installeer de {{ app.name }} app gratis.</td>
+</tr>
+<tr><td width="10px">&nbsp;</td><td><a href="{{ app.ios_appstore_web_uri }}" target="_blank"><img src="/static/images/M_2.png" /></a></td></tr>
+<tr><td width="10px">&nbsp;</td><td><a href="{{ app.android_market_web_uri }}" target="_blank"><img src="/static/images/M_1.png" /></a></td></tr>
+<tr>
+<td>
+<h2>Stap 2:</h2></td>
+<td>Scan mijn id opnieuw met de {{ app.name }} app.</td>
+</tr>
+</table>
+{% endblock %}

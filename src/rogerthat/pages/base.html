@@ -1,0 +1,83 @@
+{% extends "base_base.html" %}
+{% block header %}
+{% if user %}
+<link rel="stylesheet" type="text/css" href="/static/css/jquery.gritter.css" />
+    <link rel="stylesheet" type="text/css" href="/static/bower_components/components-font-awesome/css/font-awesome.min.css">
+<script type="text/javascript" src="/static/js/jquery.gritter.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.tmpl.min.js"></script>
+<script type="text/javascript" src="/static/js/slimScroll.min.js"></script>
+{% endif %}
+{% endblock %}
+{% block body %}
+<div id="body">
+	<div id="tab_placeholder">&nbsp;</div>
+	<div id="tab_with_menu" class="mc_tab">
+		<div id="left" class="span-5" style="display: none">
+		{% if user %}
+			{% block profile %}
+			<a id="myProfile" class="link"><img src="/mobi/profile/my_avatar?user={{user.email}}" alt="Edit Profile" style="width: 50px; height: 50px;"/></a>
+			<span id="profileName"></span>
+			<a id="editProfile" class="mcblue link">Edit profile</a>
+			{% endblock %}
+			<div id="menuContainer">{% block menu %} {% endblock %}</div>
+	        {% block extra_menu %}{% endblock %}
+	    {% endif %}
+	        <div class="span-5 last"></div>
+		</div>
+		<div class="span-1">&nbsp;</div>
+		<div class="span-18 last" id="contentContainer"> {% block content %}{% endblock %} </div>
+	</div>
+	<div id="tab_without_menu" class="mc_tab">
+		{% block tab_without_menu %}
+		
+		{% endblock %}
+	</div>
+</div>
+{% if user %}
+<div style="display: none;">
+	<div id="invitationSendDialog">
+	    Invitation was sent successfully.
+	</div>
+	<div id="addFriendsDialog">
+		<span id="viaEmail">
+			Enter email address of the Rogerthat user you want to become friends with:<br>
+			<input type="text" id="friendEmail" style="width: 390px;" placeholder="Email address" autocorrect="off" autocapitalize="off"/>
+		</span>
+		<span id="viaUserCode">
+			Invite <b><span id="viaUserCodeName"></span></b>
+		</span>
+		<br>
+		<br>
+		Enter invite text (leave blank for default):<br>
+		<textarea rows="5" cols="40" id="friendInviteText" placeholder="Add personal invitation note here."></textarea><br>
+		<span id="friendInviteError" style="color: red;"></span>
+	</div>
+</div>
+{% endif %}
+<script type="text/javascript">
+<!--
+$(function() {
+
+	var resizeContentArea = function(e) {
+		var width = $(window).width();
+		var height = $(window).height();
+/* 		$('#body').slimScroll({
+		    height: ($(window).height() - 89) + 'px',
+		    width: width + 'px',
+		    wheelStep: 10,
+		    alwaysVisible: true,
+		    color: 'rgba(255,255,255,180)',
+		    size: '10px'
+		});
+ */		$("#body > #tab_placeholder").css('width', ((width - 960) / 2)+'px');
+ 		$("#body").css('height', (height - 86) + 'px');
+	};
+	$(window).resize(resizeContentArea);
+	resizeContentArea();
+    $.extend($.gritter.options, {
+        position: 'bottom-left'
+    });
+});
+-->
+</script>
+{% endblock %}

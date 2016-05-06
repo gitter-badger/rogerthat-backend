@@ -1,0 +1,25 @@
+{% extends "base_base.html" %}
+
+{% block body %}
+<div class="note2">
+	<span>
+		{{ message }}
+	</span>
+	<br>
+	<button id="close">Close</button>
+</div>
+<script type="text/javascript">
+<!--
+$(window).load(function () {
+	$("#close").click(function() {
+		{% if mobile %}
+		window.location = "rogerthat://";
+		{% else %}
+		window.opener = window.self;
+		window.self.close();
+		{% endif %}
+	});
+});
+-->
+</script>
+{% endblock %}

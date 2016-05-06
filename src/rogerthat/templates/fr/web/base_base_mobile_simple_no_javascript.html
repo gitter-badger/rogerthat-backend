@@ -1,0 +1,166 @@
+<html class=ui-mobile>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=UTF-8">
+<base href=.>
+<title>Rogerthat</title>
+<meta name=viewport content="width=device-width, initial-scale=1">
+<meta name=google value=notranslate>
+{% block facebook_header %}{% endblock %}
+<style>.ui-bar-a{border:1px solid #2a2a2a;background:#111;color:#fff;font-weight:bold;text-shadow:0 -1px 1px #000;background-image:-webkit-gradient(linear, left top, left bottom, from(#3c3c3c),
+to(#111));background-image:-webkit-linear-gradient(top, #3c3c3c, #111);background-image:-moz-linear-gradient(top, #3c3c3c, #111);background-image:-ms-linear-gradient(top, #3c3c3c, #111);background-image:-o-linear-gradient(top, #3c3c3c, #111);background-image:linear-gradient(top, #3c3c3c, #111)}
+.ui-bar-a{font-family:Helvetica, Arial, sans-serif}
+.ui-btn-up-a{border:1px solid #222;background:#333;font-weight:bold;color:#fff;text-shadow:0 -1px 1px #000;background-image:-webkit-gradient(linear, left top, left bottom, from(#555),
+to(#333));background-image:-webkit-linear-gradient(top, #555, #333);background-image:-moz-linear-gradient(top, #555, #333);background-image:-ms-linear-gradient(top, #555, #333);background-image:-o-linear-gradient(top, #555, #333);background-image:linear-gradient(top, #555, #333)}
+.ui-btn-up-a{font-family:Helvetica, Arial, sans-serif;text-decoration:none}
+.ui-link:hover{color:#2489ce}
+.ui-btn-inner{border-top:1px solid #fff;border-color:rgba(255, 255, 255, .3)}
+@media only screen and (-webkit-min-device-pixel-ratio:1.5) , only screen and
+(min--moz-device-pixel-ratio:1.5) , only screen and
+(min-resolution:240dpi){.ui-icon-plus{background-image:url(images/icons-36-white.png);-moz-background-size:776px 18px;-o-background-size:776px 18px;-webkit-background-size:776px 18px;background-size:776px 18px}
+}
+.ui-btn-corner-all{-moz-border-radius:1em;-webkit-border-radius:1em;border-radius:1em}
+.ui-shadow{-moz-box-shadow:0 1px 4px rgba(0, 0, 0, .3);-webkit-box-shadow:0 1px 4px rgba(0, 0, 0, .3);box-shadow:0 1px 4px rgba(0, 0, 0, .3)}
+.ui-bar-a .ui-shadow{-moz-box-shadow:0 1px 0 rgba(255, 255, 255, .3);-webkit-box-shadow:0 1px 0 rgba(255, 255, 255, .3);box-shadow:0 1px 0 rgba(255, 255, 255, .3)}
+.ui-mobile,.ui-mobile body{height:100%}
+.ui-mobile-viewport{margin:0;overflow-x:hidden;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0)}
+.ui-mobile [data-role=page],.ui-mobile [data-role=dialog]{top:0;left:0;width:100%;min-height:100%;position:absolute;display:none;border:0}
+.ui-mobile-rendering>*{visibility:hidden}
+@
+-webkit-keyframes spin{from{-webkit-transform:rotate(0deg)}
+to{-webkit-transform:rotate(360deg)}
+}
+@
+-webkit-keyframes slideinfromright{from{-webkit-transform:translateX(100%)}
+to{-webkit-transform:translateX(0)}
+}
+@
+-webkit-keyframes slideinfromleft{from{-webkit-transform:translateX(-100%)}
+to{-webkit-transform:translateX(0)}
+}
+@
+-webkit-keyframes slideouttoleft{from{-webkit-transform:translateX(0)}
+to{-webkit-transform:translateX(-100%)}
+}
+@
+-webkit-keyframes slideouttoright{from{-webkit-transform:translateX(0)}
+to{-webkit-transform:translateX(100%)}
+}
+@
+-webkit-keyframes slideinfromtop{from{-webkit-transform:translateY(-100%)}
+to{-webkit-transform:translateY(0)}
+}
+@
+-webkit-keyframes slideinfrombottom{from{-webkit-transform:translateY(100%)}
+to{-webkit-transform:translateY(0)}
+}
+@
+-webkit-keyframes slideouttobottom{from{-webkit-transform:translateY(0)}
+to{-webkit-transform:translateY(100%)}
+}
+@
+-webkit-keyframes slideouttotop{from{-webkit-transform:translateY(0)}
+to{-webkit-transform:translateY(-100%)}
+}
+@
+-webkit-keyframes fadein{from{opacity:0}
+to{opacity:1}
+}
+@
+-webkit-keyframes fadeout{from{opacity:1}
+to{opacity:0}
+}
+@
+-webkit-keyframes flipinfromright{from{-webkit-transform:rotateY(-180deg) scale(.8)}
+to{-webkit-transform:rotateY(0) scale(1)}
+}
+@
+-webkit-keyframes flipinfromleft{from{-webkit-transform:rotateY(180deg) scale(.8)}
+to{-webkit-transform:rotateY(0) scale(1)}
+}
+@
+-webkit-keyframes flipouttoleft{from{-webkit-transform:rotateY(0) scale(1)}
+to{-webkit-transform:rotateY(-180deg) scale(.8)}
+}
+@
+-webkit-keyframes flipouttoright{from{-webkit-transform:rotateY(0) scale(1)}
+to{-webkit-transform:rotateY(180deg) scale(.8)}
+}
+@
+-webkit-keyframes dontmove{from{opacity:1}
+to{opacity:1}
+}
+@
+-webkit-keyframes popin{from{-webkit-transform:scale(.2);opacity:0}
+to{-webkit-transform:scale(1);opacity:1}
+}
+@
+-webkit-keyframes popout{from{-webkit-transform:scale(1);opacity:1}
+to{-webkit-transform:scale(.2);opacity:0}
+}
+.ui-footer{position:absolute;overflow:hidden;width:100%;border-left-width:0;border-right-width:0}
+.ui-footer-fixed{z-index:1000;-webkit-transform:translateZ(0)}
+.ui-btn{display:block;text-align:center;cursor:pointer;position:relative;margin:.5em 5px;padding:0}
+.ui-footer .ui-btn{display:inline-block;font-size:13px;margin:0}
+.ui-btn-inner{padding:.6em 25px;display:block;text-overflow:ellipsis;overflow:hidden;white-space:nowrap;position:relative;zoom:1}
+.ui-footer .ui-btn-inner{padding:.4em 8px .5em}
+@media all and (min-width:450px){.ui-controlgroup-label{vertical-align:top;display:inline-block;width:20%;margin:0 2% 0 0}
+}
+@media all and (min-width:450px){.ui-field-contain{border-width:0;padding:0;margin:1em 0}
+}
+@
+-moz-document url-prefix (){.ui-select .ui-btn select{opacity:.0001}
+}
+@media all and (min-width:450px){label.ui-select{vertical-align:top;display:inline-block;width:20%;margin:0 2% 0 0}
+}
+@media all and (min-width:450px){label.ui-input-text{vertical-align:top;display:inline-block;width:20%;margin:0 2% 0 0}
+}
+.ui-li>.ui-btn-inner{display:block;position:relative;padding:0}
+@media all and (min-width:480px){.ui-li-aside{width:45%}
+}
+.ui-listview * .ui-btn-inner>.ui-btn>.ui-btn-inner{border-top:0}
+@media only screen and (min-device-width:768px) and
+(max-device-width:1024px){.ui-li .ui-btn-text{overflow:visible}
+}
+@media all and (min-width:480px){label.ui-slider{vertical-align:top;display:inline-block;width:20%;margin:0 2% 0 0}
+}
+*{font-family:Arial;color:#333333;text-shadow:0 1px 0 #FFFFFF;}
+.ui-btn-text{color:#FFFFFF !important;font-weight:bold;text-shadow:0 -1px 1px #000000;}
+table{width:100%;height:100%;background-image:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#ccc),
+to(#eee));background-image:-webkit-linear-gradient(top, #ccc, #eee);background-image:-moz-linear-gradient(top, #ccc, #eee);background-image:-ms-linear-gradient(top, #ccc, #eee);background-image:-o-linear-gradient(top, #ccc, #eee);}
+.link-button{padding:5px;color:#fff !important;display:block;text-align:center;text-shadow:0 1px 0 #000000;background-image:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#7fa200),
+to(#415300));background-image:-webkit-linear-gradient(top, #7fa200, #415300);background-image:-moz-linear-gradient(top, #7fa200, #415300);background-image:-ms-linear-gradient(top, #7fa200, #415300);background-image:-o-linear-gradient(top, #7fa200, #415300);-moz-border-radius:5px;border-radius:5px;box-shadow:0 1px 0 rgba(0, 0, 0, 0.3);font-weight:bold;}
+h2{margin-bottom:5px;font-size:16px;width:60px;}
+.mob-top span{diSPLAY:block;}
+label{font-size:80%;}
+.mob-top{border:1px solid #bbb;padding:5px;background:#eee;-moz-border-radius:5px;border-radius:5px;margin:5px 0px;}
+span{text-align:center;}
+.ui-footer{position:static !important;}
+.ui-btn-inner{padding:4px 13px !important;}
+.ui-btn{margin:4px 10px !important;}</style>
+</head>
+<body class=ui-mobile-viewport style="margin: 0; padding: 0;">
+<table cellpadding=0 cellspacing=0>
+<tr>
+<td>
+<div data-role=header class=ui-bar-a role=banner style="padding-left: 5px; padding-top: 2px; padding-bottom: 2px;">
+Rogerthat</div></td>
+</tr>
+<tr>
+<td>
+{% block body %}{% endblock %}
+</td>
+</tr>
+<tr style="height: 100%;">
+<td style="height: 100%;">&nbsp;</td>
+</tr>
+<tr>
+<td>
+<div data-role=footer data-position=fixed style="text-align: center; top: 576px;" class="ui-footer ui-bar-a ui-footer-fixed fade ui-fixed-overlay" role=contentinfo>
+&copy; 2011-2016  <a href="mailto:info@mobicage.com" class="ui-btn-left ui-btn ui-btn-up-a ui-btn-corner-all ui-shadow" data-theme=a><span class="ui-btn-inner ui-btn-corner-all"><span class=ui-btn-text> Mobicage NV</span>
+</span>
+</a> All&nbsp;rights&nbsp;reserved&nbsp;worldwide.
+</div></td>
+</tr>
+</table>
+</body>
+</html>

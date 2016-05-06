@@ -1,0 +1,116 @@
+{{if unsigned_orders.length }}
+<div id="billing_unsigned_orders">
+    <h4>Unsigned orders</h4>
+    <table class="table table-striped table-hover table-bordered">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Order number</th>
+                <th>Total amount</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {{each(i, unsigned_order) unsigned_orders}}
+        <tr>
+            <td>${unsigned_order.full_date_str}</td>
+            <td>${unsigned_order.order_number}</td>
+            <td>${unsigned_order.amount}</td>
+            <td>
+               <a class="btn btn-primary sign-order" target="_blank" customer_id="${unsigned_order.customer_id}"
+                  order_status="${unsigned_order.order_status}" order_number="${unsigned_order.order_number}">Sign order</a>
+            </td>
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
+</div>
+{{/if}}
+{{if orders.length}}
+<div id="billing_orders">
+    <h4>Signed orders</h4>
+    <table class="table table-striped table-hover table-bordered">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Order number</th>
+                <th>Total amount</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {{each(i, order) orders}}
+        <tr>
+            <td>${order.full_date_str}</td>
+            <td>${order.order_number}</td>
+            <td>${order.amount}</td>
+            <td>
+                <a class="btn btn-primary" target="_blank"
+                   href="/internal/shop/order/pdf?customer_id=${order.customer_id}&order_number=${order.order_number}&download=false">View</a>
+            </td>
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
+</div>
+{{/if}}
+{{if canceledOrders.length }}
+<div id="billing_canceled_orders">
+    <h4>Canceled orders</h4>
+    <table class="table table-striped table-hover table-bordered">
+        <thead>
+        <tr>
+            <th>Date created</th>
+            <th>Date canceled</th>
+            <th>Order number</th>
+            <th>Total amount</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {{each(i, order) canceledOrders}}
+        <tr>
+            <td>${order.full_date_str}</td>
+            <td>${order.full_date_canceled_str}</td>
+            <td>${order.order_number}</td>
+            <td>${order.amount}</td>
+            <td>
+                <a class="btn btn-primary" target="_blank"
+                   href="/internal/shop/order/pdf?customer_id=${order.customer_id}&order_number=${order.order_number}&download=false">View</a>
+            </td>
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
+</div>
+{{/if}}
+{{if invoices.length}}
+<div id="billing_invoices">
+    <h4>Invoices</h4>
+    <table class="table table-striped table-hover table-bordered">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Invoice number</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {{each(i, invoice) invoices}}
+        <tr>
+            <td>${invoice.full_date_str}</td>
+            <td>${invoice.invoice_number}</td>
+            <td>
+                <a class="btn btn-primary" target="_blank"
+                   href="/internal/shop/invoice/pdf?customer_id=${invoice.customer_id}&order_number=${invoice.order_number}&charge_id=${invoice.charge_id}&invoice_number=${invoice.invoice_number}">View</a>
+            </td>
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
+</div>
+{{/if}}
+{{if !(unsigned_orders.length || orders.length || invoices.length || canceledOrders.length)}}
+<h4>Orders</h4>
+<p>No orders found</p>
+{{/if}}

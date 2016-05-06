@@ -1,0 +1,17 @@
+{{ profile.name }} quiere comunicarse con usted a través de una innovadora app para smartphone.
+
+Paso 1. Instalar app {{ app.name }}:
+{{ BASE_URL }}/install?a={{ app.app_id }}&email
+
+Paso 2. Subscribirse a {{ profile.name }}:
+{{ short_url }}{% if secret %}?s={{ secret }}{% endif %}
+
+
+
+{% if message %}{{ profile.name }} añadida nota personal a su petición de invitación:
+{{ message }}
+
+{% endif %}{% if consts.INCLUDE_ROGERTHAT_DOT_NET %}
+
+Para obtener más información acerca de {{ app.name }} y otros productos a base Rogerthat, por favor visite:
+http://www.rogerthat.net{% endif %}

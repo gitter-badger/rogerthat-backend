@@ -1,0 +1,23 @@
+<html>
+  <body>
+    <p>{{ from_name }} le recomienda conectarse a {{ service_name }} en {{ app_name }}.</p>
+    <p>
+      <ul>
+        <li>
+          Paso 1. Instalar la app de {{ app_name }}:<br>
+          <a href="{{ BASE_URL }}/install?email">{{ BASE_URL }}/install</a><br><br>
+        </li>
+        <li>
+          Paso 2. Conectarse a {{ service_name }}:<br>
+          <a href="{{ share_url }}">{{ share_url }}</a>
+        </li>
+      </ul>
+    </p>
+    <p>&nbsp;</p>
+    {% if consts.INCLUDE_ROGERTHAT_DOT_NET %}
+    <p>
+    Para obtener más información acerca de {{ app_name }} y otros productos a base Rogerthat, por favor visite:<br>
+    <a href="http://www.rogerthat.net">http://www.rogerthat.net</a>
+    </p>{% endif %}
+  </body>
+</html>

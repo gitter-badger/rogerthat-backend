@@ -1,0 +1,35 @@
+{% translate language, 'dear_name', 'name=' + profile.name %},
+
+
+{{email_reminder_intro }}
+{% if has_mobiles %}{%- for cause_caption, cause in causes %}
+    {%- if loop.index > 0 %}
+    {%- endif %}
+
+{{ cause_caption }}: {{ cause }}
+{%- endfor %}{% endif %}
+
+
+
+{% translate language, 'email_reminder_message_summary' %}
+
+{%- for unread_message in unread_messages %}
+
+{{ unread_message.name }} - {{ unread_message.time }}
+{{ unread_message.message|truncate(100, True) }}
+    {%- if unread_message.broadcast_type %}
+- {% translate language, 'broadcast_reminder_explanation', 'broadcast_type=' + unread_message.broadcast_type %}
+{{ unread_message.unsubscribe_caption }}: {{ unread_message.unsubscribe_link }}
+    {%- endif %}
+{%- endfor %}
+
+{% if has_mobiles %}
+{{ outro }}{% endif %}
+
+{{ unsubscribe_info }}
+
+
+
+{% translate language, 'Kind regards' %},
+
+{{ team }}.

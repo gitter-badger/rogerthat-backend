@@ -1,0 +1,136 @@
+<div id="brandingContainer" class="span-18 last">
+    <link rel="stylesheet" href="/static/css/imgareaselect/imgareaselect-default.css" />
+    <script type="text/javascript" src="/static/js/jquery.imgareaselect.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.imgareaselect.pack.js"></script>
+    <script type="text/javascript" src="/static/js/branding.js"></script>
+
+	<div id="uploadContainer">
+		<h3>Create new screen branding template</h3>
+		<div class="span-17 last">
+	        <a id="branding_designer" class="action-link" style="float:right">Open branding designer</a>
+			<iframe id="brandingHiddenUploadFrame" name="brandingHiddenUploadFrame" style="width: 0px; height: 0px; border: 0px; color: #fff; padding: 0px"></iframe>
+			<form id="upload" method="post" enctype="multipart/form-data" target="brandingHiddenUploadFrame" action="/mobi/service/branding/upload">
+				Description:<br>
+				<input id="description" name="description" type="text" style="width: 200px"><span id="description_error" class="mcwarning" style="display: none;">* required field</span><br>
+				Choose file:<br>
+				<input id="file" type="file" name="file" accept="*.zip" /><span id="file_error" class="mcwarning" style="display: none;">* required field</span>
+			</form>
+			<button id="upload_button">Upload</button>
+			<span id="upload_error" class="mcwarning" style="display: none;"></span>
+		</div>
+	</div>
+	<br>&nbsp;<br>
+	<div id="brandingListContainer">
+		<h3>Manage screen branding templates</h3>
+		<div id="branding_list" class="span-17 last">
+		</div>
+	</div>
+	<div id="preview_dialog" style="display: none;">
+		<div style="background: url('/static/images/mobile_sceleton.png'); width: 415px; height: 732px">
+			<iframe id="preview_frame" style="width: 318px;height: 452px;margin-left: 49px;margin-top: 81px; background: white;"></iframe>
+		</div>
+	</div>
+
+    <div id="branding_designer_popup" style="display: none">
+        <div id="branding_designer_preview" style="float: right;">
+            <div
+                style="background: url('/static/images/mobile_sceleton.png'); width: 415px; height: 732px; overflow: hidden;">
+                <iframe id="designer_preview_frame" src="/mobi/service/branding/editor/1/branding.html?xrender=true"
+                    style="width: 318px; height: 452px; margin-left: 49px; margin-top: 81px; background: white;"></iframe>
+            </div>
+        </div>
+        <div id="branding_designer_form" style="float: left;">
+            <table>
+                <tr>
+                    <td class="label">Branding</td>
+                    <td>
+                        <select id="brandings">
+                            <option value="">New branding</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr style="display: none;">
+                    <td class="label">Preview</td>
+                    <td>
+                        <select id="preview">
+                            <option value="message">Message</option>
+                            <option value="menu">Service Menu</option>
+                            <option value="description">Service Description</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">Description</td>
+                    <td>
+                        <input id="branding_description" name="description" type="text" />
+                        <span id="description_error" class="mcwarning" style="display: none;">* required field</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">Logo<br>(Click to change)</td>
+                    <td>
+                        <div id="logo_div"><img src="/mobi/service/branding/editor/1/logo.jpg"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">Color scheme</td>
+                    <td>
+                        <select id="color_scheme">
+                            <option value="dark">Dark</option>
+                            <option value="light">Light</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">Background color</td>
+                    <td>
+                        <input id="background_color" type="text" class="color" />
+                        &nbsp; <span id="background_color_preview" style="background-color: rgb(255, 255, 255);">&nbsp;&nbsp;&nbsp;</span>
+                        &nbsp;
+                        <a href="http://www.colorpicker.com/" class="action-link" target="_blank"
+                            style="font-weight: normal;">help</a>
+                        &nbsp; <span id="background_color_error" class="mcerror" style="display: none;">* invalid
+                            color</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">Text color</td>
+                    <td>
+                        <input id="text_color" type="text" class="color" />
+                        &nbsp; <span id="text_color_preview" style="background-color: rgb(255, 255, 255);">&nbsp;&nbsp;&nbsp;</span>
+                        &nbsp;
+                        <a href="http://www.colorpicker.com/" class="action-link" target="_blank"
+                            style="font-weight: normal;">help</a>
+                        &nbsp; <span id="text_color_error" class="mcerror" style="display: none;">* invalid color</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">Menu item color</td>
+                    <td>
+                        <input id="menu_item_color" type="text" class="color" />
+                        &nbsp; <span id="menu_item_color_preview" style="background-color: rgb(255, 255, 255);">&nbsp;&nbsp;&nbsp;</span>
+                        &nbsp;
+                        <a href="http://www.colorpicker.com/" class="action-link" target="_blank"
+                            style="font-weight: normal;">help</a>
+                        &nbsp; <span id="menu_item_color_error" class="mcerror" style="display: none;">* invalid color</span>
+                    </td>
+                </tr>
+                <tr>
+                	<td class="label">Static content</td>
+                	<td>
+                		<select id="static_content_mode">
+                            <option value="disabled">Disabled</option>
+                            <option value="plain-text">Plain text</option>
+                            <option value="html">Html (Advanced)</option>
+                        </select>
+                	</td>
+                </tr>
+                <tr style="display: none;">
+                	<td colspan="2">
+                		<textarea id="static_content"></textarea>
+                	</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

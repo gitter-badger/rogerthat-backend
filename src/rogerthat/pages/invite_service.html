@@ -1,0 +1,36 @@
+{% extends "base_base.html" %}
+
+{% block facebook_header %}
+  	<meta property="og:title" content="{{ user_profile.name }}'s personal {{ app.name }} invitation page."/>
+  	<meta property="og:image" content="https://rogerth.at/invite?code={{ user_code }}"/>
+  	<meta property="og:url" content="https://rogerth.at/q/i{{ user_code }}"/>
+  	<meta property="og:type" content="website"/>
+  	<meta property="og:site_name" content="{{ app.name }}"/>
+  	<meta property="og:description" content="Connect with {{ user_profile.name }} through the {{ app.name }} app!"/>
+  	<meta property="fb:app_id" content="{{ app.facebook_app_id }}"/>
+{% endblock %}
+
+{% block body %}
+<div class="note2">
+	<span>
+		Please <a href="/logout">log out from your service account</a>
+        
+        and log in with a user account <br> to connect with {{ user_profile.name }} on {{ app.name }}<br>
+	</span>
+	<br>
+	<table>
+		<tr>
+			<td><b>You</b></td>
+			<td><img src="/static/images/site/plug.png"/></td>
+			<td><img src="/unauthenticated/mobi/cached/avatar/{{ user_profile.avatarId }}" alt="{{ user_profile.name }}"/></td>
+			<td><b>{{ user_profile.name }}</b></td>
+		</tr>
+	</table>
+	<br>
+	<br>
+	<br>
+	<br>
+	<div style="width: 350px; margin-left: auto; margin-right: auto;">{% include "signupbox.html" %}</div>
+</div>
+{% endblock %}
+

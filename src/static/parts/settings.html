@@ -1,0 +1,110 @@
+<div id="settingsContainer" class="span-18 last">
+	<script type="text/javascript" src="/static/js/settings.js"></script>
+	<div class="span-18 last">
+	<div id="tabs" style="display: none; height: 460px;">
+		<ul id="tabContainer">
+			<!-- <li><a href="#tabs-general">Default Settings</a></li> -->
+		</ul>
+		<div id="tabs-general" style="height: 450px">
+			<div id="general" style="height: 100px">
+			    The following settings are applied on a mobile device when it gets registered with your Rogerthat account.<br />
+			    After registration each mobile device can be configured seperatly.
+			</div>
+		    <div id="mobile" style="display: none;height: 100px" class="container">
+		    	<div class="span-10">
+			    	Mobile device name:<br />
+			    	<input id="description" type="text" style="width: 300px"/><br />
+			    	Color used with mobile device: <span id="color" style="cursor: crosshair;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+		    	</div>
+		    	<div class="span-7 last stick-right">
+					<button id="unregister" style="display: none">Unregister this mobile device</button>
+		    	</div>
+		    </div>
+		    <div id="options" style="height: 250px;">
+		    	<ul>
+                    <li><a href="#tabsGeoLocationTracking">Location</a></li>
+                    <li><a href="#tabsGPS">Battery</a></li>
+                    <li><a href="#tabsDebug">Developer</a></li>
+		    	</ul>
+		    	<div id="tabsGeoLocationTracking">
+                    Location sharing (on top of these settings each friend needs to be granted access):<br/>
+					<input id="geoLocationTracking" type="checkbox" value="True"/>Enable / disable<br />
+                    <br />
+					<div id="geoLocationTrackingDetails">
+					    Days on which friends can request your location:<br />
+						<input id="GeoLocationTrackingDayMonday" type="checkbox" value="1" />Monday
+						<input id="GeoLocationTrackingDayTuesday" type="checkbox" value="2" />Tuesday
+						<input id="GeoLocationTrackingDayWednesday" type="checkbox" value="4" />Wednesday
+						<input id="GeoLocationTrackingDayThursday" type="checkbox" value="8" />Thursday
+						<input id="GeoLocationTrackingDayFriday" type="checkbox" value="16" />Friday
+						<input id="GeoLocationTrackingDaySaterday" type="checkbox" value="32" />Saturday
+						<input id="GeoLocationTrackingDaySunday" type="checkbox" value="64" />Sunday<br />
+						<br />
+						Time range in which friends can request your location:
+						<span id="GeoLocationTrackingTimeSlotLabel"></span><br />
+						<div id="GeoLocationTrackingTimeSlotSlider"></div>
+						<br />
+						<div style="display: none">
+						<!-- hidden because no longer relevant -->
+						Battery powered geo location sampling rate: <span id="GeoLocationTrackingSamplingRateBatteryLabel"></span><br />
+						<div id="GeoLocationTrackingSamplingRateBatterySlider" style="width: 300px;"></div>
+						<br />
+						Cable powered geo location sampling rate: <span id="GeoLocationTrackingSamplingRateChargingLabel"></span><br />
+						<div id="GeoLocationTrackingSamplingRateChargingSlider" style="width: 300px;"></div>
+						</div>
+					</div>
+		    	</div>
+		    	<div id="tabsGPS">
+					Using the GPS module of your mobile device can drain the battery rapidly.<br />
+					Geo locations can be retrieved with alternative techniques which are less accurate but less battery intensive.<br />
+					<br />
+					<input id="GPSBattery" type="checkbox" value="True" />Use GPS module when mobile device is battery powered<br />
+					<input id="GPSCharging" type="checkbox" value="True" />Use GPS module when mobile device is charging<br><br>
+		    	</div>
+                <div id="tabsDebug">
+                    Start receiving logs of HTML5 apps running in Rogerthat.
+                    <br /><br />
+                    <button id="startDebugging">Open log viewer</button>
+                </div>
+		    </div>
+			<button id="save">Save ...</button><br />
+			<span id="pendingChanges" style="color: red;">&nbsp;</span>
+		</div>
+	</div></div>
+	<div id="deleteMobileDialog" style="display: none">
+		Are you sure that you want to unregister mobile device &apos;<span id="toBeDeletedMobileDescription"></span>&apos;?<br/>
+	</div>
+    <div id="debuggingDialog" style="display: none">
+        <label><input id="autoScrollDebuggingDialog" type="checkbox" checked> Auto scroll logs</label>
+        <br /><br />
+        <div id="debugLogs"></div>
+    </div>
+	<input id="mobileId" type="hidden"/>
+	<div id="colorDialog" style="display: none">
+		<div class="container">
+			<div class="span-7 last">
+				<div class="span-7 last">
+					<div style="background-color: #FF0000" class="span-1">&nbsp;</div>
+					<div style="background-color: #FF8080" class="span-1">&nbsp;</div>
+					<div style="background-color: #FFFF80" class="span-1">&nbsp;</div>
+					<div style="background-color: #FF80FF" class="span-1">&nbsp;</div>
+					<div style="background-color: #00FF00" class="span-1">&nbsp;</div>
+					<div style="background-color: #00FF80" class="span-1">&nbsp;</div>
+					<div style="background-color: #80FF80" class="span-1 last">&nbsp;</div>
+				</div>
+				<div class="span-7 last">
+					<br />
+				</div>
+				<div class="span-7 last">
+					<div style="background-color: #80FF00" class="span-1">&nbsp;</div>
+					<div style="background-color: #80FFFF" class="span-1">&nbsp;</div>
+					<div style="background-color: #00FFFF" class="span-1">&nbsp;</div>
+					<div style="background-color: #FFFFFF" class="span-1">&nbsp;</div>
+					<div style="background-color: #0000FF" class="span-1">&nbsp;</div>				
+					<div style="background-color: #0080FF" class="span-1">&nbsp;</div>				
+					<div style="background-color: #8080FF" class="span-1 last">&nbsp;</div>				
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

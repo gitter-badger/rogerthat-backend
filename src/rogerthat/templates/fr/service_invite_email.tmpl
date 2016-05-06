@@ -1,0 +1,18 @@
+Cher,
+
+{{ profile.name }} veut améliorer leurs services pour vous via l'application de service à la clientèle {{ app.name }}.
+Vous pouvez utiliser l'application {{ app.name }} pour communiquer avec {{ profile.name }} et d'autres organisations qui font usage de {{ app.name }}.
+
+Étape 1. Installez l'application {{ app.name }} gratuitement:
+{{ BASE_URL }}/install?a={{ app.app_id }}&email
+
+Étape 2. Abonnez-vous à {{ profile.name }}:
+{{ short_url }}{% if secret %}?s={{ secret }}{% endif %}
+
+{% if message %}{{ profile.name }} a ajouté une note personnelle à leur demande d'invitation:
+{{ message }}
+
+{% endif %}{% if consts.INCLUDE_ROGERTHAT_DOT_NET %}
+
+Pour plus d'informations à propos de {{ app.name }} ou d'autres produits Rogerthat, merci de visiter:
+http://www.rogerthat.net{% endif %}

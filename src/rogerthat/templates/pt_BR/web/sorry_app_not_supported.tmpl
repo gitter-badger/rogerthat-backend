@@ -1,0 +1,17 @@
+{% extends "base_base_mobile_simple_no_javascript.html" %}
+
+
+{% block body %}
+<table cellpadding="5" style="background: none !important;">
+<tr>
+<td colspan="2">
+<p class="mob-top"><label>
+Instale o aplicativo <b>"{{ app_name }}"</b> no seu smartphone iPhone ou Android. Abra o aplicativo e escaneie o seguinte código qr.</label><br><br>
+</p></td>
+</tr>
+<tr>
+<td width="10px">&nbsp;</td>
+<td width="100%"><img src="https://chart.googleapis.com/chart?cht=qr&chs=150x150&{{ payload }}"/></td>
+</tr>
+</table>
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends "base_base.html" %}
+
+{% block body %}
+<div class="note2">
+{% if not user %}
+	<span>
+		Sign in to connect with {{ service.name }}.<br>
+	</span>
+	<br>
+	<table>
+		<tr>
+			<td>You</td>
+			<td><img src="/static/images/site/plug.png"/></td>
+			<td><img src="/unauthenticated/mobi/cached/avatar/{{ service.avatarId }}" alt="{{ service.name }}"/></td>
+			<td>{{ service.name }}</td>
+		</tr>
+	</table>
+	<br>
+	<br>
+	<br>
+	<br>
+	<div style="width: 350px; margin-left: auto; margin-right: auto;">{% include "signupbox.html" %}</div>
+
+{% else %}
+	{% if not connected %}
+	<span>
+		Connect with {{ service.name }} on Rogerthat.<br>
+	</span>
+	{% endif %}
+	<br>
+	<table>
+		<tr>
+			<td>{{ you.name }}</td>
+			<td><img src="/unauthenticated/mobi/cached/avatar/{{ you.avatarId }}" alt="{{ you.name }}"/></td>
+			<td><img src="/static/images/site/plug.png"/></td>
+			<td><img src="/unauthenticated/mobi/cached/avatar/{{ service.avatarId }}" alt="{{ service.name }}"/></td>
+			<td>{{ service.name }}</td>
+		</tr>
+	</table>
+	<br>
+	<span>
+	{% if connected %}
+		Hi {{ you.name }},<br>
+		You are already connected with {{ service.name }}.<br>
+		<a href="/">Go to Rogerthat dashboard</a>
+	{% else %}
+		<input type="submit" id="connect" value="Connect"/><br>
+		<br>
+	</span>
+	<script type="text/javascript">
+<!--
+$(window).load(function () {
+	$("#connect").button().click(function () {
+		mctracker.call({
+			url: "/mobi/rest/friends/invite",
+			type: "POST",
+			data: {
+				data: JSON.stringify({
+					email: "{{ service.user.email }}",
+					message: null,
+					tag: "{{ tag }}",
+				})
+			},
+			success: function  (data, textStatus, XMLHttpRequest) {
+				$("#connection_initiated_dialog").dialog('open');
+			},
+			error: function (data, textStatus, XMLHttpRequest) { 
+				alert("Connect failed.\nPlease refresh your browser and try again.");
+			}
+		});
+	});
+	$("#connection_initiated_dialog").dialog({
+		autoOpen: false,
+		title: "Congratulations",
+		buttons: {
+			Ok: function () {
+				window.location = "/";
+			}
+		}
+	});
+});
+-->
+	</script>
+	<div id="connection_initiated_dialog">
+	Congratulations, you've initiated the connection between your Rogerthat account and {{ service.name }} successfully.
+	</div>
+	{% endif %}
+{% endif %} 
+</div>
+{% endblock %}
+

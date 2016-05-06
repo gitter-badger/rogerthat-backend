@@ -1,0 +1,12 @@
+<html><body>Estimado{% if name %} {{ name|escape }}{% endif %},<br>
+<br>
+Este es su código de activación para la app {{ app.name }}:<br>
+<br>
+<span style="font-size: xx-large;">{{ pin }}</span><br>
+<br>
+Volver a la app {{ app.name }} en su dispositivo móvil e introducir su código de activación para continuar.<br>
+<br>
+¿Gracias por usar la app {{ app.name }}!<br>
+<br>
+- El equipo de {{ app.name }}<br>
+</body></html>

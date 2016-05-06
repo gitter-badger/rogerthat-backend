@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Pick account</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google" value="notranslate" />
+<!-- Bootstrap -->
+<link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet"
+    media="screen">
+<link href="/static/bootstrap/datepicker/css/datepicker.css"
+    rel="stylesheet" media="screen">
+<link
+    href="/static/bootstrap/timepicker/css/bootstrap-timepicker.min.css"
+    rel="stylesheet" media="screen">
+
+<link href="/static/css/solutions/style.css" rel="stylesheet" media="screen">
+<script src="/static/js/jquery-1.10.0.min.js"></script>
+<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+<script src="/static/bootstrap/datepicker/js/bootstrap-datepicker.js"></script>
+<script
+    src="/static/bootstrap/timepicker/js/bootstrap-timepicker.min.js"></script>
+<script src="/static/js/jquery.tmpl.min.js"></script>
+
+<script src="/static/js/modernizr.custom.62420.js"></script>
+
+<style media="screen">
+    .do-login {
+        background: white;
+        border: 1px solid #ddd;
+        margin-bottom: 15px;
+        margin-left: 15px;
+        position: relative;
+        opacity: .75;
+        filter: alpha(opacity=75);
+        border-radius: 5px;
+        padding: 20px;
+        overflow: hidden;
+        cursor: pointer;
+        color: #000;
+        text-decoration: none;
+    }
+    
+    .do-login:hover {
+        border: 2px solid #ddd;
+        background-color: #ddd;
+        padding: 19px;
+        color: #000;
+        text-decoration: none;
+    }
+</style>
+
+</head>
+
+<body>
+    <div id="wrap">
+        <div class="container">
+
+        <h2 style="color: #000; margin-bottom: 20px;">Login as:</h2>
+        {% for si in owning_user_services %}
+        <div class="do-login pull-left thumbnail" do-login="{{ si.service_identity_user }}" style="height: 50px; width: 420px; padding:10px;margin-bottom: 10px; margin-right:10px;">
+             <img style="display: block;max-width: 100%;margin-right: auto;float: left;" height="50px" width="50px" src="{{ si.avatar_url }}">
+	         <div style="float:left;margin-left: 10px;width:360px;height:50px;">
+	             <p style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;" title="{{ si.name }}" >{{ si.name }}</p>
+	             <p style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;" title="{{ si.description }}" >{% if si.description %}{{ si.description }}{% endif %}</p>
+             
+	         </div>
+        </div>
+        {% endfor %}
+    <script type="text/javascript">
+$(function () {
+    
+    $(document).on('click', '.do-login', function() {
+        var account = $(this).attr('do-login');
+        
+        $.ajax({
+            url : "/mobi/rest/user/login_as",
+            type : "POST",
+            data : {
+                data: JSON.stringify({
+                    account: account
+                })
+            },
+            success : function(data) {
+                if(data.success) {
+                    location.href = '/?user=' + encodeURIComponent(data.email);
+                } else {
+                    location.href = '/service_disabled';
+                }
+            },
+            error : function(data) {
+                alert("An unknown error occured, please try again.");
+            }
+        });
+    });
+});
+</script>
+        </div>
+    </div>
+    
+     <div id="footer" style="width: 960px; margin: 0 auto; margin-top: 20px;">
+        <div style="text-align: center;">
+            <img alt="Rogerthat logo" src="/static/images/solution-header.png" />
+        </div>
+    </div>
+</body>
+</html>

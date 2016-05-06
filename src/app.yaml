@@ -1,0 +1,245 @@
+application: mobicagecloudhr
+runtime: python27
+version: 1
+api_version: 1
+threadsafe: true
+
+instance_class: F2
+
+libraries:
+- name: pycrypto
+  version: "2.3"
+- name: lxml
+  version: "2.3"
+- name: jinja2
+  version: "2.6"
+- name: ssl
+  version: latest
+- name: PIL
+  version: latest
+
+inbound_services:
+- warmup
+- mail
+- channel_presence
+
+handlers:
+- url: /_ah/mail/.+
+  script: rogerthat_admin.app
+  login: admin
+
+- url: /_ah/queue/deferred
+  script: rogerthat_admin.app
+  login: admin
+
+- url: /_ah/warmup
+  script: rogerthat_admin.app
+  login: admin
+  
+- url: /_ah/channel/(dis)?connected/
+  script: rogerthat_admin.app
+  secure: always
+
+- url: /crossdomain.xml
+  script: rogerthat_unauthenticated.app
+  secure: always
+
+- url: /login/.dev
+  script: rogerthat_unauthenticated.app
+  secure: always
+  login: admin
+
+- url: /(invite|setpassword|resetpassword)
+  script: rogerthat_unauthenticated.app
+  secure: always
+
+- url: /register
+  script: rogerthat_unauthenticated.app
+  secure: always
+
+- url: /register_android_google_account
+  script: rogerthat_google_authenticated.app
+  login: required
+  secure: always
+
+- url: /about
+  script: rogerthat_unauthenticated.app
+  secure: always
+
+- url: /install
+  script: rogerthat_unauthenticated.app
+  secure: always
+
+- url: /q/.*
+  script: rogerthat_unauthenticated.app
+  secure: always
+
+- url: /si/.*
+  script: rogerthat_unauthenticated.app
+  secure: always
+
+- url: /(S|M|A)/.*
+  script: rogerthat_unauthenticated.app
+  secure: always
+
+- url: /(login|message)
+  script: rogerthat_unauthenticated.app
+  secure: always
+
+- url: /json-rpc
+  script: rogerthat_unauthenticated.app
+  secure: always
+
+- url: /upgrade/update_to_rogerth.at
+  script: rogerthat_unauthenticated.app
+  secure: always
+
+- url: /login_required
+  script: rogerthat_unauthenticated.app
+  secure: always
+
+- url: /tac_required
+  script: rogerthat_authenticated.app
+  secure: always
+
+- url: /terms_and_conditions
+  script: rogerthat_authenticated.app
+  secure: always
+
+- url: /(login_facebook|login_google|login_linkedin)
+  script: rogerthat_unauthenticated.app
+  secure: always
+
+- url: /subscribe
+  script: rogerthat_unauthenticated.app
+  secure: always
+
+- url: /unauthenticated/.*
+  script: rogerthat_unauthenticated.app
+  secure: always
+
+- url: /branding/.*
+  script: rogerthat_unauthenticated.app
+
+- url: /favicon\.ico
+  static_files: static/images/favicon.png
+  upload: static/images/favicon\.png
+
+- url: /static
+  static_dir: static
+
+- url: /cron/.*
+  script: rogerthat_admin.app
+  login: admin
+  secure: always
+
+- url: /mobiadmin/.*
+  script: rogerthat_admin.app
+  login: admin
+  secure: always
+  
+- url: /channel/token
+  script: rogerthat_google_authenticated.app
+  login: required
+  secure: always
+  
+- url: /channel/large_object
+  script: rogerthat_google_authenticated.app
+  login: required
+  secure: always
+
+- url: /mobi/rest/user/(signup|login|reset_password|authenticate_mobile|statistics)
+  script: rogerthat_unauthenticated.app
+  secure: always
+  
+- url: /mobi/rest/user/unsubscribe/.*
+  script: rogerthat_unauthenticated.app
+  secure: always
+  
+- url: (/mobi/rest/srv/load|/mobi/rest/service_map/load)
+  script: rogerthat_unauthenticated.app
+
+- url: /mobi/rest/mdp/.*
+  script: rogerthat_unauthenticated.app
+
+- url: /unauthenticated/mobi/logging/exception
+  script: rogerthat_unauthenticated.app
+
+- url: /mobi/rest/.*
+  script: rogerthat_rest.app
+  secure: always
+
+- url: /mobi/js_embedding/.*
+  script: rogerthat_unauthenticated.app
+  secure: always
+
+- url: /mobi/service/menu/icons/lib/.*
+  script: rogerthat_unauthenticated.app
+  secure: always
+
+- url: /mobi/.*
+  script: rogerthat_authenticated.app
+  secure: always
+
+- url: /(invite_facebook|invite_linkedin)
+  script: rogerthat_authenticated.app
+  secure: always
+
+- url: /connect/.*
+  script: rogerthat_authenticated.app
+  secure: always
+
+- url: /(logout|unsubscribeme)
+  script: rogerthat_authenticated.app
+  secure: always
+
+- url: /(unsubscribe_reminder|unsubscribe_broadcast)
+  script: rogerthat_unauthenticated.app
+  secure: always
+  
+- url: /auto_login
+  script: rogerthat_unauthenticated.app
+  secure: always
+
+- url: /api/1/servertime
+  script: rogerthat_unauthenticated.app
+
+- url: /api/1.*
+  script: rogerthat_unauthenticated.app
+  secure: always
+
+- url: /robots.txt
+  script: rogerthat_unauthenticated.app
+
+- url: /
+  script: rogerthat_unauthenticated.app
+  secure: always
+
+- url: /service_disabled
+  script: rogerthat_unauthenticated.app
+  secure: always
+
+admin_console:
+  pages:
+  - name: Settings
+    url: /mobiadmin/settings
+  - name: Interactive explorer
+    url: /mobiadmin/explorer
+  - name: Service tools
+    url: /mobiadmin/services
+  - name: User tools
+    url: /mobiadmin/debugging
+  - name: Mobile error logs
+    url: /mobiadmin/client_errors
+  - name: Broadcast to mobile users
+    url: /mobiadmin/broadcast
+  - name: Installation logs
+    url: /mobiadmin/installation_logs
+  - name: Activation logs
+    url: /mobiadmin/activation_logs
+  - name: Djmatic overview logs
+    url: /mobiadmin/djmatic_overview_logs
+  - name: JS Embedding
+    url: /mobiadmin/js_embedding
+  - name: Apps
+    url: /mobiadmin/apps

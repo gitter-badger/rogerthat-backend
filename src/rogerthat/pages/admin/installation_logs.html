@@ -1,0 +1,221 @@
+<html>
+<head>
+  <style type="text/css">
+    tr.black > td { background-color:black; height:2px; padding: 0; }
+    table { font-family:Arial; font-size:12px; }
+    body { font-family:Arial; font-size:16px; padding: 10px; }
+    .android1 { background-color:#FFFFEF; }
+    .android2 { background-color:#FFFFDF; }
+    .ios1 { background-color:#EFFFFF; }
+    .ios2 { background-color:#DFFFFF; }
+    .blackberry1 { background-color:#FFEFFF; }
+    .blackberry2 { background-color:#FFDFFF; }
+    .windows1 { background-color:#DEFDEF; }
+    .windows2 { background-color:#CFFCE8; }
+    .unfinished { color:#DD0000; }
+  </style>
+
+    <script src="/static/js/jquery-1.10.0.min.js"></script>
+    <script src="/static/js/jquery-ui-1.8.13.custom.min.js" type="text/javascript"></script>
+    <script src="/static/js/jquery.tmpl.min.js" type="text/javascript"></script>
+    <link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
+    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<h2>Installation logs</h2>
+
+<div class="pagination pagination-large">
+    <ul>
+        <li><a href="{{ back_url }}">&laquo; Back</a></li>
+        <li class="disabled"><a href="#">{{ current_day }}</a></li>
+        <li {% if not next_url %}class="disabled"{% endif %}><a href="{{ next_url }}">Next &raquo;</a></li>
+    </ul>
+</div>
+<pre id="installation-logs-completed-text">
+Completed installations: Loading...
+</pre>
+<br>
+<table class="table table-condensed table-bordered">
+    <thead>
+        <tr>
+            <th>Timestamp</th>
+            <th>Mobile</th>
+            <th>Install id</th>
+            <th>User</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody id="installtion-logs-installs">
+    </tbody>
+</table>
+
+<script type="text/javascript">
+
+$(function() {
+    var installations = [];
+    var currentOffset = {{ offset }};
+    
+   var renderInstallationLogs = function() {
+       var table = $("#installtion-logs-installs");
+       table.empty();
+	   var appInstallCount = {};
+       var completedCount = 0;
+       $.each(installations, function(i, installation) {
+           if (!appInstallCount[installation.app_id]) {
+               appInstallCount[installation.app_id] = {"total":0, "complete": 0}
+           }
+           appInstallCount[installation.app_id].total += 1;
+           if (installation.logs.length > 0) {
+	           var evenRows = i % 2 == 0 ? 1 : 2; 
+               var platformClass;
+                  platformClass = installation.platform_string + evenRows;
+               if (installation.logged_registration_successful) {
+                   completedCount += 1;
+                   appInstallCount[installation.app_id].complete += 1;
+               } else {
+                   platformClass += " unfinished";
+               }
+               var splitter = $('<tr class="black"></tr>');
+               splitter.append($('<td></td>'));
+               splitter.append($('<td></td>'));
+               splitter.append($('<td></td>'));
+               splitter.append($('<td></td>'));
+               splitter.append($('<td></td>'));
+               table.append(splitter);
+               
+               var loggedPlatform = false;
+               var loggedHardwareModel = false;
+               var loggedOsVersion = false;
+               
+               var loggedInstallId = false;
+               
+               var loggedUser = false;
+               var loggedAge = false;
+               var loggedGender = false;
+               
+               $.each(installation.logs, function(j, log) {
+                   if (log.time) {
+                       var tr = $('<tr class="' + platformClass + '"></tr>');
+                       // TD 1
+                       var td_1 = $('<td>' + log.time + '</td>');
+                       tr.append(td_1);
+                       // TD 2
+                       var td_2 = $('<td></td>');
+                       if (loggedPlatform) {
+                           if (log.mobile_os_version) {
+                               if (loggedHardwareModel) {
+                                   if (!loggedOsVersion) {
+                                       td_2.text(installation.platform_string + ' - ' + log.mobile_os_version);
+	                                   loggedOsVersion = true;
+                                   }
+                               } else {
+                                   td_2.text(log.mobile_hardware_model);
+                                   loggedHardwareModel = true;
+                               }
+                           }
+                       } else{
+                           td_2.text(installation.platform_string + ' - ' + installation.version);
+	                       loggedPlatform = true;
+                       }
+                       tr.append(td_2);
+                       // TD 3
+                       var td_3 = $('<td></td>');
+                       if (!loggedInstallId) {
+                           td_3.text(installation.install_id);
+	                       loggedInstallId = true;
+                       }
+                       tr.append(td_3);
+                       // TD 4
+                       var td_4 = $('<td></td>');
+                       if (!loggedUser && log.registration_user_email) {
+                           td_4.text(log.registration_user_email);
+	                       loggedUser = true;
+                       }
+                       
+                       if (!loggedAge && log.profile_age) {
+                           td_4.append(" - " + log.profile_age);
+                           loggedAge = true;
+                       }
+                       if (!loggedGender && log.profile_gender) {
+                           td_4.append(" - " + log.profile_gender);
+                           loggedGender = true;
+                       }
+                       
+                       tr.append(td_4);
+                       // TD 5
+                       var td_5 = $('<td></td>');
+                       if (log.description_url) {
+                           td_5.html('<a href="' + log.description_url + '">' + log.description + '</a>')
+                       } else {
+                           td_5.text(log.description)
+                       }
+                       tr.append(td_5);
+                       table.append(tr);
+                   }
+               });
+           }
+       });
+
+       var toPercentageString = function(pct) {
+            if (pct.toString().indexOf(".") == -1) {
+                return pct;
+            } else {
+                return pct.toFixed(2);
+            }
+       };
+
+       var keys = function(obj) {
+           var a = [];
+           for(var key in obj)
+           if (obj.hasOwnProperty(key))
+               a.push(key);
+           return a;
+       };
+
+       var completedPct = installations.length > 0 ? ((100 * completedCount) / installations.length) : 0;
+       $("#installation-logs-completed-text").text("Completed installations: " + toPercentageString(completedPct) + "% (" + completedCount + "/" + installations.length + ")")
+       $("#installation-logs-completed-text").append("<br>");
+       
+       $.each(keys(appInstallCount).sort(), function(i, appId) {
+           var appInstalls = appInstallCount[appId];
+           var completedPct = (100 * appInstalls.complete) / appInstalls.total;
+           $("#installation-logs-completed-text").append("<br>");
+           $("#installation-logs-completed-text").append("- " + appId + ": " + toPercentageString(completedPct) + "% (" + appInstalls.complete + "/" + appInstalls.total + ")")
+       });
+   };
+   
+   var loadInstallationLogs = function(cursor) {
+		$.ajax({
+		    url : "/mobiadmin/installation_logs/load",
+		    type : "GET",
+		    data : {
+		        offset : currentOffset,
+		        cursor : cursor
+		    },
+		    success : function(data) {
+		        
+		        $.each(data.installations, function(i, installation) {
+		            installations.push(installation);
+	            });
+		        
+		        if (data.installations.length > 0) {
+		            loadInstallationLogs(data.cursor);
+		        } else {
+			        renderInstallationLogs();
+		        }
+		    },
+		    error : function() {
+		        console.log("loadInstallationLogs error", cursor, installations);
+		        alert("load installation logs failed");
+		    }
+		});
+        
+    };
+    
+    loadInstallationLogs(null);
+});
+
+</script>
+</body>
+</html>

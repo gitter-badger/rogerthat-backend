@@ -1,0 +1,20 @@
+{% extends "base_base_mobile_simple_no_javascript.html" %}
+
+{% block facebook_header %}<meta property="og:title" content="{{ profile.name }}"/>{% endblock %}
+
+{% block body %}
+<table cellpadding="5" style="background: none !important;">
+<tr>
+<td colspan="2">
+<p class="mob-top">
+<img src="/unauthenticated/mobi/avatar/{{ profile.avatarId }}" width="50px" height="50px" style="float: left; margin-right: 10px;">
+<b>{{ profile.name }}</b><br> <label>
+Installeer de <b>"{{ app_name }}"</b> app op je iPhone of Android toestel. Open de app en scan de volgende QR code.</label><br><br>
+</p></td>
+</tr>
+<tr>
+<td width="10px">&nbsp;</td>
+<td width="100%"><img src="https://chart.googleapis.com/chart?cht=qr&chs=150x150&{{ payload }}"/></td>
+</tr>
+</table>
+{% endblock %}

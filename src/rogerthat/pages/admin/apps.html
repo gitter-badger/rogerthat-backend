@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Apps</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google" value="notranslate" />
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+<!-- Bootstrap -->
+<link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
+
+<link rel="stylesheet" type="text/css" href="/static/css/jquery.dataTables-1.9.4.css">
+
+<style type="text/css">
+body {
+    margin: 10px;
+}
+</style>
+
+<script src="/static/js/jquery-1.10.0.min.js"></script>
+<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+<script src="/static/bootstrap/datepicker/js/bootstrap-datepicker.js"></script>
+<script src="/static/bootstrap/timepicker/js/bootstrap-timepicker.min.js"></script>
+<script src="/static/js/jquery.tmpl.min.js"></script>
+
+<script type="text/javascript" charset="utf8" src="/static/js/jquery.dataTables-1.9.4.min.js"></script>
+
+<script type="text/javascript">
+   
+    var deleteAppModel = '<div id="deleteAppModel" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">'
+        + '<div class="modal-header">'
+        + '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'
+        + '    <h3 id="myModalLabel">${header}</h3>'
+        + '</div>'
+        + '<div class="modal-body">'
+        + '</div>'
+        + '<div class="modal-footer">'
+        + '    <button action="cancel" class="btn" data-dismiss="modal"'
+        + '        aria-hidden="true">Cancel</button>'
+        + '    <button action="submit" class="btn btn-primary">Submit</button>'
+        + '</div></div>';
+        
+    {% if result %}
+    $(window).load(function () {
+        alert("{{result}}");
+    });
+    {% endif %}
+
+    var createModal = function(html, onShown) {
+        var modal = $(html).modal({
+            backdrop : true,
+            keyboard : true,
+            show : false
+        }).on('hidden', function() {
+            modal.remove(); // remove from DOM
+        });
+
+        if (onShown) {
+            modal.on('shown', function() {
+                onShown(modal);
+            });
+        }
+        modal.modal('show');
+        return modal;
+    };
+   
+    var deleteApp = function() {
+        var app_id = $(this).attr('app_id');
+        
+        var html = $.tmpl(deleteAppModel, {
+            header : "Delete app: " + app_id
+        });
+        var modal = createModal(html);
+        
+        $("#delete_app_id", modal).val(app_id);
+        
+        $('button[action="submit"]', modal).click(function() {
+            $.ajax({
+                url : "/mobiadmin/apps/delete",
+                type : "POST",
+                data : {
+                    app_id : app_id
+                },
+                success : function(data) {
+                    if (!data.success) {
+                        alert(data.errormsg);
+                        return;
+                    }
+                    window.location.replace("/mobiadmin/apps#" + new Date().getTime());
+                    window.setTimeout('window.location.reload()', 1000);
+                },
+                error : function() {
+                    alert("Error occurred while deleting app");
+                }
+            });
+            modal.modal('hide');
+        });
+    };
+
+    var setDefaultApp = function(appId) {
+        var defaultAppControlGroup = $("#defaultAppControlGroup");
+        defaultAppControlGroup.removeClass("error").removeClass("success");
+
+        $.ajax({
+            url : "/mobiadmin/apps/set_default_app",
+            type : "post",
+            data : {
+                data : JSON.stringify({
+                    app_id : appId
+                })
+            },
+            success : function () {
+                defaultAppControlGroup.addClass("success");
+                $("#defaultAppHelp").text("Successfully updated the default app");
+            },
+            error : function () {
+                defaultAppControlGroup.addClass("error");
+                $("#defaultAppHelp").text("Failed to set the default app. Please try again.");
+            }
+        });
+    }
+
+    $(function() {
+	    $(".delete-app").click(deleteApp);
+	    $("#apps").dataTable();
+	    $("#defaultApp").change(function () {
+	        setDefaultApp($(this).val());
+	    });
+    });
+    </script>
+</head>
+<body>
+	<div>
+	   <h2>Apps</h2>
+        <hr>
+		<table id="apps" class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Update</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for app in apps %}
+                <tr>
+                    <td><h4>{{app.type_str}}</h4></td>
+                    <td>{{app.app_id}}</td>
+                    <td>{{app.name}}</td>
+                    <td><a href="/mobiadmin/apps?id={{app.app_id}}" class="btn btn-warning">Update</a>
+                    <a href="apps/translations/app/{{ app.app_id }}/" class="btn">Translations</a></td>
+                    <td><input type="submit" app_id="{{app.app_id}}" class="btn btn-danger delete-app" value="Delete" /></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+	</div>
+    <br><br>
+    <a href="/mobiadmin/apps?new_app=1" class="btn btn-success span5">Create new app</a>
+    <br><br>
+    <div>
+        <h2>Default app</h2>
+        <hr>
+        <div id="defaultAppControlGroup" class="control-group">
+            <select id="defaultApp">
+                {% for app in apps %}
+                <option value="{{ app.app_id }}" {% if app.is_default %}selected{% endif %}>{{ app.name }}</option>
+                {% endfor %}
+            </select>
+            <span id="defaultAppHelp" class="help-inline"></span>
+        </div>
+    </div>
+</body>
+</html>

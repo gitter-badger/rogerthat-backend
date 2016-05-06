@@ -1,0 +1,30 @@
+<html>
+  <body>
+    <p>{{ profile.name }} wants to communicate with you using an innovative smartphone app.</p>
+    <p>
+      <ul>
+        <li>
+          Step 1. Install the {{ app.name }} app:<br>
+          <a href="{{ BASE_URL }}/install?a={{ app.app_id }}&email">{{ BASE_URL }}/install?a={{ app.app_id }}&email</a><br><br>
+        </li>
+        <li>
+          Step 2. Subscribe to {{ profile.name }}:<br>
+          <a href="{{ short_url }}{% if secret %}?s={{ secret }}{% endif %}">{{ short_url }}{% if secret %}?s={{ secret }}{% endif %}</a>
+        </li>
+      </ul>
+    </p>
+    <p>&nbsp;</p>
+    {% if message %}
+    <p>
+      {{ profile.name }} added a personal note to his invitation request:
+    </p>
+    <p style="background-color: #f0e68c; padding: 10px; margin-left: 20px; border-radius: 15px; margin-right: 20px; padding-left: 20px; -moz-border-radius: 15px;">
+      {{ message }}
+    </p>
+    {% endif %}{% if consts.INCLUDE_ROGERTHAT_DOT_NET %}
+    <p>
+    For more information about {{ app.name }} and other Rogerthat based products, please visit:<br>
+    <a href="http://www.rogerthat.net">http://www.rogerthat.net</a>
+    </p>{% endif %}
+  </body>
+</html>

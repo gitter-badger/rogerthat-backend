@@ -1,0 +1,173 @@
+<div id="loginFailedDialog" style="display: none;">
+	Invalid email / password combination!
+</div>
+<div id="loginFailedToManyAttemptsDialog" style="display: none;">
+	To many failed login attempts!
+</div>
+<div id="loginFailedNoPasswordDialog" style="display: none;">
+	This is the first time you log in to Rogerthat Web.<br>
+	<br>
+	Enter your name and the same email address you used for registering Rogerthat on your mobile device.<br>
+	Then press the <b>Join</b> button.
+</div>
+<div id="loginFailedAccountDeactivatedDialog" style="display: none;">
+	You have deactivated your account.<br>
+	<br>
+	For support contact: <b>support@mobicage.com</b>.
+</div>
+<script type="text/javascript">
+<!--
+var LOGIN_SUCCESS = 1;
+var LOGIN_FAIL_NO_PASSWORD = 2;
+var LOGIN_FAIL = 3;
+var LOGIN_TO_MANY_ATTEMPTS = 4;
+var LOGIN_ACCOUNT_DEACTIVATED = 5;
+var LOGIN_FAILED_SERVICE_DISABLED = 6;
+
+$(window).load(function() {
+	if ( $.browser.msie && $.browser.version < 8 ) {
+		$(".forgot_my_password").removeAttr('href', '').click(function () {
+			mctracker.alert("Your browser is not supported. Please use Internet Explorer 8 or 9, Chrome, Firefox or Safari.");
+			return;
+		});
+	}
+
+	var cont = "{{ continue|safe }}";
+	var loginFailedDialog = $("#loginFailedDialog").dialog({
+		title: 'Login failed',
+		modal: true,
+		autoOpen: false,
+		close: function () {
+			$("#email").focus();
+		},
+		buttons: {
+			'Try again': function () {
+				loginFailedDialog.dialog('close');
+			}
+		}
+	});
+	$("#loginbox").watermark();
+	var loginFailedToManyAttemptsDialog = $("#loginFailedToManyAttemptsDialog").dialog({
+		title: 'Login failed',
+		modal: true,
+		autoOpen: false,
+		close: function () {
+			$("#email").focus();
+		},
+		buttons: {
+			'Cancel': function () {
+				loginFailedToManyAttemptsDialog.dialog('close');
+			}
+		}
+	});
+
+	var loginFailedNoPasswordDialog = $("#loginFailedNoPasswordDialog").dialog({
+		title: 'Login failed',
+		modal: true,
+		autoOpen: false,
+		close: function () {
+			$("#signupbox_email").val($("#email").val());
+		},
+		buttons: {
+			'Ok': function () {
+				loginFailedNoPasswordDialog.dialog('close');
+			}
+		}
+	});
+	
+	var loginFailedAccountDeactivatedDialog = $("#loginFailedAccountDeactivatedDialog").dialog({
+		title: 'Account deactivated',
+		modal: true,
+		autoOpen: false,
+		close: function () {
+		    $("#email").focus();
+		},
+		buttons: {
+			'Ok': function () {
+			    loginFailedAccountDeactivatedDialog.dialog('close');
+			}
+		}
+	});
+
+	$("#forgot_my_password").click(function () {
+		var loc = "/resetpassword?continue={{ continue|urlencode }}&email=" + encodeURIComponent($('#email').val());
+		window.location = loc;
+	});
+
+	$("#loginbox_login").button().click(function () {
+		if ( $.browser.msie && $.browser.version < 8 ) {
+			mctracker.alert("Your browser is not supported. Please use Internet Explorer 8 or 9, Chrome, Firefox or Safari.");
+			return;
+		}
+		var email = trim($("#email").val());
+		var password = $("#password").val();
+		var remember = $("#loginbox_keep_me_logged_in").prop('checked');
+		mctracker.call({
+			url: '/mobi/rest/user/login',
+			type: 'POST',
+			data: {
+				data: JSON.stringify({
+					email: email,
+					password: password,
+					remember: remember
+				})
+			},
+			success: function (data) {
+			    console.log("DATA:" + data);
+				if (data == LOGIN_SUCCESS) {
+					window.location = cont;
+				} else if (data == LOGIN_FAIL_NO_PASSWORD) {
+					loginFailedNoPasswordDialog.dialog('open');
+				} else if (data == LOGIN_TO_MANY_ATTEMPTS) {
+					loginFailedToManyAttemptsDialog.dialog('open');
+				} else if (data == LOGIN_ACCOUNT_DEACTIVATED) {
+                    loginFailedAccountDeactivatedDialog.dialog('open');
+                }else if (data == LOGIN_FAILED_SERVICE_DISABLED){
+                    window.location = '/service_disabled';
+				} else 
+					loginFailedDialog.dialog('open');				
+			}
+		});
+	});
+	$("#password").keypress(function(event) {
+		if (event.which == 13) {
+			$("#loginbox_login").click();
+		}
+	});
+});
+-->
+</script>
+<div id="loginbox">
+   	<table>
+   		<tr>
+   			<td>
+				<input id="email" name="email" type="text" placeholder="Email" autocapitalize="off" autocorrect="off"/>
+   			</td>
+   			<td>
+   				<input id="password" name="password" type="password" placeholder="Password"/>
+   			</td>
+   			<td>
+   				<button id="loginbox_login">Log&nbsp;in</button>
+   			</td>
+   		</tr>
+   		<tr>
+   			<td>
+				<input id="loginbox_keep_me_logged_in" type="checkbox"/>
+				<label for="loginbox_keep_me_logged_in">Remember me</label>
+   			</td>
+   			<td colspan="2">
+				<label id="forgot_my_password">&nbsp;&nbsp;Forgot my password</label>
+   			</td>
+   		</tr>
+   	</table>
+</div>
+<style>
+#loginbox { line-height: 1px; }
+#loginbox table { margin: 0px; width: auto; }
+#loginbox td { padding: 0px; padding-right: 3px; }
+#loginbox span { margin-top: 0px; font-size: 15px; float: none; color: #fff; line-height: 1; }
+#loginbox input[type=text], #loginbox input[type=password] { 
+	margin: 0px;  padding: 4px; font-size: 15px; -webkit-border-radius: 3px; -moz-border-radius: 3px; width: 135px; font: 15px Arial, sans-serif;}
+#loginbox input[type=checkbox], #loginbox label, #loginbox a { font-size: 11px; color: #00A0FF; font-weight: bold; top: 0;}
+#loginbox a, #loginbox label { cursor: pointer !important; }
+</style>

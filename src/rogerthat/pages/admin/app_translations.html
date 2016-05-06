@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mobiadmin - app translations</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google" value="notranslate"/>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Expires" content="0"/>
+    <!-- Bootstrap -->
+    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+</head>
+<body>
+<div class="container" id="main-content">
+</div>
+<script src="/static/js/jquery-1.10.0.min.js"></script>
+<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+<script src="/static/js/jquery.tmpl.min.js"></script>
+<script src="/static/js/stacktrace.js"></script>
+<script src="/static/js/solutions/sln-utils.js"></script>
+<script>
+    var app = {{ app }};
+    var TEMPLATES = {{ templates }};
+    var TRANSLATIONS = JSON.parse({{ translations }}) || {};
+    var CommonTranslations = {
+		AJAX_ERROR_MESSAGE: 'An unexpected error occurred.',
+		ALERT: 'Alert',
+		CANCEL: 'Cancel',
+		CHANNEL_DISCONNECTED_RELOAD_BROWSER: 'Could not renew auto updating channel automatically. Reload your browser to resolve the situation.',
+		CLOSE: 'Close',
+		CONFIRM: 'Confirm',
+		INPUT: 'Input',
+		NO: 'No',
+		PARSING_DOT_DOT_DOT: 'Parsing...',
+		STARTING_AT: 'starting at',
+		SUBMIT: 'Submit',
+		WARNING: 'Warning',
+		YES: 'Yes'
+	};
+</script>
+<script src="/static/js/app_translations.js"></script>
+</body>
+</html>

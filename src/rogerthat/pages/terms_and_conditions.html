@@ -1,0 +1,63 @@
+{% extends "base_base.html" %}
+
+{% block body %}
+<div class="note2 dateconf">
+	<span>Please read the Rogerthat <a href="http://www.rogerthat.net/wp-content/uploads/2012/01/Mobicage_Terms_and_Conditions.pdf" style="color: #9c3;" target="_blank">Terms and Conditions</a> to continue:</span>
+    <br><br> 
+   	<input id="tac" type="checkbox"><label for="tac" style="cursor: pointer;">I have read and agree to the Rogerthat Terms and Conditions.</label><br>
+   	<div><label >Date of birth: </label><input type="text" id="datepicker"><img id="popup" src="/static/images/site/cal-ico.png" /></div><br>
+   	<button id="submit">Submit</button>
+    <br><br>
+    <br><br> 
+    <br><br>
+    <br><br> 
+    <br><br>
+    <br><br> 
+</div>
+
+<script type="text/javascript">
+<!--
+
+var continue_address = "{{ continue }}";
+var mobile_count = {{ mobile_count }};
+
+$(window).load(function () {
+	$("#datepicker").datepicker({
+		changeMonth: true,
+		changeYear: true,
+		yearRange: '1900:' + new Date().getFullYear()
+	});
+	$("#popup").click(function() {
+		$("#datepicker").datepicker("show");
+	}).css("cursor", "pointer");
+	$("#submit").click(function () {
+		if (! $("#tac").prop('checked')) {
+			alert("Please read the Terms and Conditions.");
+			$("#tac").focus();
+			return;
+		}
+		if (! $("#datepicker").val()) {
+			alert("We need your date of birth for legal reasons.");
+			$("#datepicker").focus();
+			return;
+		} 
+		var birthdate = new Date($("#datepicker").val()).getTime() / 1000;
+		
+		mctracker.call({
+			url: '/mobi/rest/profile/agree_to_terms_and_conditions',
+			type: 'POST',
+			data: {
+				data: JSON.stringify({
+					birthDate: birthdate
+				})
+			},
+			success: function () {
+				window.location.href = continue_address ? continue_address : "/";
+			}
+		});
+	});
+});
+
+-->
+</script>
+{% endblock %}

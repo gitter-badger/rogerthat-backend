@@ -1,0 +1,118 @@
+/* VERTICAL SCROLLBAR */
+
+.scroller-content{
+	float: left;
+	top: 0px;
+	position: relative;
+}
+
+.scroller-control {
+	width: 20px;
+	float: left;
+	margin-left: 20px;
+}
+
+.scroller-control img {
+	border: 0px;
+}
+
+.scroller-control a:focus {
+	outline: 0px;
+}
+
+
+
+.scroller-up {
+	width: 17px;	
+	height: 9px;
+	float: left;	
+}
+
+.scroller-down {
+	width: 17px;	
+	height: 9px;
+	float: left;
+}
+
+.scroller-field {
+	width: 17px;	
+	float: left;	
+/*	background-image: url('../images/scroller-v-field.png'); */
+	background-repeat: repeat-y;
+	background-position: top center;	
+	margin-bottom: 10px;	
+	margin-top: 10px;	
+}
+
+.scroller {
+	width: 17px;
+	height: 29px;
+	cursor: pointer;
+	text-align: center;
+	position: relative;
+	top: 0px;	
+	z-index: 10;
+}
+
+
+
+/* HORIZONTAL SCROLLBAR */
+
+
+.h-scroller-content{
+	float: left;	
+	left: 0px;
+	position: relative;
+	width: 9999px;
+}
+
+
+.h-scroller-control {
+	height: 20px;
+	float: left;
+	clear: left;
+	margin-top: 20px;
+}
+
+.h-scroller-control img {
+	border: 0px;
+}
+
+.h-scroller-control a:focus {
+	outline: 0px;
+}
+
+
+
+.h-scroller-left {
+	height: 17px;	
+	width: 9px;
+	float: left;	
+}
+
+.h-scroller-right {
+	height: 17px;	
+	width: 9px;
+	float: left;
+}
+
+.h-scroller-field {
+	height: 17px;	
+	float: left;	
+	background-image: url('../images/scroller-h-field.png');
+	background-repeat: repeat-x;
+	background-position: center center;	
+	margin-left: 10px;	
+	margin-right: 10px;	
+}
+
+.h-scroller{
+	width: 29px;
+	height: 17px;
+	cursor: pointer;
+	text-align: center;
+	position: relative;
+	margin-top: 4px;	
+	left: 0px;
+	z-index: 10;
+}

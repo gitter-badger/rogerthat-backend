@@ -1,0 +1,306 @@
+{{ DELIMITER }}
+windows/src/Interfaces/Generated.cs
+{{ LICENSE|safe }}
+
+using Com.Mobicage.Rogerthat.Common;
+using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
+
+{% for to in tos %}
+namespace {{ to.package|common_namespace }}
+{
+    public partial class {{ to.name }} : IJsonAble {
+        {% for field in to.fields %}
+        private {% if field.collection_type %}List<{{ field.type|csharp_map_castable_type }}>{% else %}{{ field.type|csharp_map_type }}{% endif %} m{{field.name|csharp_camel_case}};{% endfor %}
+
+        {% for field in to.fields %}
+        public {% if field.collection_type %}List<{{ field.type|csharp_map_castable_type }}>{% else %}{{ field.type|csharp_map_type }}{% endif %} {{field.name|csharp_camel_case}} {
+            get{
+                return m{{field.name|csharp_camel_case}};
+            }
+            set{
+                this.m{{field.name|csharp_camel_case}} = value;
+            }
+        }{% endfor %}
+        
+        public {{ to.name }}()
+        {
+            // empty one for testing
+        }
+        public {{ to.name }}(JObject json)
+        {
+            {% for field in to.fields %}
+            if (json.Property("{{ field.name }}") != null){
+                {% if field.collection_type %}
+                this.{{ field.name|csharp_camel_case }} = new List<{{field.type|csharp_map_castable_type}}>();
+                {% if field.type|common_is_simple_type %}
+                JArray arr{{ forloop.counter0 }} = (JArray) json["{{ field.name }}"];
+                foreach({{field.type|csharp_map_type}} o in arr{{ forloop.counter0 }}) {
+                    this.{{ field.name|csharp_camel_case }}.Add(o);{% else %}
+                JArray arr{{ forloop.counter0 }} = (JArray) json["{{ field.name }}"];
+                foreach(JObject o in arr{{ forloop.counter0 }}) {
+                {% if field.type|common_is_simple_type %}
+                    this.{{ field.name|csharp_camel_case }}.Add(({{field.type|csharp_map_type}})(o));
+                {% else %}
+                    this.{{ field.name|csharp_camel_case }}.Add(new {{field.type|csharp_map_type}}(o));
+                {% endif %}{% endif %}
+                }
+                {% else %}{% if field.type|common_is_simple_type %}this.{{ field.name|csharp_camel_case }} = ({{field.type|csharp_map_type}}) json["{{ field.name }}"];
+                {% else %}JObject {{ field.name }} = json["{{ field.name }}"] as JObject;
+                this.{{ field.name|csharp_camel_case }} = {{ field.name }} == null ? null : new {{field.type|csharp_map_type}}({{ field.name }});
+                {% endif %}{% endif %}
+            } else {{% if field.default != MISSING %}
+                this.{{ field.name|csharp_camel_case }} = {{ field|java_default_value|safe }};{% else %}
+                throw new IncompleteMessageException("{{ to.full_name }} object is missing field '{{ field.name }}'");{% endif %}
+            }{% endfor %}
+        }
+
+        public JObject ToJsonObject()
+        {
+            JObject dic = new JObject();{% for field in to.fields %}{% if field.collection_type %}
+            if (this.{{ field.name|csharp_camel_case }} == null) {
+                dic.Add("{{ field.name }}",null);
+            } else {{% if field.type|common_is_simple_type %}
+                JArray arr = new JArray();
+                foreach ({{ field.type|csharp_map_type }} o in this.{{ field.name|csharp_camel_case }}) {
+                    arr.Add(o);
+                }
+                dic.Add("{{ field.name }}", arr);{% else %}
+                JArray arr = new JArray();
+                foreach (IJsonAble o in this.{{ field.name|csharp_camel_case }}) {
+                    arr.Add(o.ToJsonObject());
+                }
+                dic.Add("{{ field.name }}", arr);{% endif %}
+            }{% else %}
+            dic.Add("{{field.name }}", this.{{ field.name|csharp_camel_case }}{% if not field.type|common_is_simple_type %}.ToJsonObject(){% endif %});{% endif %}{% endfor %}
+            return dic;
+        }
+    }
+}
+{% endfor %}
+
+{{ DELIMITER }}
+
+{{ DELIMITER }}
+windows/src/Backlog/BacklogGen.cs
+{{ LICENSE|safe }}
+
+using Com.Mobicage.Rogerthat.Common;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace Com.Mobicage.Rogerthat.Backlog {
+    public partial class Backlog : IBacklog {  
+        // Handle
+        private void HandleApi(JToken o, string callId, CompleteBacklogItem cbi){
+            switch(cbi.Function){
+{% for package in CS_API_packages %}{% for function in package.functions %}
+                case "{{ package.name }}.{{ function.name }}":
+                    if({{ package.name|common_namespace|csharp_delete_dots }}_{{ function.name|common_cap_first }}_val != null){
+                        try{
+                            IPickleable bag = cbi.Bag == null ? null : (IPickleable)Pickler.CreateObjectFromPickle(cbi.Bag);
+                            bool success = "success" == (string)o["s"];
+                            string error = success ? null : (string)o["e"];
+                            {{ function.rtype.type|csharp_map_type }} result = null;
+                            if (o["r"] != null) {
+                                result = new {{ function.rtype.type|csharp_map_type }}((JObject)o["r"]);
+                            }
+                            {{ package.name|common_namespace|csharp_delete_dots }}_{{ function.name|common_cap_first }}Response(bag, success, error, result);
+                        }
+                        catch (PickleException e) {
+                            L.Bug("Could not unpickle original call context for {0}", e, callId);
+                        }
+                        catch (Exception e) {
+                            L.Bug("Error during response processing for {0}", e, callId);
+                        }
+                    }
+                    else
+                        L.W("Function not implemented for {{ package.name|common_namespace|csharp_delete_dots }}_{{ function.name|common_cap_first }}Response");
+                    break;
+{% endfor %}{% endfor %}
+                default:
+                    L.W("HandleApi function not found for: {0}", cbi.Function); // Client not updated to latest version
+                    break;
+            }
+        }
+        public async Task HandleCapi(long timestamp, string function, string callId, JObject arguments) {
+            JObject dicResult = null;
+            string error = null;
+            bool success = false;
+            switch (function) {
+{% for package in SC_API_packages %}{% for function in package.functions %}
+                case "{{ package.name }}.{{ function.name }}":
+                    if ({{ package.name|common_namespace|csharp_delete_dots }}_{{ function.name|common_cap_first }}_val == null){
+                        error = "Function not implemented";
+                        L.W("Function not implemented for {{ package.name|common_namespace|csharp_delete_dots }}_{{ function.name|common_cap_first }}Request");
+                    }
+                    else {
+                        {% for arg in function.args %}{{ arg.type|csharp_map_type }}{% endfor %} request = arguments == null ? null : new {% for arg in function.args %}{{ arg.type|csharp_map_type }}{% endfor %}((JObject)arguments["request"]); // always request?
+                        try {
+                            {{ function.rtype.type|csharp_map_type }} result = await {{ package.name|common_namespace|csharp_delete_dots }}_{{ function.name|common_cap_first }}Request(request);
+                            dicResult = result.ToJsonObject();
+                            success = true;
+                        }
+                        catch (Exception e) {
+                            error = e.ToString();
+                            L.Bug("Parse to Dic failed for {{ package.name }}.{{ function.name }}", e);
+                        }
+                    }
+                    break;
+
+{% endfor %}{% endfor %}
+            default:
+                L.Bug("HandleCapi function not found for: {0}", function);
+                break;
+            }
+            Dictionary<string, object> response = new Dictionary<string, object>();
+            response.Add("av", 1);
+            response.Add("ci", callId);
+            response.Add("t", timestamp / 1000);
+            response.Add("s", success ? "success" : "fail");
+            if (success)
+                response.Add("r", dicResult);
+            else
+                response.Add("e", error);
+            string message = JsonConvert.SerializeObject(response);
+            this.mWrapper.UpdateCapiInBacklogDB(message, callId);
+        }
+
+        // API
+        {% for package in CS_API_packages %}{% for function in package.functions %}{{ package.name|common_namespace|csharp_delete_dots }}_{{ function.name|common_cap_first }}ResponseDelegate {{ package.name|common_namespace|csharp_delete_dots }}_{{ function.name|common_cap_first }}_val = null;
+        {% endfor %}{% endfor %}
+        {% for package in CS_API_packages %}{% for function in package.functions %}public {{ package.name|common_namespace|csharp_delete_dots }}_{{ function.name|common_cap_first }}ResponseDelegate {{ package.name|common_namespace|csharp_delete_dots }}_{{ function.name|common_cap_first }}Response {
+            get { return this.{{ package.name|common_namespace|csharp_delete_dots }}_{{ function.name|common_cap_first }}_val; }
+            set { this.{{ package.name|common_namespace|csharp_delete_dots }}_{{ function.name|common_cap_first }}_val = value; }
+        }
+        {% endfor %}{% endfor %}
+        {% for package in CS_API_packages %}{% for function in package.functions %}public void {{ package.name|common_namespace|csharp_delete_dots }}_{{ function.name|common_cap_first }}(IPickleable bag, {% for arg in function.args %}{{ arg.type|csharp_map_type }} {{ arg.name }}{% endfor %}) {
+            this.ApiCall("{{ package.name }}.{{ function.name }}",request,bag);
+        }
+        {% endfor %}{% endfor %}
+        // CAPI
+        {% for package in SC_API_packages %}{% for function in package.functions %}{{ package.name|common_namespace|csharp_delete_dots }}_{{ function.name|common_cap_first }}RequestDelegate {{ package.name|common_namespace|csharp_delete_dots }}_{{ function.name|common_cap_first }}_val = null;
+        {% endfor %}{% endfor %}
+
+        {% for package in SC_API_packages %}{% for function in package.functions %}public {{ package.name|common_namespace|csharp_delete_dots }}_{{ function.name|common_cap_first }}RequestDelegate {{ package.name|common_namespace|csharp_delete_dots }}_{{ function.name|common_cap_first }}Request {
+            get { return this.{{ package.name|common_namespace|csharp_delete_dots }}_{{ function.name|common_cap_first }}_val; }
+            set { this.{{ package.name|common_namespace|csharp_delete_dots }}_{{ function.name|common_cap_first }}_val = value; }
+        }
+        {% endfor %}{% endfor %}
+    }
+}
+{{ DELIMITER }}
+
+{{ DELIMITER }}
+windows/src/Interfaces/IBacklog.cs
+{{ LICENSE|safe }}
+
+using Newtonsoft.Json.Linq;
+using System.Threading.Tasks;
+
+namespace Com.Mobicage.Rogerthat.Common 
+{
+    {% for package in CS_API_packages %}{% for function in package.functions %}public delegate void {{ package.name|common_namespace|csharp_delete_dots }}_{{ function.name|common_cap_first }}ResponseDelegate(IPickleable bag, bool success, string error, {{ function.rtype.type|csharp_map_type }} response);
+    {% endfor %}{% endfor %}
+    {% for package in SC_API_packages %}{% for function in package.functions %}public delegate Task<{{ function.rtype.type|csharp_map_type }}> {{ package.name|common_namespace|csharp_delete_dots }}_{{ function.name|common_cap_first }}RequestDelegate({% for arg in function.args %}{{ arg.type|csharp_map_type }} {{ arg.name }}{% endfor %});
+    {% endfor %}{% endfor %}
+
+    public interface IBacklog {
+        {% for package in CS_API_packages %}{% for function in package.functions %}void {{ package.name|common_namespace|csharp_delete_dots }}_{{ function.name|common_cap_first }}(IPickleable bag, {% for arg in function.args %}{{ arg.type|csharp_map_type }} {{ arg.name }}{% endfor %});
+        {{ package.name|common_namespace|csharp_delete_dots }}_{{ function.name|common_cap_first }}ResponseDelegate {{ package.name|common_namespace|csharp_delete_dots }}_{{ function.name|common_cap_first }}Response { set; }
+
+        {% endfor %}{% endfor %}
+        {% for package in SC_API_packages %}{% for function in package.functions %}{{ package.name|common_namespace|csharp_delete_dots }}_{{ function.name|common_cap_first }}RequestDelegate {{ package.name|common_namespace|csharp_delete_dots }}_{{ function.name|common_cap_first }}Request { set; }
+        {% endfor %}{% endfor %}
+    }
+}
+{{ DELIMITER }}
+
+{{ DELIMITER }}
+windows/src/Backlog/ThreadSafeBacklogGen.cs
+{{ LICENSE|safe }}
+
+using Com.Mobicage.Rogerthat.Common;
+using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Threading.Tasks;
+
+namespace Com.Mobicage.Rogerthat.Backlog {
+    public class ThreadSafeBacklog : ThreadedInterfaceBase {
+        private readonly SQLite.SQLiteConnection mConnection;
+        private IBacklog mTarget;
+
+        private static readonly MethodInfo mStartInfo = typeof(Backlog).GetMethod("Start"); 
+        private static readonly MethodInfo mHandleCapiInfo = typeof(Backlog).GetMethod("HandleCapi");
+        private static readonly MethodInfo mKickMethodInfo = typeof(Backlog).GetMethod("Kick");
+        private static readonly MethodInfo mOnIncommingResponsesInfo = typeof(Backlog).GetMethod("OnIncommingResponses");
+        private static readonly MethodInfo mOnIncommingCallsInfo = typeof(Backlog).GetMethod("OnIncommingCalls");
+        private static readonly MethodInfo mOnIncommingAcksInfo = typeof(Backlog).GetMethod("OnIncommingAcks");
+        private static readonly MethodInfo mUpdateCapiInBacklogDBInfo = typeof(Backlog).GetMethod("UpdateCapiInBacklogDB");
+
+        {% for package in CS_API_packages %}{% for function in package.functions %}private static readonly MethodInfo m{{ package.name|common_namespace|csharp_delete_dots }}_{{ function.name|common_cap_first }}Info = typeof(Backlog).GetMethod("{{ package.name|common_namespace|csharp_delete_dots }}_{{ function.name|common_cap_first }}");
+        {% endfor %}{% endfor %}
+        {% for package in CS_API_packages %}{% for function in package.functions %}private static readonly PropertyInfo m{{ package.name|common_namespace|csharp_delete_dots }}_{{ function.name|common_cap_first }}Property = typeof(Backlog).GetProperty("{{ package.name|common_namespace|csharp_delete_dots }}_{{ function.name|common_cap_first }}Response");
+        {% endfor %}{% endfor %}
+        {% for package in SC_API_packages %}{% for function in package.functions %}private static readonly PropertyInfo m{{ package.name|common_namespace|csharp_delete_dots }}_{{ function.name|common_cap_first }}Property = typeof(Backlog).GetProperty("{{ package.name|common_namespace|csharp_delete_dots }}_{{ function.name|common_cap_first }}Request");
+        {% endfor %}{% endfor %}
+
+        public ThreadSafeBacklog(SQLite.SQLiteConnection connection, SubProcess process)
+                : base(process) {
+                    mConnection = connection;
+        }
+
+        protected override object Initialize() {
+            lock(this){
+                mTarget = new Backlog(mConnection, this);
+                return mTarget;
+            }
+        }
+
+        public void Start() {
+            InvokeVoid(mStartInfo);
+        }
+
+        public void HandleCapi(long timestamp, string function, string callId, JObject arguments) {
+            InvokeVoid(mHandleCapiInfo, timestamp, function, callId, arguments);
+        }
+
+        public void Kick() {
+            InvokeVoid(mKickMethodInfo);
+        }
+
+        public void OnIncommingResponses(ICollection<JToken> responses) {
+            InvokeVoid(mOnIncommingResponsesInfo, responses);
+        }
+
+        public async Task<bool> OnIncommingCalls(JArray calls) {
+            return (bool)await Invoke(mOnIncommingCallsInfo, calls);
+        }
+
+        public void OnIncommingAcks(JArray acks) {
+            InvokeVoid(mOnIncommingAcksInfo, acks);
+        }
+
+        public void UpdateCapiInBacklogDB(string message, string callId) {
+            InvokeVoid(mUpdateCapiInBacklogDBInfo, message, callId);
+        }
+
+        {% for package in CS_API_packages %}{% for function in package.functions %}public void {{ package.name|common_namespace|csharp_delete_dots }}_{{ function.name|common_cap_first }}(IPickleable bag, {% for arg in function.args %}{{ arg.type|csharp_map_type }} {{ arg.name }}{% endfor %}) {
+            InvokeVoid(m{{ package.name|common_namespace|csharp_delete_dots }}_{{ function.name|common_cap_first }}Info, bag, request);
+        }
+        {% endfor %}{% endfor %}
+        {% for package in CS_API_packages %}{% for function in package.functions %}public {{ package.name|common_namespace|csharp_delete_dots }}_{{ function.name|common_cap_first }}ResponseDelegate {{ package.name|common_namespace|csharp_delete_dots }}_{{ function.name|common_cap_first }}Response {
+            set { Invoke(m{{ package.name|common_namespace|csharp_delete_dots }}_{{ function.name|common_cap_first }}Property, value); }
+        }
+        {% endfor %}{% endfor %}
+        {% for package in SC_API_packages %}{% for function in package.functions %}public {{ package.name|common_namespace|csharp_delete_dots }}_{{ function.name|common_cap_first }}RequestDelegate {{ package.name|common_namespace|csharp_delete_dots }}_{{ function.name|common_cap_first }}Request {
+            set { Invoke(m{{ package.name|common_namespace|csharp_delete_dots }}_{{ function.name|common_cap_first }}Property, value); }
+        }
+        {% endfor %}{% endfor %}
+    }
+}
+{{ DELIMITER }}

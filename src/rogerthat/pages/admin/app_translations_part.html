@@ -1,0 +1,67 @@
+{% raw %}
+    <h1>${ app.name } translations</h1>
+    <div>
+        <a href='/mobiadmin/apps' class="btn">Back to apps</a>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="select-language">Language</label>
+        <div class="controls">
+            <select id="select-language">
+                {{each(i, lang) availableLanguages}}
+                <option value="${lang}" {{if language==lang}}selected{{/if}}>${lang}</option>
+                {{/each}}
+            </select>
+            <button class="btn btn-danger" id="remove-language">Remove this language</button>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="add-language">Add language (should be en, nl,...)</label>
+        <div class="controls">
+            <input type="text" id="add-language">
+        </div>
+        <button type="button" class="btn btn-success" id="add-language-button">Add language</button>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="add-translation-key">Add translation key</label>
+        <div class="controls">
+            <input type="text" id="add-translation-key">
+        </div>
+        <button type="button" class="btn btn-success" id="add-translation-key-button">Add translation key</button>
+    </div>
+    <div>
+        <table class="table table-bordered table-responsive">
+            <thead>
+            <tr>
+                <th>Translation key</th>
+                <th>English</th>
+                {{if language !== 'en'}}<th>${language} translation</th>{{/if}}
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {{if translations}}
+                {{each(key, translation) translations['en']}}
+                <tr data-translation-key="${key}">
+                    <td>${key}</td>
+                    <td>
+                        <textarea type="text" data-language="en" data-key="${key}" style="width:95%;resize:vertical;"
+                        >{{if translations['en']}}${translations['en'][key]}{{/if}}</textarea>
+                    </td>
+                    {{if language !== 'en'}}
+                        <td><textarea type="text"
+                                      data-language="${language}"
+                                      data-key="${key}" style="width:95%;resize:vertical"
+                        >{{if translations[language]}}${translations[language][key]}{{/if}}</textarea>
+                        </td>
+                    {{/if}}
+                    <td><button type="button" class="btn btn-danger remove-translation" data-key="${key}">Remove</button>
+                    </td>
+                </tr>
+                {{/each}}
+            {{/if}}
+            </tbody>
+        </table>
+        <button type="button" class="btn btn-success" id="save-translations">Save</button>
+    </div>
+{% endraw %}

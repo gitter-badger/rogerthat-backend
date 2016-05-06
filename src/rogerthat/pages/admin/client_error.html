@@ -1,0 +1,204 @@
+<html>
+
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google" value="notranslate" />
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+<!-- Bootstrap -->
+<link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
+
+<script src="/static/js/jquery-1.10.0.min.js"></script>
+<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+<style type="text/css">
+body {
+	padding: 10px;
+}
+
+A:link {
+	text-decoration: none
+}
+
+A:visited {
+	text-decoration: none
+}
+
+A:active {
+	text-decoration: none
+}
+
+A:hover {
+	text-decoration: underline;
+	color: red;
+}
+
+.production {
+	font-size: 11px;
+	color: black;
+}
+
+.blackberry.production {
+	background: #faf;
+}
+
+.android.production {
+	background: #ee0;
+}
+
+.ios.production {
+	background: #0ee;
+}
+
+.other.production {
+	background: #6e6;
+}
+
+.debug {
+	padding-left: 10px;
+	font-size: 11px;
+	background: #222;
+}
+
+.blackberry.debug {
+	color: #faf;
+}
+
+.android.debug {
+	color: #ee0;
+}
+
+.ios.debug {
+	color: #0ee;
+}
+
+.other.debug {
+	color: #e0e;
+}
+
+td.error-info {
+	width: 250px;
+}
+
+pre {
+	margin-bottom: 0px;
+}
+
+#detailsPopup {
+	width: 98%;
+	height: 92%;
+	padding: 0px;
+	margin: 0px;
+	top: 1%;
+	left: 1%;
+}
+
+#detailsPopup .modal-body {
+	max-height: none;
+	font-family: monospace;
+	font-size: smaller;
+}
+
+#detailsPopup .modal-body p {
+	margin: 0px;
+}
+</style>
+</head>
+
+<body>
+    <script src="/static/js/jquery-1.6.1.min.js" type="text/javascript"></script>
+    <h2>Client Errors</h2>
+    <pre><span class="android production">  Android Production  </span><span class="android debug"> Android Dev Build  </span><span
+            class="ios production">  iOS Production  </span><span class="ios debug"> iOS Dev Build  </span><span
+            class="other production">  Web Production  </span></pre>
+    {% if cursor %}
+    <div class="pagination pagination-centered">
+        <ul>
+            <li>
+                <a href="/mobiadmin/client_errors">First</a>
+            </li>
+            <li>
+                <a href="/mobiadmin/client_errors?cursor={{ cursor }}">Next</a>
+            </li>
+        </ul>
+    </div>
+    {% endif %}
+    <table cellpadding="0" class="table table-bordered table-striped table-hover table-condensed">
+        <thead>
+            <tr>
+                <td>
+                    <b>Info</b>
+                </td>
+                <td>
+                    <b>Error</b>
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for error in errors %}
+            <tr>
+                <td class="error-info">
+                    <pre class="{{error.platform_string}} {% if error.is_debug %}debug{% else %}production{% endif %}">{{ error.niceTime|safe }}<br>{% if error.userStr %}{{ error.userStr }}{% else %}{% if error.user %}{{ error.user.email }}{% else %}{{ error.installId }}{% endif %}{% endif %}<br>Count: <b>{{ error.parent.occurenceCount }}</b> - Version: {% if error.parent.mobicageVersion %}{% if error.parent.mobicageVersion < '0.0' %}<u>DEV BUILD</u>{% else %}<b>{{ error.parent.mobicageVersion }}</b>{% endif %}{% else %}<b>{{ error.parent.platformVersion }}</b>{% endif %}</pre>
+                </td>
+                <td class="error-details">
+                    <a data-toggle="modal" href="#detailsPopup" error_key="{{error.parent.key}}" target="_top">
+                        <pre style="font-size: 11px; max-height: 250px; overflow-y: scroll;">{{ error.parent.shortError }}</pre>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if cursor %}
+    <div class="pagination pagination-centered">
+        <ul>
+            <li>
+                <a href="/mobiadmin/client_errors">First</a>
+            </li>
+            <li>
+                <a href="/mobiadmin/client_errors?cursor={{ cursor }}">Next</a>
+            </li>
+        </ul>
+    </div>
+    {% endif %}
+    <div id="detailsPopup" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="detailsPopupLabel"
+        aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3 id="detailsPopupLabel">Error details</h3>
+        </div>
+        <div class="modal-body">
+            <pre id="detailsContainer"></pre>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        </div>
+    </div>
+    <script type="text/javascript">
+    <!--
+    $(window).load(function() {
+        $("td.timestamp").each(function() {
+            $(this).text(new Date(new Number($(this).text()) * 1000));
+        });
+    });
+
+    $(function() {
+        $(".error-details a").click(function() {
+            $("#detailsPopup .modal-body").css('height', $('#detailsPopup').height() - 138 + "px");
+            var errorKey = $(this).attr('error_key');
+            $.ajax({
+                url : "/mobiadmin/client_errors/get_error_details",
+                type : "GET",
+                data : {
+                    error_key : errorKey
+                },
+                success : function(data) {
+                    $("#detailsPopup #detailsContainer").text(data);
+                }
+            });
+        });
+    });
+    -->
+    </script>
+</body>
+</html>

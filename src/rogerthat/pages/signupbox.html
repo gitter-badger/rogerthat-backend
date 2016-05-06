@@ -1,0 +1,144 @@
+<div id="signupbox">
+	<span>New to Rogerthat web?</span><br>Join for free today!<br>
+	<input id="signupbox_name" name="name" type="text" placeholder="Full name"/><br>
+	<input id="signupbox_email" name="email" type="text" placeholder="Email" autocapitalize="off" autocorrect="off"/><br>
+	<input type="button" id="signupbox_submit" value="Join"/>
+</div>
+<div id="signupFailureDialog" style="display: none;">
+	Both name and email address are required to start the registration process.
+</div>
+<div id="accountExistsDialog" style="display: none;">
+	This email address is already registered.<br>
+	<br>
+	How do you want to proceed ?
+</div>
+<div id="signupLoadOverflowDialog" style="display: none;">
+	The Rogerthat servers are overloaded with signup requests. Please try again later!
+</div>
+<div id="signupInvalidEmailDomainDialog" style="display: none;">
+	Invalid email domain!
+</div>
+<style>
+	#signupbox { font-size: 15px;}
+	#signupbox { color: #fff; width: auto; display: block;}
+	#signupbox input[type=submit] { font-size:24px; float: right; margin-top: 5px;}
+	#signupbox input[type=text], #signupbox input[type=password] { 
+	margin: 0px; margin-top: 3px; padding: 4px; font-size: 15px; -webkit-border-radius: 3px; -moz-border-radius: 3px; width: 100%; }
+	#signupbox_submit span { margin-top: 0px; font-size: 15px; float: none; color: #fff; line-height: 1; }
+</style>
+<script type="text/javascript">
+<!--
+
+$(window).load(function () {
+	var cont = "{{ continue|safe }}";
+	var signupFailureDialog = $("#signupFailureDialog").dialog({
+		title: 'Registration',
+		modal: true,
+		autoOpen: false,
+		close: function () {
+			$("#signupbox_name").focus();
+		},
+		buttons: {
+			Ok: function () {
+				signupFailureDialog.dialog('close');
+			}
+		}
+	});
+	$("#signupbox").watermark();
+	var signupLoadOverflowDialog = $("#signupLoadOverflowDialog").dialog({
+		title: 'Registration',
+		modal: true,
+		autoOpen: false,
+		close: function () {
+			$("#signupbox_name").focus();
+		},
+		buttons: {
+			Ok: function () {
+				signupLoadOverflowDialog.dialog('close');
+			}
+		}
+	});
+	var signupInvalidEmailDomainDialog = $("#signupInvalidEmailDomainDialog").dialog({
+		title: 'Registration',
+		modal: true,
+		autoOpen: false,
+		close: function () {
+			$("#signupbox_name").focus();
+		},
+		buttons: {
+			Ok: function () {
+			    signupInvalidEmailDomainDialog.dialog('close');
+			}
+		}
+	});
+	var accountExistsDialog = $("#accountExistsDialog").dialog({
+		title: 'Registration',
+		modal: true,
+		autoOpen: false,
+		buttons: {
+			Login: function () {
+				$("#email").val($("#signupbox_email").val());
+				$("#password").focus();
+				accountExistsDialog.dialog('close');
+			},
+			"Reset password": function () {
+				window.location = "/resetpassword?continue={{ continue|urlencode }}&email=" + $("#signupbox_email").val();
+			},
+			Close: function () {
+				accountExistsDialog.dialog('close');
+			}
+		}
+	});
+	$("#signupbox_submit").button().click(function () {
+		if ( $.browser.msie && $.browser.version < 8 ) {
+			mctracker.alert("Your browser is not supported. Please use Internet Explorer 8 or 9, Chrome, Firefox or Safari.");
+			return;
+		}
+
+		var name = $("#signupbox_name").val();
+		var email = trim($("#signupbox_email").val()).toLowerCase();
+		
+		mctracker.call({
+			url: "/mobi/rest/user/signup",
+			type: "POST",
+			data: {
+				data: JSON.stringify({
+					name: name,
+					email: email,
+					cont: cont
+				})
+			},
+			success: function (data) {
+				if (data == 1) {
+					// success
+					var dialog = $("<div></div")
+						.html("An email has been sent to <b>"+email+"</b> containing the following step of the registration process.<br><br>Please check your email in a couple of moments!")
+						.dialog({
+							title: 'Registration',
+							modal: true,
+							buttons: {
+								'Ok': function () {
+									window.location = "/";
+								}
+							}
+						});
+				} else if (data == 4) {
+					accountExistsDialog.dialog('open');
+				} else if (data == 5) {
+				    signupLoadOverflowDialog.dialog('open');
+				} else if (data == 6) {
+				    signupInvalidEmailDomainDialog.dialog('open');
+				} else {
+					signupFailureDialog.dialog('open');
+				}
+			}
+		});
+	});
+	$("#signupbox_name").keypress(function(event) {
+		if (event.which == 13) {
+			$("#signupbox_email").focus();
+		}
+	});
+});
+-->
+</script>

@@ -1,0 +1,25 @@
+<html>
+  <body>
+	<p>Prezado,</p>
+	<p>A partir de hoje, você pode usar o aplicativo '{{ profile.name }} '.<br>
+Nosso aplicativo funciona em {{ app.name }} {% if app.type == app.APP_TYPE_CITY_APP %}Cidade{% else %}app{% endif %}. Para instalá-lo no seu smartphone, faça o seguinte:</p>
+    <p>
+      <ul>
+        <li>
+          Passo 1. Instale o aplicativo {{ app.name }} {% if app.type == app.APP_TYPE_CITY_APP %}City-App{% else %}app{% endif %} gratuitamente:<br>
+          <a href="{{ BASE_URL }}/install?a={{ app.app_id }}&email">{{ BASE_URL }}/install?a={{ app.app_id }}&email</a><br><br>
+        </li>
+        <li>
+			Passo 2. Abra o aplicativo{{ app.name }} {% if app.type == app.APP_TYPE_CITY_APP %}City-App{% else %}{% endif %} e procure '{{ profile.name }}' em '{% if app.type == app.APP_TYPE_CITY_APP %}{{ localized_organization_type }}{% else %}Serviços{% endif %}'.
+        </li>
+      </ul>
+    </p>
+    <p>&nbsp;</p>
+    {% if message %}
+    <p style="background-color: #f0e68c; padding: 10px; margin-left: 20px; border-radius: 15px; margin-right: 20px; padding-left: 20px; -moz-border-radius: 15px;">
+      {{ message }}
+    </p>
+    {% endif %}
+    <p>{{ profile.name }}</p>
+  </body>
+</html>

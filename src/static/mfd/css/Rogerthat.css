@@ -1,0 +1,32 @@
+div.rogerthat-hidden { display: none }
+
+div.WireIt-Container.WiringEditor-module-Results.flush > div.WireIt-Container-ddhandle {
+	background-color: #0C9600;
+}
+div.WireIt-Container.WiringEditor-module-Results.flush > div.body {
+	border-color: #0C9600;
+}
+div.WireIt-Container.WiringEditor-module-Results.email > div.WireIt-Container-ddhandle {
+	background-color: #0C9600;
+}
+div.WireIt-Container.WiringEditor-module-Results.email > div.body {
+	border-color: #0C9600;
+}
+div.WireIt-Container.WiringEditor-module-Start > div.WireIt-Container-ddhandle {
+	background-color: gray;
+}
+div.WireIt-Container.WiringEditor-module-Start > div.body {
+	border-color: gray;
+}
+div.WireIt-Container.WiringEditor-module-End > div.WireIt-Container-ddhandle {
+	background-color: gray;
+}
+div.WireIt-Container.WiringEditor-module-End > div.body {
+	border-color: gray;
+}
+div.WireIt-Container.WiringEditor-module-Flow.code > div.WireIt-Container-ddhandle {
+    background-color: #DB33D5;
+}
+div.WireIt-Container.WiringEditor-module-Flow.code > div.body {
+    border-color: #DB33D5;
+}

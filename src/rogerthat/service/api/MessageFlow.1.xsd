@@ -1,0 +1,738 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="MessageFlow" targetNamespace="https://rogerth.at/api/1/MessageFlow.xsd" elementFormDefault="qualified"
+		   xmlns="https://rogerth.at/api/1/MessageFlow.xsd" xmlns:mstns="https://rogerth.at/api/1/MessageFlow.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+	<!-- Generate instructions: cd into root directory of this project. xsd /c /n:rogerthat.Rogerthat.MFD MessageFlow.xsd -->
+
+	<xs:simpleType name="AlertType">
+		<xs:annotation>
+			<xs:appinfo source="http://www.rogerthat.net/developers/api-reference/#TPS_send_message"></xs:appinfo>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="BEEP">
+				<xs:annotation>
+					<xs:documentation>A short beep played when a message arrives on the
+						device of the user.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="SILENT">
+				<xs:annotation>
+					<xs:documentation>The receiving Rogerthat device will not make any
+						sound when the message arrives.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="RING_5">
+				<xs:annotation>
+					<xs:documentation>The receiving device will ring for 5 seconds
+						unless the message is acknowledged or locked.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="RING_15">
+				<xs:annotation>
+					<xs:documentation>The receiving device will ring for 15 seconds
+						unless the message is acknowledged or locked.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="RING_30">
+				<xs:annotation>
+					<xs:documentation>The receiving device will ring for 30 seconds
+						unless the message is acknowledged or locked.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="RING_60">
+				<xs:annotation>
+					<xs:documentation>The receiving device will ring for 1 minute
+						unless the message is acknowledged or locked.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="AlertIntervalType">
+		<xs:annotation>
+			<xs:appinfo source="http://www.rogerthat.net/developers/api-reference/#TPS_send_message"></xs:appinfo>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="NONE">
+				<xs:annotation>
+					<xs:documentation>The receiving device will not cycle the ring tone
+						or beep.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="INTERVAL_5">
+				<xs:annotation>
+					<xs:documentation>The receiving device should repeat the alert with
+						a 5 seconds pause interval until the message is
+						acknowledged or
+						locked.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="INTERVAL_15">
+				<xs:annotation>
+					<xs:documentation>The receiving device should repeat the alert with
+						a 15 seconds pause interval until the message is
+						acknowledged or
+						locked.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="INTERVAL_30">
+				<xs:annotation>
+					<xs:documentation>The receiving device should repeat the alert with
+						a 30 seconds pause interval until the message is
+						acknowledged or
+						locked.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="INTERVAL_60">
+				<xs:annotation>
+					<xs:documentation>The receiving device should repeat the alert with
+						a 1 minute pause interval until the message is
+						acknowledged or
+						locked.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="INTERVAL_300">
+				<xs:annotation>
+					<xs:documentation>The receiving device should repeat the alert with
+						a 5 minute pause interval until the message is
+						acknowledged or
+						locked.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="INTERVAL_900">
+				<xs:annotation>
+					<xs:documentation>The receiving device should repeat the alert with
+						a 15 minute pause interval until the message is
+						acknowledged or
+						locked.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="INTERVAL_3600">
+				<xs:annotation>
+					<xs:documentation>The receiving device should repeat the alert with
+						a 1 hour pause interval until the message is
+						acknowledged or
+						locked.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:complexType name="Attachment">
+		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute name="url" type="xs:string" use="required" />
+		<xs:attribute name="contentType" type="xs:string" use="required" />
+		<xs:attribute name="size" type="xs:long" use="required" />
+	</xs:complexType>
+
+	<xs:simpleType name="FormButton">
+		<xs:annotation>
+			<xs:appinfo source="http://www.rogerthat.net/developers/api-reference/#TPS_send_message"></xs:appinfo>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="positive">
+				<xs:annotation>
+					<xs:documentation>The form is submitted using the green button.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="negative">
+				<xs:annotation>
+					<xs:documentation>The form is submitted using the red button.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="ProgrammingLanguage">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="JYTHON" />
+			<xs:enumeration value="JRUBY" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="MemberStatus">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="SUBMITTED">
+				<xs:annotation>
+					<xs:documentation>Message flow has been submitted but the system
+						did not start it yet.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="INITIATED">
+				<xs:annotation>
+					<xs:documentation>First message has been sent to the user but is
+						not yet received or he did not act on it yet.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="RUNNING">
+				<xs:annotation>
+					<xs:documentation>The user is currently interacting on the
+						messages.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="FINISHED">
+				<xs:annotation>
+					<xs:documentation>The user has interacted on the complete message
+						flow.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:complexType name="FlowElement">
+		<xs:attribute name="id" type="xs:ID" use="required" />
+	</xs:complexType>
+
+	<xs:complexType name="Answer">
+		<xs:attribute name="caption" type="xs:string" use="required" />
+		<xs:attribute name="action" type="xs:string" use="required" />
+		<xs:attribute name="id" type="xs:ID" use="required" />
+		<xs:attribute name="reference" type="xs:IDREF" use="required" />
+	</xs:complexType>
+
+	<xs:complexType name="Message">
+		<xs:complexContent>
+			<xs:extension base="FlowElement">
+				<xs:sequence>
+					<xs:element name="content" minOccurs="1" maxOccurs="1">
+						<xs:complexType>
+							<xs:simpleContent>
+								<xs:extension base="xs:string"></xs:extension>
+							</xs:simpleContent>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="answer" type="Answer" minOccurs="0" maxOccurs="unbounded" />
+					<xs:element name="attachment" type="Attachment" minOccurs="0" maxOccurs="unbounded" />
+				</xs:sequence>
+				<xs:attribute name="allowDismiss" type="xs:boolean" use="required" />
+				<xs:attribute name="dismissReference" type="xs:IDREF" use="optional" />
+				<xs:attribute name="brandingKey" type="xs:string" use="optional" />
+				<xs:attribute name="autoLock" type="xs:boolean" use="required" />
+				<xs:attribute name="vibrate" type="xs:boolean" use="required" />
+				<xs:attribute name="alertType" type="AlertType" use="required" />
+				<xs:attribute name="alertIntervalType" type="AlertIntervalType" use="required" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="ResultsFlush">
+		<xs:complexContent>
+			<xs:extension base="FlowElement">
+				<xs:attribute name="reference" type="xs:IDREF" use="required" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="ResultsEmail">
+		<xs:complexContent>
+			<xs:extension base="FlowElement">
+				<xs:sequence>
+					<xs:element name="email" type="Value" maxOccurs="unbounded" minOccurs="0" />
+				</xs:sequence>
+				<xs:attribute name="reference" type="xs:IDREF" use="required" />
+				<xs:attribute name="emailAdmins" type="xs:boolean" use="required" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="FlowCode">
+		<xs:complexContent>
+			<xs:extension base="FlowElement">
+				<xs:sequence>
+					<xs:element name="outlet" type="Outlet" maxOccurs="unbounded" minOccurs="0" />
+					<xs:element name="javascriptCode" minOccurs="1" maxOccurs="1">
+						<xs:complexType>
+							<xs:simpleContent>
+								<xs:extension base="xs:string"></xs:extension>
+							</xs:simpleContent>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+				<xs:attribute name="exceptionReference" type="xs:IDREF" use="required" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="Widget">
+	</xs:complexType>
+
+	<xs:complexType name="BaseSliderWidget">
+		<xs:complexContent>
+			<xs:extension base="Widget">
+				<xs:attribute name="min" type="xs:float" use="required" />
+				<xs:attribute name="max" type="xs:float" use="required" />
+				<xs:attribute name="step" type="xs:float" use="required" />
+				<xs:attribute name="precision" type="xs:long" use="required" />
+				<xs:attribute name="unit" type="xs:string" use="required" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="SliderWidget">
+		<xs:complexContent>
+			<xs:extension base="BaseSliderWidget">
+				<xs:attribute name="value" type="xs:float" use="required" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="RangeSliderWidget">
+		<xs:complexContent>
+			<xs:extension base="BaseSliderWidget">
+				<xs:attribute name="lowValue" type="xs:float" use="required" />
+				<xs:attribute name="highValue" type="xs:float" use="required" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="PhotoUploadWidget">
+		<xs:complexContent>
+			<xs:extension base="Widget">
+				<xs:attribute name="quality" type="xs:string" use="required" />
+				<xs:attribute name="gallery" type="xs:boolean" use="optional" />
+				<xs:attribute name="camera" type="xs:boolean" use="optional" />
+				<xs:attribute name="ratio" type="xs:string" use="required" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="GPSLocationWidget">
+		<xs:complexContent>
+			<xs:extension base="Widget">
+				<xs:attribute name="gps" type="xs:boolean" use="required" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="TextWidget">
+		<xs:complexContent>
+			<xs:extension base="Widget">
+				<xs:attribute name="maxChars" type="xs:long" use="required" />
+				<xs:attribute name="placeholder" type="xs:string" use="optional"/>
+				<xs:attribute name="value" type="xs:string" use="optional"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="TextLineWidget">
+		<xs:complexContent>
+			<xs:extension base="TextWidget">
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="TextBlockWidget">
+		<xs:complexContent>
+			<xs:extension base="TextWidget">
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="Value">
+		<xs:attribute name="value" type="xs:string" use="required" />
+	</xs:complexType>
+
+	<xs:complexType name="FloatValue">
+		<xs:attribute name="value" type="xs:float" use="required" />
+	</xs:complexType>
+
+	<xs:complexType name="AdvancedOrderCategory">
+		<xs:sequence>
+			<xs:element name="item" type="AdvancedOrderItem" minOccurs="1" maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attribute name="id" type="xs:ID" use="required" />
+		<xs:attribute name="name" type="xs:string" use="required" />
+	</xs:complexType>
+
+	<xs:complexType name="AdvancedOrderItem">
+		<xs:attribute name="id" type="xs:ID" use="required" />
+		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute name="description" type="xs:string" use="optional" />
+		<xs:attribute name="value" type="xs:long" use="required" />
+		<xs:attribute name="unit" type="xs:string" use="required" />
+		<xs:attribute name="unitPrice" type="xs:long" use="required" />
+		<xs:attribute name="hasPrice" type="xs:boolean" use="optional" default="true"/>
+		<xs:attribute name="step" type="xs:long" use="required" />
+		<xs:attribute name="stepUnit" type="xs:string" use="optional" />
+		<xs:attribute name="stepUnitConversion" type="xs:long" use="optional" />
+		<xs:attribute name="imageUrl" type="xs:string" use="optional" />
+	</xs:complexType>
+
+	<xs:complexType name="TextAutocompleteWidget">
+		<xs:complexContent>
+			<xs:extension base="TextWidget">
+				<xs:sequence>
+					<xs:element name="suggestion" type="Value" minOccurs="0" maxOccurs="unbounded" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="Choice">
+		<xs:complexContent>
+			<xs:extension base="Value">
+				<xs:attribute name="label" type="xs:string" use="required" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="SelectWidget">
+		<xs:complexContent>
+			<xs:extension base="Widget">
+				<xs:sequence>
+					<xs:element name="choice" type="Choice" minOccurs="0" maxOccurs="unbounded" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="SelectSingleWidget">
+		<xs:complexContent>
+			<xs:extension base="SelectWidget">
+				<xs:attribute name="value" type="xs:string" use="required" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="SelectMultiWidget">
+		<xs:complexContent>
+			<xs:extension base="SelectWidget">
+				<xs:sequence>
+					<xs:element name="value" type="Value" minOccurs="0" maxOccurs="unbounded" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="SelectDateWidget">
+		<xs:complexContent>
+			<xs:extension base="Widget">
+				<xs:attribute name="minDate" type="xs:long" use="optional" />
+				<xs:attribute name="maxDate" type="xs:long" use="optional" />
+				<xs:attribute name="date" type="xs:long" use="optional" />
+				<xs:attribute name="minuteInterval" type="xs:long" use="optional" />
+				<xs:attribute name="mode" type="xs:string" use="required" />
+				<xs:attribute name="unit" type="xs:string" use="optional" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="MyDigiPassWidget">
+		<xs:complexContent>
+			<xs:extension base="Widget">
+				<xs:attribute name="scope" type="xs:string" use="required"></xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="AdvancedOrderWidget">
+		<xs:complexContent>
+			<xs:extension base="Widget">
+				<xs:sequence>
+					<xs:element name="category" type="AdvancedOrderCategory" minOccurs="1" maxOccurs="unbounded" />
+				</xs:sequence>
+				<xs:attribute name="currency" use="required" type="xs:string" />
+				<xs:attribute name="leapTime" use="optional" type="xs:long" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="Form">
+		<xs:sequence>
+			<xs:element name="widget" type="Widget" minOccurs="1" maxOccurs="1" />
+			<xs:element name="javascriptValidation" type="xs:string" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+		<xs:attribute name="positiveButtonCaption" type="xs:string" use="required" />
+		<xs:attribute name="positiveButtonConfirmation" type="xs:string" use="optional" />
+		<xs:attribute name="negativeButtonCaption" type="xs:string" use="required" />
+		<xs:attribute name="negativeButtonConfirmation" type="xs:string" use="optional" />
+	</xs:complexType>
+
+	<xs:complexType name="FormMessage">
+		<xs:complexContent>
+			<xs:extension base="FlowElement">
+				<xs:sequence>
+					<xs:element name="content" minOccurs="1" maxOccurs="1">
+						<xs:complexType>
+							<xs:simpleContent>
+								<xs:extension base="xs:string"></xs:extension>
+							</xs:simpleContent>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="form" type="Form" minOccurs="1" maxOccurs="1" />
+					<xs:element name="attachment" type="Attachment" minOccurs="0" maxOccurs="unbounded" />
+				</xs:sequence>
+				<xs:attribute name="member" type="xs:string" use="optional"/>
+				<xs:attribute name="brandingKey" type="xs:string" use="optional" />
+				<xs:attribute name="autoLock" type="xs:boolean" use="required" />
+				<xs:attribute name="vibrate" type="xs:boolean" use="required" />
+				<xs:attribute name="alertType" type="AlertType" use="required" />
+				<xs:attribute name="alertIntervalType" type="AlertIntervalType" use="required" />
+				<xs:attribute name="positiveReference" type="xs:IDREF" use="required" />
+				<xs:attribute name="negativeReference" type="xs:IDREF" use="required" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="Outlet">
+		<xs:attribute name="value" type="xs:string" use="required" />
+		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute name="reference" type="xs:IDREF" use="required" />
+	</xs:complexType>
+
+	<xs:complexType name="End">
+		<xs:complexContent>
+			<xs:extension base="FlowElement">
+				<xs:attribute name="waitForFollowUpMessage" type="xs:boolean" use="optional" default="false" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="MessageFlowDefinition">
+		<xs:sequence>
+			<xs:element name="end" minOccurs="1" maxOccurs="unbounded" type="End" />
+			<xs:element name="message" minOccurs="0" maxOccurs="unbounded" type="Message" />
+			<xs:element name="formMessage" minOccurs="0" maxOccurs="unbounded" type="FormMessage" />
+			<xs:element name="resultsFlush" minOccurs="0" maxOccurs="unbounded" type="ResultsFlush" />
+			<xs:element name="resultsEmail" minOccurs="0" maxOccurs="unbounded" type="ResultsEmail" />
+			<xs:element name="flowCode" minOccurs="0" maxOccurs="unbounded" type="FlowCode" />
+		</xs:sequence>
+		<xs:attribute name="name" use="required" type="xs:string" />
+		<xs:attribute name="startReference" use="optional" type="xs:IDREF" />
+		<xs:attribute name="language" use="required" type="xs:string" />
+	</xs:complexType>
+
+	<xs:complexType name="MessageFlowDefinitionSet">
+		<xs:sequence>
+			<xs:element name="definition" minOccurs="1" maxOccurs="unbounded" type="MessageFlowDefinition" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="Step">
+		<xs:attribute name="id" use="required" type="xs:ID" />
+		<xs:attribute name="creationTimestamp" use="required" type="xs:long" />
+		<xs:attribute name="definition" use="required" type="xs:IDREF" />
+		<xs:attribute name="previousStep" use="optional" type="xs:IDREF" />
+		<xs:attribute name="nextStep" use="optional" type="xs:IDREF" />
+		<xs:attribute name="message" use="optional" type="xs:string" />
+		<xs:attribute name="button" use="optional" type="xs:string" />
+	</xs:complexType>
+
+	<xs:complexType name="BaseMessageStep">
+		<xs:complexContent>
+			<xs:extension base="Step">
+				<xs:attribute name="receivedTimestamp" use="optional" type="xs:long" />
+				<xs:attribute name="acknowledgedTimestamp" use="optional" type="xs:long" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="MessageStep">
+		<xs:complexContent>
+			<xs:extension base="BaseMessageStep">
+				<xs:attribute name="answer" use="optional" type="xs:IDREF" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="WidgetStep">
+		<xs:complexContent>
+			<xs:extension base="BaseMessageStep">
+				<xs:attribute name="displayValue" use="optional" type="xs:string" />
+				<xs:attribute name="formButton" use="optional" type="FormButton" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="TextWidgetStep">
+		<xs:complexContent>
+			<xs:extension base="WidgetStep">
+				<xs:attribute name="value" use="required" type="xs:string" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="SliderWidgetStep">
+		<xs:complexContent>
+			<xs:extension base="WidgetStep">
+				<xs:attribute name="value" use="required" type="xs:float" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="RangeSliderWidgetStep">
+		<xs:complexContent>
+			<xs:extension base="WidgetStep">
+				<xs:sequence>
+					<xs:element name="value" type="FloatValue" minOccurs="2" maxOccurs="2" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="PhotoUploadWidgetStep">
+		<xs:complexContent>
+			<xs:extension base="WidgetStep">
+				<xs:attribute name="value" use="required" type="xs:string" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="GPSLocationWidgetStep">
+		<xs:complexContent>
+			<xs:extension base="WidgetStep">
+				<xs:attribute name="horizontalAccuracy" use="required" type="xs:float" />
+				<xs:attribute name="verticalAccuracy" use="required" type="xs:float" />
+				<xs:attribute name="latitude" use="required" type="xs:float" />
+				<xs:attribute name="longitude" use="required" type="xs:float" />
+				<xs:attribute name="altitude" use="required" type="xs:float" />
+				<xs:attribute name="timestamp" use="required" type="xs:long" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="MyDigiPassEidProfile">
+		<xs:attribute name="firstName" use="required" type="xs:string" />
+		<xs:attribute name="firstName3" use="required" type="xs:string" />
+		<xs:attribute name="lastName" use="required" type="xs:string" />
+		<xs:attribute name="gender" use="required" type="xs:string" />
+		<xs:attribute name="nationality" use="required" type="xs:string" />
+		<xs:attribute name="dateOfBirth" use="required" type="xs:string" />
+		<xs:attribute name="locationOfBirth" use="required" type="xs:string" />
+		<xs:attribute name="nobleCondition" use="required" type="xs:string" />
+		<xs:attribute name="issuingMunicipality" use="required" type="xs:string" />
+		<xs:attribute name="cardNumber" use="required" type="xs:string" />
+		<xs:attribute name="chipNumber" use="required" type="xs:string" />
+		<xs:attribute name="validityBeginsAt" use="required" type="xs:string" />
+		<xs:attribute name="validityEndsAt" use="required" type="xs:string" />
+		<xs:attribute name="createdAt" use="required" type="xs:string" />
+	</xs:complexType>
+
+	<xs:complexType name="MyDigiPassEidAddress">
+		<xs:attribute name="streetAndNumber" use="required" type="xs:string" />
+		<xs:attribute name="zipCode" use="required" type="xs:string" />
+		<xs:attribute name="municipality" use="required" type="xs:string" />
+	</xs:complexType>
+
+	<xs:complexType name="MyDigiPassProfile">
+		<xs:attribute name="updatedAt" use="required" type="xs:string" />
+		<xs:attribute name="firstName" use="required" type="xs:string" />
+		<xs:attribute name="lastName" use="required" type="xs:string" />
+		<xs:attribute name="bornOn" use="required" type="xs:string" />
+		<xs:attribute name="preferredLocale" use="required" type="xs:string" />
+		<xs:attribute name="uuid" use="required" type="xs:string" />
+	</xs:complexType>
+
+	<xs:complexType name="MyDigiPassAddress">
+		<xs:attribute name="address1" use="required" type="xs:string" />
+		<xs:attribute name="address2" use="required" type="xs:string" />
+		<xs:attribute name="city" use="required" type="xs:string" />
+		<xs:attribute name="zip" use="required" type="xs:string" />
+		<xs:attribute name="country" use="required" type="xs:string" />
+		<xs:attribute name="state" use="required" type="xs:string" />
+	</xs:complexType>
+
+	<xs:complexType name="MyDigiPassWidgetStep">
+		<xs:complexContent>
+			<xs:extension base="WidgetStep">
+				<xs:sequence>
+					<xs:element name="eidProfile" type="MyDigiPassEidProfile" minOccurs="0" maxOccurs="1" />
+					<xs:element name="eidAddress" type="MyDigiPassEidAddress" minOccurs="0" maxOccurs="1" />
+					<xs:element name="profile" type="MyDigiPassProfile" minOccurs="0" maxOccurs="1" />
+					<xs:element name="address" type="MyDigiPassAddress" minOccurs="0" maxOccurs="1" />
+				</xs:sequence>
+				<xs:attribute name="eidPhoto" use="optional" type="xs:string" />
+				<xs:attribute name="email" use="optional" type="xs:string" />
+				<xs:attribute name="phone" use="optional" type="xs:string" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="SelectSingleWidgetStep">
+		<xs:complexContent>
+			<xs:extension base="WidgetStep">
+				<xs:attribute name="value" use="required" type="xs:string" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="SelectMultiWidgetStep">
+		<xs:complexContent>
+			<xs:extension base="WidgetStep">
+				<xs:sequence>
+					<xs:element name="selection" type="Value" minOccurs="0" maxOccurs="unbounded" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="SelectDateWidgetStep">
+		<xs:complexContent>
+			<xs:extension base="WidgetStep">
+				<xs:attribute name="date" use="required" type="xs:long" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="AdvancedOrderWidgetStep">
+		<xs:complexContent>
+			<xs:extension base="WidgetStep">
+				<xs:sequence>
+					<xs:element name="category" type="AdvancedOrderCategory" minOccurs="1" maxOccurs="unbounded" />
+				</xs:sequence>
+				<xs:attribute name="currency" use="required" type="xs:string" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="MemberRun">
+		<xs:sequence>
+			<xs:element name="step" minOccurs="0" maxOccurs="unbounded" type="Step" />
+		</xs:sequence>
+		<xs:attribute name="email" use="required" type="xs:string" />
+		<xs:attribute name="name" use="optional" type="xs:string" />
+		<xs:attribute name="status" use="required" type="MemberStatus" />
+		<xs:attribute name="endReference" use="optional" type="xs:IDREF" />
+		<xs:attribute name="language" use="required" type="xs:string" />
+		<xs:attribute name="appId" use="required" type="xs:string" />
+		<xs:attribute name="avatarUrl" use="optional" type="xs:string" />
+		<xs:attribute name="userData" use="optional" type="xs:string" />
+	</xs:complexType>
+
+	<xs:complexType name="MessageFlowRun">
+		<xs:sequence>
+			<xs:element name="definition" minOccurs="1" maxOccurs="unbounded" type="MessageFlowDefinition" />
+			<xs:element name="memberRun" minOccurs="1" maxOccurs="unbounded" type="MemberRun" />
+		</xs:sequence>
+		<xs:attribute name="launchTimestamp" use="required" type="xs:long" />
+		<xs:attribute name="serviceName" use="optional" type="xs:string" />
+		<xs:attribute name="serviceDisplayEmail" use="optional" type="xs:string" />
+		<xs:attribute name="serviceEmail" use="optional" type="xs:string" />
+		<xs:attribute name="serviceData" use="optional" type="xs:string" />
+	</xs:complexType>
+
+	<xs:element name="messageFlowDefinition" type="MessageFlowDefinition" />
+	<xs:element name="messageFlowRun" type="MessageFlowRun" />
+	<xs:element name="messageFlowDefinitionSet" type="MessageFlowDefinitionSet" />
+
+</xs:schema>

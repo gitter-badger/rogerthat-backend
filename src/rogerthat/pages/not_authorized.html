@@ -1,0 +1,85 @@
+{% extends "base_base.html" %} 
+{% block body %}
+{% if not SmartphoneChoice %}
+<div class="span-24 last">
+	<div class="span-24 last center2">Thank you for pre-registering!<br><br></div>
+	<div class="span-8">&nbsp;</div>
+	<div class="span-8 small_center" style="text-align: left;">
+		Rogerthat will be available on<br>all major smartphone platforms.<br><br>
+		Which smartphone do you use?<br>
+		<form method="post">
+		<input id="iphone" type="radio" name="type" value="iphone" />&nbsp;<label for="iphone" class="mclabel">iPhone</label><br>
+		<input id="android" type="radio" name="type" value="android" />&nbsp;<label for="android" class="mclabel">Android</label><br>
+		<input id="blackberry" type="radio" name="type" value="blackberry" />&nbsp;<label for="blackberry" class="mclabel">Blackberry</label><br>
+		<input id="windowsphone" type="radio" name="type" value="windowsphone" />&nbsp;<label for="windowsphone" class="mclabel">Windows Phone</label><br>
+		<input id="symbian" type="radio" name="type" value="symbian" />&nbsp;<label for="symbian" class="mclabel">Symbian</label><br>
+		<input id="palm" type="radio" name="type" value="palm" />&nbsp;<label for="palm" class="mclabel">Palm</label><br>
+		<input id="other" type="radio" name="type" value="other" checked/>&nbsp;<label for="other" class="mclabel">Other</label><br>
+		<input type="submit">
+		</form>
+	</div>
+	<div class="span-8 last">&nbsp;</div>
+</div>
+{% else %}
+<div class="span-24 last">
+	<div class="span-4">&nbsp;</div>
+	<div class="span-16 center2">
+		<table>
+			<tr>
+				<td>
+					<img src="/static/images/logo_big.png" />
+				</td>
+				<td class="center" style="width: 390px">
+					Rogerthat<br><br>Next-generation<br>social messaging
+				</td>
+			</tr>
+			<tr><td colspan="2">&nbsp;</td></tr>
+			<tr >
+				<td class="center" colspan="2">coming soon ...</td>
+			</tr>
+			<tr><td colspan="2">&nbsp;</td></tr>
+			<tr><td colspan="2">&nbsp;</td></tr>
+			<tr>
+				<td colspan="2">
+					<td class="small_center" colspan="2">Don't forget to share Rogerthat with your friends on <a id="feed_facebook" class="green_link">facebook</a> and <a id="feed_twitter" class="green_link" target="_blank" href="http://twitter.com/share?url=https%3A%2F%2Frogerth.at&text=Check+out+Rogerthat%2C+and+don%27t+forget+to+pre-register+at+https%3A%2F%2Frogerth.at+%21&via=rogerth_at">twitter</a>!
+						<div id="fb-root"></div>
+						<script src="http://connect.facebook.net/en_US/all.js">
+						</script>
+						<script type="text/javascript">
+<!--
+google.setOnLoadCallback(function () {
+	FB.init({ 
+        appId:'188033791211994', cookie:true, 
+        status:true, xfbml:true 
+     });
+	$("#feed_facebook").click(function () {
+		FB.ui({ 
+			method: 'feed',
+			picture: 'https://rogerth.at/static/images/logo_big.png',
+			link: 'https://rogerth.at',
+			caption: 'Share Rogerthat with your friends on facebook',
+			description: 'Rogerthat: Next-generation social messaging',
+            message: "Check out Rogerthat, and don't forget to pre-register at https://rogerth.at !"});
+	});
+});
+-->
+						</script>
+						<!-- AddThis Button BEGIN -->
+						<!-- 
+						<div class="addthis_toolbox addthis_default_style">
+						<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+						<a class="addthis_button_tweet"></a>
+						<a class="addthis_counter addthis_pill_style"></a>
+						</div>
+						<script type="text/javascript">var addthis_config = {"data_track_clickback":true};</script>
+						<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4db94b7653aacbae"></script>
+						-->
+						<!-- AddThis Button END -->
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div class="span-4 last">&nbsp;</div>
+</div>
+{% endif %}
+{% endblock %}

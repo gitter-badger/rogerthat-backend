@@ -1,0 +1,11 @@
+Prezado,
+
+A partir de hoje, você pode usar o aplicativo '{{ profile.name }}'.
+Nosso aplicativo funciona em {{ app.name }} {% if app.type == app.APP_TYPE_CITY_APP %}Cidade{% else %}app{% endif %}. A instalação no seu smartphone funciona da seguinte maneira:
+
+Passo 1. Instale o aplicativo {{ app.name }} {% if app.type == app.APP_TYPE_CITY_APP %}Cidade{% else %}app{% endif %} gratuitamente:
+{{ BASE_URL }}/install?a={{ app.app_id }}&emailPasso 2. Abra {{ app.name }} {% if app.type == app.APP_TYPE_CITY_APP %}Cidade{% else %}app{% endif %} e procure '{{ profile.name }}' em '{% if app.type == app.APP_TYPE_CITY_APP %}{{ localized_organization_type }}{% else %}Serviços{% endif %}'.
+
+{% if message %}{{ message }}
+
+{% endif %}{{ profile.name }}

@@ -1,0 +1,98 @@
+<div id="profileContainer" class="span-18 last">
+	<link rel="stylesheet" href="/static/css/imgareaselect/imgareaselect-default.css" />
+	<script type="text/javascript" src="/static/js/jquery.imgareaselect.min.js"></script>
+	<script type="text/javascript" src="/static/js/jquery.imgareaselect.pack.js"></script>
+    <script type="text/javascript" src="/static/js/profile.js"></script>
+    <div class="topbar">
+
+	    <div class="topgrop nosep">
+			<button class="save_button" style="float: right">Save settings</button>
+			<button id="change_pwd" style="float: left">Change password</button>
+	    </div>
+
+	    <div class="topgrop block human_users_only" style="display: none">
+	    	<div class="title">Profile identification</div>
+	    	<table>
+	    		<tr>
+	    			<td style="width: 300px;">
+						<label>Email:</label>&nbsp;<span id="email"></span><br>
+	    			</td>
+	    			<td>
+	    				<div id="passport_container">
+							<label>Your personal Rogerthat Passport:</label><br>
+							<a target="_blank"><img id="passport" alt="Rogerthat Passport" style="width: 100px" /></a>
+						</div>
+	    			</td>
+	    		</tr>
+	    	</table>
+	    </div>
+ 
+	    <div class="topgrop block human_users_only" style="display: none">
+	    	<div class="title">Profile configuration</div>
+	    	<table>
+	    		<tr>
+	    			<td style="width: 300px;">
+						<label>Name:</label>
+						<input id="name" type="text" style="width: 200px;"/>
+						<span id="nameErrorMsg" class="mcerror" style="display:none">
+							Name is a required field, should not contain an &apos;@&apos; and is max 50 characters!
+						</span>
+						<br>
+						<br>
+	    			</td>
+	    			<td>
+						<label style="float: left; position: relative; top: 12px;">Profile picture:<br>(click to modify)</label>
+						<div style="width: 50px; float:left;">
+							<div id="avatar_div" class="action-link" style="overflow: hidden; width: 50px; height: 50px; float: left; position: relative">
+								<img id="avatar" style="position: relative" width="50px" height="50px"/>
+							</div>
+						</div>
+	    			</td>
+	    		</tr>
+	    		<tr>
+	    			<td>
+						<label>Language:</label>
+						<select id="language"></select>
+	    			</td>
+	    			<td>&nbsp;</td>
+	    		</tr>
+	    	</table>
+	    </div>
+
+	    <div class="topgrop block service_users_only" style="display: none">
+	    	<div class="title">Profile configuration</div>
+			<table>
+	    		<tr>
+	    			<td style="width: 300px;">
+						<label>Email:</label>&nbsp;<span id="email"></span>
+	    			</td>
+	    			<td>
+	    				<label style="float: left; position: relative; top: 12px;">Profile picture:<br>(click to modify)</label>
+						<div style="width: 50px; float:left;">
+							<div id="avatar_div" class="action-link" style="overflow: hidden; width: 50px; height: 50px; float: left; position: relative">
+                                <img id="avatar" style="position: relative" width="50px" height="50px"/>
+							</div>
+						</div>
+	    			</td>
+	    		</tr>
+	    	</table>
+	    </div>
+
+	    <div class="topgrop nosep">
+			<button class="save_button" style="float: right">Save settings</button>
+	    </div>
+	</div>
+
+    <!-- dialogs -->
+	<div id="createAvatarDialog" style="display: none;">
+		<span id="errormessage" class="mcerror"></span><br>
+		1: Upload image:
+		<iframe id="profileAvatarHiddenUploadFrame" name="profileAvatarHiddenUploadFrame" style="width: 0px; height: 0px; border: 0px; color: #fff; padding: 0px"></iframe>
+		<form id="uploadForm" target="profileAvatarHiddenUploadFrame" enctype="multipart/form-data" method="post" action="/mobi/profile/avator/post">
+			<input id="newAvatar" name="newAvatar" type="file" />
+		</form><br>
+		2: Select area to use for your profile picture:<br>
+		<img id="avatarUpload" style="width: 200px; border:1px; border-color: #000; border-style: solid;" src="/static/images/unknown_avatar.png"/>
+		<img id="avatarSelectionArea" style="display: block; max-width: 400px; max-height: 400px; border:1px; border-color: #000; border-style: solid;"/>
+	</div>
+</div>

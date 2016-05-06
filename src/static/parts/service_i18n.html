@@ -1,0 +1,43 @@
+<div id="serviceI18nContainer" class="span-18 last">
+    <script type="text/javascript" src="/static/js/service_i18n.js"></script>
+	<div id="serviceLanguagesContainer">
+		<h3>Supported Languages</h3>
+		<div class="span-17 last">
+		    <div style="float:left;">Default language: <strong id="default_language">&lt;not set&gt;</strong></div>
+		    <div style="float:right;"><a href="mailto:info@mobicage.com" class="action-link">Contact us</a> to modify your default language</div><br><br>
+		    <div style="float:left; clear:both;">Other languages:</div>
+			<div style="float:left;" id="supported_languages_list">
+                <div id="service_languages_list" style="margin-left: 8px"></div>
+                <div id="all_languages_list">
+                </div>
+			</div>
+		</div>
+	</div>
+	<br>&nbsp;<br>
+	<div id="uploadContainer">
+		<h3>Import translations</h3>
+		<div class="span-17 last">
+			<iframe id="hiddenUploadFrame" name="serviceI18nContainerHiddenUploadFrame" style="width: 0px; height: 0px; border: 0px; color: #fff; padding: 0px"></iframe>
+			<form id="upload" method="post" enctype="multipart/form-data" target="serviceI18nContainerHiddenUploadFrame" action="/mobi/service/translations/upload">
+				<input id="file" type="file" name="file" accept="application/vnd.ms-excel" style="width:100%"/>
+				<span id="file_error" class="mcwarning" style="display: none;">* select a MS Excel file</span>
+			</form>
+			<button id="upload_button">Import MS Excel translation file</button>
+			<span id="upload_error" class="mcwarning" style="display: none;"></span>
+		</div>
+	</div>
+	<br>&nbsp;<br>
+	<div id="downloadContainer">
+		<h3>Export translations</h3>
+		<button id="download_button">Export MS Excel translation file</button>
+	</div>
+	<div id="removeLanguageDialog" style="display:none">
+	   <div>
+	       Are you sure you wish to remove '<span></span>' as a supported language?<br>
+	       All translations of language '<span></span>' will be removed.<br><br>
+	       You can download the translation file to obtain a backup of the translations.
+	       <br>
+	       <a id="download_translations" href="#" class="action-link">Download translations</a>
+	   </div>
+	</div>
+</div>

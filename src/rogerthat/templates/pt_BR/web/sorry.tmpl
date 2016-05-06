@@ -1,0 +1,10 @@
+{% extends "base_base_mobile_simple_no_javascript.html" %}
+
+{% block body %}
+<p>{{ app.name }} é atualmente compat’vel apenas com iPhone e Android.</p>
+<p>Instale o aplicativo <b>"{{ app.name }}"</b> no seu telefone e continue com o passo 2 no seu {{ invitation_kind }}.</p>
+<p>
+  <a href="{{ app.ios_appstore_web_uri }}" target="_blank"><img src="/static/images/M_2.png" /></a>
+  <a href="{{ app.android_market_web_uri }}" target="_blank"><img src="/static/images/M_1.png" /></a>
+</p>
+{% endblock %}

@@ -1,0 +1,33 @@
+<html>
+	<body>
+Dear,
+<br><br>
+Here are the statistics of last week for your service{% if service %}<span style="font-weight: bold;"> {{ service|escape }} </span>{% endif %}.
+<br><br>
+<span style="font-weight: bold;">Users:</span><br>
+Today: {{ users.today }} users.<br>
+In the last 7 days you gained {{ users.week.gained }} and lost {{ users.week.lost }} users.<br>
+In the last 30 days you gained {{ users.month.gained }} and lost {{ users.month.lost }} users.<br>
+<br>
+{% if usage_length > 0 %}
+<span style="font-weight: bold;">Usage for the last 7 days:</span><br>
+<table>
+	<tr>
+		<td>Name</td>
+		<td>Usage</td>
+	</tr>
+	{% for stat in usage %}
+	<tr>
+		<td>{{ stat.name }}</td>
+		<td>{{ stat.count }}</span>
+	</tr>
+	{% endfor %}
+</table>
+{% endif %}
+<br>
+Thank you for using Rogerthat!
+<br>
+- The Rogerthat Team<br>
+https://rogerth.at/
+
+</body></html>

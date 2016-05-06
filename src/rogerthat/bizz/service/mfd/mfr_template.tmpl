@@ -1,0 +1,172 @@
+flowDefinition = {
+    context: {{ context|mcjs }},
+    parent_message_key: {{ parent_message_key|mcjs }},
+    lang: {{ f.language|mcjs }},
+    name: {{ f.name|mcjs }},
+    start: {{ f.startReference|mcjs }},
+{% for end in f.end %}
+    {{ end.id|mcjs }}: {
+        step_type: STEP_TYPE_END,
+        id: {{ end.id|mcjs }},
+        wff: {{ end.waitForFollowUpMessage|mcjs }}
+    },
+{% endfor %}
+{% for result in f.resultsFlush %}
+    {{ result.id|mcjs }}: {
+        step_type: STEP_TYPE_FLUSH,
+        id: {{ result.id|mcjs }},
+        reference: {{ result.reference|mcjs }}
+    },
+{% endfor %}
+{% for resultsEmail in f.resultsEmail %}
+    {{ resultsEmail.id|mcjs }}: {
+        step_type: STEP_TYPE_EMAIL,
+        id: {{ resultsEmail.id|mcjs }},
+        reference: {{ resultsEmail.reference|mcjs }},
+        emails : [ {% for emailValue in resultsEmail.email %}{{emailValue.value|mcjs}},{% endfor %} ],
+        email_admins : {{ resultsEmail.emailAdmins|mcjs }}
+    },
+{% endfor %}
+{% for flowCode in f.flowCode %}
+    {{ flowCode.id|mcjs }}: {
+        step_type: STEP_TYPE_FLOW_CODE,
+        id: {{ flowCode.id|mcjs }},
+        exception_reference: {{ flowCode.exceptionReference|mcjs }},
+        outlets : {
+            {% for outlet in flowCode.outlet %}
+            {{ outlet.value|mcjs }}: {{ outlet.reference|mcjs }},
+            {% endfor %}
+        },
+        javascript_code: {{ flowCode.javascriptCode.valueOf_|mcjs }}
+    },
+{% endfor %}
+{% for message in f.message %}
+    {{ message.id|mcjs }}: {
+        step_type: STEP_TYPE_MESSAGE,
+        id: {{ message.id|mcjs }},
+        {% if message.allowDismiss %}
+        dismiss_reference: {{ message.dismissReference|mcjs }},
+        {% endif %}
+        {% if message.answer %}
+        button_references: {
+            {% for answer in message.answer %}
+            {{ answer.id|mcjs }}: {{ answer.reference|mcjs }},
+            {% endfor %}
+        },
+        {% endif %}
+        message_type: MESSAGE_TYPE_MESSAGE,
+        getAction: function (parent_key, key, sender, member_email, context, timestamp) {
+            return {
+                func: 'com.mobicage.capi.messaging.newMessage',
+                request: {
+                    message: {
+                        alert_flags: {{ message|js_mfr_alert_flags }},
+                        branding: {{ message.brandingKey|mcjs }},
+                        buttons: [
+                        {% for answer in message.answer %}
+                        {
+                            id: {{ answer.id|mcjs }},
+                            action: {{ answer.action|mcjs }},
+                            caption: {{ answer.caption|mcjs }},
+                            ui_flags: getUIFlagsByButtonReferenceId({{ answer.reference|mcjs }})
+                        },
+                        {% endfor %}
+                        ],
+                        attachments: [
+                        {% for attachment in message.attachment %}
+                        {
+                            content_type: {{ attachment.contentType|mcjs }},
+                            download_url: {{ attachment.url|mcjs }},
+                            name: {{ attachment.name|mcjs }},
+                            size: {{ attachment.size }}
+                        },
+                        {% endfor %}
+                        ],
+                        context: context,
+                        dismiss_button_ui_flags: {% if message.allowDismiss %}getUIFlagsByButtonReferenceId({{ message.dismissReference|mcjs }}){% else %}0{% endif %},
+                        flags: {{ message|js_mfr_flags }},
+                        key: key,
+                        members: [{
+                            acked_timestamp: 0,
+                            button_id: null,
+                            custom_reply: null,
+                            member: member_email,
+                            received_timestamp: 0,
+                            status: 0
+                        }],
+                        message: {{ message.content.valueOf_|mcjs }},
+                        message_type: 1,
+                        parent_key: parent_key,
+                        sender: sender,
+                        threadTimestamp: 0,
+                        thread_size: 0,
+                        timeout: 0,
+                        timestamp: timestamp
+                    }
+                }
+            };
+        }
+    },
+{% endfor %}
+{% for message in f.formMessage %}
+    {{ message.id|mcjs }}: {
+        step_type: STEP_TYPE_MESSAGE,
+        id: {{ message.id|mcjs }},
+        button_references: {
+             negative: {{ message.negativeReference|mcjs }},
+             positive: {{ message.positiveReference|mcjs }}
+        },
+        message_type: MESSAGE_TYPE_FORM,
+        getAction: function (parent_key, key, sender, member_email, context, timestamp) {
+            return {
+                func: {{ message.form|js_mfr_form_func }},
+                request: {
+                    form_message: {
+                        alert_flags: {{ message|js_mfr_alert_flags }},
+                        branding: {{ message.brandingKey|mcjs }},
+                        context: context,
+                        flags: {{ message|js_mfr_flags }},
+                        form: {
+                            positive_button: {{ message.form.positiveButtonCaption|mcjs }},
+                            positive_confirmation: {% if message.form.positiveButtonConfirmation %}{{ message.form.positiveButtonConfirmation|mcjs }}{% else %}null{% endif %},
+                            javascript_validation: {% if message.form.javascriptValidation %}{{ message.form.javascriptValidation|mcjs }}{% else %}null{% endif %},
+                            positive_button_ui_flags: getUIFlagsByButtonReferenceId({{ message.positiveReference|mcjs }}),
+                            negative_button: {{ message.form.negativeButtonCaption|mcjs }},
+                            negative_confirmation: {% if message.form.negativeButtonConfirmation %}{{ message.form.negativeButtonConfirmation|mcjs }}{% else %}null{% endif %},
+                            negative_button_ui_flags: getUIFlagsByButtonReferenceId({{ message.negativeReference|mcjs }}),
+                            type: {{ message.form|js_mfr_form_type }},
+                            widget: {{ message.form|js_mfr_form_widget_json|safe }}
+                        },
+                        key: key,
+                        member: {
+                            acked_timestamp: 0,
+                            button_id: null,
+                            custom_reply: null,
+                            member: member_email,
+                            received_timestamp: 0,
+                            status: 0
+                        },
+                        message: {{ message.content.valueOf_|mcjs }},
+                        message_type: 2,
+                        parent_key: parent_key,
+                        sender: sender,
+                        threadTimestamp: 0,
+                        thread_size: 0,
+                        timestamp: timestamp,
+                        attachments: [
+                        {% for attachment in message.attachments %}
+                        {
+                            content_type: {{ attachment.contentType|mcjs }},
+                            download_url: {{ attachment.url|mcjs }},
+                            name: {{ attachment.name|mcjs }},
+                            size: {{ attachment.size }}
+                        },
+                        {% endfor %}
+                        ],
+                    }
+                }
+            };
+        }
+    },
+{% endfor %}
+};

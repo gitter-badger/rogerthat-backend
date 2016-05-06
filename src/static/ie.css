@@ -1,0 +1,105 @@
+.content {margin-top:0px !important; }
+
+#content_introduction a {color: #00A0FF;}
+
+#signupbox_name, #signupbox_email {width: 330px !important;}
+
+#signupbox_submit {float: right;}
+
+.med, #left, #body { float:none ;}
+#left { margin-left:0px; width:220px;}
+#contentContainer { top:0px; position: absolute; margin-top:0px;}
+
+.recipients  { float:left;}
+
+#newmessage_members {  /*margin-top:-20px; */}
+#menuContainer { margin-top:10px;}
+
+div.mcrootmessage .k { left:43px;  margin-left:-61px;}
+.new_button_area { background:#005181 !important;}
+.messagebox textarea, .recipients input { margin-left:-10px  !important; }
+
+
+
+
+.mcbranded  { position: static !important;  z-index:10;}
+
+#msg { z-index:1;  width:525px !important; float:left !important; }
+#msg  iframe { width:100% !important; /*height:75px !important;*/}
+#msg  p { width:100% !important;} 
+/*
+.mcmessagemembers  .mcmessagememberavatar {margin-top:-10px !important; margin-left:-10px !important; float:none !important; } */
+
+.mcmessagetools, .mcmessagetools * { width:20px !important;}
+
+
+#header { position: relative !important; margin-top:-8px;}
+.buble { position:  relative !important;  margin-bottom:-65px; }
+div.mcmessagemembers .messagebutton p { margin-bottom:0px !important; padding-bottom:6px !important; height: auto !important;}
+div.mcsenderavatar { margin-right:0px !important;} 
+.mcmessagemembers  .mcmessagememberavatar { margin-right:5px !important;}
+#menuContainer  hr{  margin-bottom:-20px;}
+#menuContainer  hr{  margin-bottom:-20px;}
+/*.mcmessagemembers .mcmessagememberavatar  { background:red;  position:absolute; top:0px;} */
+.messagebutton { margin-bottom:3px !important; margin-left:0px !important;}
+.mcrootmessage hr { margin-bottom:-30px !important;}
+.mcrootmessage  .replyPlaceholder {}
+
+.mcmessagemembers { position: static !important; right:0px; width: auto !important; float:right !important; }
+.mcmessagemembers br { display:block; clear:both;}
+.mcmessagemembers  div { float:right !important; clear:none  !important;}
+div.mcmessagemembers  div.mcmessagememberavatar {  margin-right:5px !important; position:  static !important; float:right !important; clear:none !important;}
+.new_button_area div label { color:#fff !important; margin-top:-5px !important; margin-left:5px; margin-right:20px;}
+.new_button_area div input { width:400px !important; margin-top:2px;} 
+.replyPlaceholder .new_button_area div input { width:345px !important; margin-top:2px;} 
+.#mainWidget .messagebuttonwidget { width:543px !important;}
+
+.replyPlaceholder { }
+.replyPlaceholder .new_button_area { width:200px;}
+div.replyPlaceholder .messagebox textarea {  width:498px; padding-left:10px;}
+#services_scrollable div.scroller-control  a { width:22px !important;}
+.scroller-content { width:155px !important; }
+.mclock {  top:0px;}
+#newmessage_buttons div { width:auto !important; background:#1674a5; border:1px solid #00a8ff; float:left !important; margin-right:5px;  }
+..messagebutton {  background:#1674a5 !important; border:1px solid #00a8ff;}
+#newmessage_buttons div span { color:#fff !important;}
+#type_fr, #type_problem { background:none !important; width:auto !important;}
+
+
+.mcrootmessage, .topic{ position:  relative  !important;}
+ body { position: absolute  !important; width:1000px !important;} 
+#loginbox span.ui-button-text { padding: 0.1em  1em ; }
+.scroller-control  { margin-left:0px !important;}
+.serviceLabel { float:left !important; margin-top:-30px; margin-left: 40px !important;}
+#services_scrollable { height:97px !important;  overflow:hidden; }
+
+.scroller-content a { margin-top:-12px;}
+#services { padding-top:12px;}
+#log { margin-right:0px !important;}
+
+#resetpassword td { text-align:center;}
+#resetpassword  input, #resetpassword  button { width:100%;}
+#resetpassword  button { padding-top:0px; padding-bottom:0px;}
+#servicePanelContainer #generateKey, #servicePanelContainer .ui-button-text {  float:left !important; width:160px !important;  }
+#messageFlowDesignContainer table thead tr th, #serviceQRCodesContainer table thead tr th, 
+.serviceUsersContainer table thead tr th, #serviceLogsContainer table thead tr th, #detail table thead tr th, #serviceIdentitiesContainer table thead tr th { background-color: #446000 !important;}
+#instructions  { width:250px !important;  float:left !important; margin-left:420px !important; margin-top:-730px !important; }
+#editor { margin-top:20px !important;}
+#instructions input { margin-left:-430px; width:178px; }
+#uploadContainer  
+{
+    
+    background: none repeat scroll 0 0 #116895;
+    border: 1px solid #0E3852;
+    float: left;
+    margin-bottom: 10px;
+    padding: 10px;
+    width: 100% !important;
+    }
+    
+    #create_new, #open_designer { margin-top:-18px;}
+#servicePanelContainer h3 .ui-panel-rightbox {  display:none !important;}
+#subject { width:100%;}
+
+#friendsContainer .mark div.actions{ width:310px !important;}
+ #friendsContainer .mark div.actions div.span-13  { width:145px !important;}

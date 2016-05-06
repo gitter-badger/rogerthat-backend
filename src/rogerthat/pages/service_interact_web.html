@@ -1,0 +1,98 @@
+{% extends "base_base.html" %}
+
+{% block facebook_header %}
+  	<meta property="og:title" content="{{ service_identity.name }}'s {{ app.name }} action page."/>
+  	<meta property="og:image" content="https://rogerth.at/si/{{ user_code }}/{{ service_interaction_id }}"/>
+  	<meta property="og:url" content="https://rogerth.at/q/s/{{ user_code }}/{{ service_interaction_id }}"/>
+  	<meta property="og:type" content="website"/>
+  	<meta property="og:site_name" content="{{ app.name }}"/>
+  	<meta property="og:description" content="{{ service_interaction_description }}"/>
+  	<meta property="fb:app_id" content="{{ app.facebook_app_id }}"/>
+{% endblock %}
+
+{% block body %}
+<div class="note2">
+{% if not user %}
+	<span>
+		Please log in to connect with {{ service_identity.name }} on {{ app.name }}<br>
+	</span>
+	<br>
+	<table>
+		<tr>
+			<td><b>You</b></td>
+			<td><img src="/static/images/site/plug.png"/></td>
+			<td><img src="/unauthenticated/mobi/cached/avatar/{{ service_identity.avatarId }}" alt="{{ service_identity.name }}"/></td>
+			<td><b>{{ service_identity.name }}</b></td>
+		</tr>
+		<tr>
+			<td colspan="4">{{ service_interaction_description }}</td>
+		</tr>
+	</table>
+	<br>
+	<br>
+	<br>
+	<br>
+	<div style="width: 350px; margin-left: auto; margin-right: auto;">{% include "signupbox.html" %}</div>
+{% else %}
+	{% if not connected %}
+	<span>
+		Connect with {{ service_identity.name }} on {{ app.name }}? <br>
+	</span><br>
+	{% endif %}
+	<table>
+		<tr>
+			<td><b>{{ you.name }}</b></td>
+			<td><img src="/unauthenticated/mobi/cached/avatar/{{ you.avatarId }}" alt="{{ you.name }}"/></td>
+			<td><img src="/static/images/site/plug.png"/></td>
+			<td><img src="/unauthenticated/mobi/cached/avatar/{{ service_identity.avatarId }}" alt="{{ service_identity.name }}"/></td>
+			<td><b>{{ service_identity.name }}</b></td>
+		</tr>
+		<tr>
+			<td colspan="4">{{ service_interaction_description }}</td>
+		</tr>
+	</table>
+	<br/>	
+	<span>
+		<input type="submit" id="connect" value="Start action"/><br>
+		<br>
+	</span>
+	<script type="text/javascript">
+<!--
+$(window).load(function () {
+	$("#connect").button().click(function () {
+		mctracker.call({
+			url: "/mobi/rest/services/poke",
+			type: "POST",
+			data: {
+				data: JSON.stringify({
+					email: "{{ email }}",
+					sid: {{ service_interaction_id }},
+				})
+			},
+			success: function  (data, textStatus, XMLHttpRequest) {
+				$("#connection_initiated_dialog").dialog('open');
+			},
+			error: function (data, textStatus, XMLHttpRequest) { 
+				alert("Connect failed.\nPlease refresh your browser and try again.");
+			}
+		});
+	});
+	$("#connection_initiated_dialog").dialog({
+		autoOpen: false,
+		title: "Congratulations",
+		buttons: {
+			Ok: function () {
+				window.location = "/";
+			}
+		}
+	});
+});
+-->
+	</script>
+	<div id="connection_initiated_dialog">
+	Congratulations, you've started the action with {{ service_identity.name }} successfully.
+	</div>
+{% endif %} 
+</div>
+{% endblock %}
+

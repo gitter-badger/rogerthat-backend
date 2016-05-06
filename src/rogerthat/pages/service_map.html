@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon"  type="image/png" href="/static/images/favicon.png">
+
+    <title>Geolocalization</title>
+	<style>
+	
+	html, body, #map-canvas {
+	  height: 100%;
+	  width: 100%;
+	  margin: 0px;
+	  padding: 0px
+	}
+	      
+	</style>
+</head>
+<body>
+	<div id="map-canvas"></div>
+	<script src="https://maps.googleapis.com/maps/api/js?key={{ maps_key }}&libraries=geometry"></script>
+    <script src="/static/js/jquery-1.6.1.min.js" type="text/javascript"></script>
+    <script src="/static/js/service_map.js"></script> 	
+</body>
+</html>

@@ -1,0 +1,1109 @@
+
+{% extends "base.html" %}
+
+{% block html_header %}
+{% if not is_service %}
+<link href="/static/service_tab.css" rel="stylesheet" type="text/css" />
+{% endif %}
+{% endblock %}
+
+{% block header %}
+{{ block.super }}
+
+<script type="text/javascript"><!--
+
+var initContainersScript = function () {
+
+	$(function () {
+		mctracker.runChannel('{{ token }}');
+		mctracker.initContainers($("#mainContainer"), $("#contentContainer"));
+		$("#menuContainer a.link,a.selected-link").click(menuClick);
+		mctracker.mainHasLoaded();
+        $("#left").show();
+{% if not is_service %}
+		$("#tmi_services").click(function () {
+			$("#tab_with_menu, #tab_with_menu > #left").addClass("mcoutofscreen");
+			$("#tab_without_menu").removeClass("mcoutofscreen");
+			$(this).addClass("selected-link").removeClass("link");
+			$("#tmi_friends").addClass("link").removeClass("selected-link");
+			selectedTab = TAB_SERVICES;
+			mctracker.broadcast({
+				type: 'rogerthat.ui.changedTab',
+				tab: selectedTab
+			});
+		});
+		$("#tmi_friends").click(function () {
+			$("#tab_with_menu, #tab_with_menu > #left").removeClass("mcoutofscreen");
+			$("#tab_without_menu").addClass("mcoutofscreen");
+			$(this).addClass("selected-link").removeClass("link");
+			$("#tmi_services").addClass("link").removeClass("selected-link");
+			selectedTab = TAB_FRIENDS_AND_ME;
+			mctracker.broadcast({
+				type: 'rogerthat.ui.changedTab',
+				tab: selectedTab
+			});
+		});
+{% else %}
+		mctracker.loadContainer("servicePanelContainer", "/static/parts/service.html");		
+{% endif %}
+		mctracker.setOnLoadContainer(function (container) {
+			$("#menuContainer a.selected-link").removeClass("selected-link").addClass("link");
+			$("#menuContainer a[container='"+container+"']").removeClass("link").addClass("selected-link");
+		});
+	});
+	
+};
+
+initContainersScript();
+
+{% if not is_service %}
+var processMessage = function (data) {
+	var friendName = function (friend) {
+		return friend.name || friend.qualifiedIdentifier || friend.email;
+	};
+	if (data.type == 'rogerthat.friend.shareLocation') {
+		var name = friendName(data.friend);
+		$.gritter.add({
+			title: 'Location sharing',
+			sticky: true,
+			image: '/unauthenticated/mobi/cached/avatar/'+data.friend.avatarId,
+			text: data.friend.sharesLocation ? name + ' has enabled you to track his/her location.' : name + ' has revoked you from tracking his/her location.'
+		});
+	} else if ( data.type == 'rogerthat.friend.ackRequestLocationSharing') {
+		var name = friendName(data.friend);
+		$.gritter.add({
+			title: 'Location sharing',
+			sticky: true,
+			image: '/unauthenticated/mobi/cached/avatar/'+data.friend.avatarId,
+			text: name + ' has ' + (data.friend.sharesLocation ? 'approved' : 'denied') + ' your request to share his/her location with you.'
+		});
+	} else if (data.type == 'rogerthat.friend.breakFriendShip') {
+		var type = (data.friend.type == FRIEND_TYPE_SERVICE) ? 'services' : 'friends';
+		if (isFriend(data.friend.email)) {
+			$.gritter.add({
+				title: 'Friends',
+				sticky: true,
+				image: '/unauthenticated/mobi/cached/avatar/'+data.friend.avatarId,
+				text: friendName(data.friend) + ' has been removed from your '+type+' list.'
+			});
+		}
+		if (data.friend.type == FRIEND_TYPE_USER) {
+			var friendsContainer = $("#friends");
+			$("div[friend='"+data.friend.email+"']", friendsContainer).fadeOut('slow', function() {
+				$(this).detach();
+			});
+			for (var fi in friendCache) {
+				if (friendCache[fi].email == data.friend.email) {
+					friendCache.splice(fi,1);
+					break;
+				}
+			}
+		}
+	} else if (data.type == 'rogerthat.friend.ackInvitation') {
+		if (data.actor == 'invitor') {
+			$.gritter.add({
+				title: 'Friends',
+				sticky: true,
+				image: '/unauthenticated/mobi/cached/avatar/'+data.friend.avatarId,
+				text: friendName(data.friend) + ' has accepted your friend invitation.'
+			});
+		}
+		if (data.friend.type == FRIEND_TYPE_USER) {
+			addFriendToMenu($("#friends"), data.friend);
+			friendCache.push(data.friend);
+		}
+	} else if (data.type == 'rogerthat.registration.finished') {
+		$("a.link.mobreg")
+			.attr("container", "settingsContainer")
+			.attr("container-url", "/static/parts/settings.html")
+			.text("Mobile devices")
+			.removeClass("mobreg")
+			.addClass("mobset");
+	}
+};
+
+mctracker.registerMsgCallback(processMessage);
+{% endif %}
+
+// --></script>
+<script type="text/javascript" src="/static/js/jquery.ba-resize.js"></script>
+{% if not is_service %}
+<script type="text/javascript" src="/static/js/avatarplugin.js"></script>
+<script type="text/javascript" src="/static/js/scrollbar/jquery.mousewheel.min.js"></script>
+<link href="/static/css/scrollbar/jquery-scroller.css" rel="stylesheet" type="text/css" />
+<link href="/static/topmenu.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/static/js/scrollbar/jquery-scroller.js"></script>
+<script type="text/javascript" src="/static/js/jquery.ThreeDots.min.js"></script>
+<script type="text/javascript" src="/static/js/bettergrow.js"></script>
+<script type="text/javascript" src="/static/js/service_page.js"></script>
+<script type="text/javascript" src="/static/js/brandingplugin.js"></script>
+<script type="text/javascript" src="/static/js/screenplugin.js"></script>
+<script type="text/javascript" src="/static/js/jquery.appear-1.1.1.js"></script>
+<script type="text/javascript" src="/static/js/services.js"></script>
+{% else %}
+<link href="/static/mfd/CodeMirror/lib/codemirror.css" rel="stylesheet" type="text/css" />
+<link href="/static/mfd/CodeMirror/theme/default.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/static/js/ui.panel.js"></script> <!-- Import should remain here -->
+<script type="text/javascript" src="/static/js/edit_service_identities.js"></script> <!-- Import should remain here -->
+<script type="text/javascript" src="/static/js/service_roles.js"></script> <!-- Import should remain here -->
+{% endif %}
+
+<script type="text/javascript">
+<!--
+var FRIEND_TYPE_USER = 1;
+var FRIEND_TYPE_SERVICE = 2;
+
+var STATUS_RECEIVED = 1;
+var STATUS_ACKED = 2;
+var STATUS_READ = 4;
+var STATUS_DELETED = 8;
+
+var friendCache = null;
+var serviceCache = null;
+var messages = [];
+var messages_cursor = null
+var messages_limit = -1;
+
+var loggedOnUserEmail = '{{user.email}}';
+$.ajaxSetup({
+    headers: { 'X-Logged-In-As': loggedOnUserEmail }
+});
+var loggedOnUserAvatarId = '{{myavatarid}}';
+var loggedOnUserName = '{{myname|safe}}';
+
+var menuClick = function (evt) {
+	var link = $(evt.target);
+	if (link.attr('container')) {
+		mctracker.loadContainer(link.attr('container'), link.attr('container-url'));
+	} else if (link.attr('toggle')) {
+		var target = $('#' + link.attr('toggle'));
+		if (target) {
+			target.is(':visible') ? target.slideUp() : target.slideDown();
+		}
+	}
+};
+
+var renderAvatar = function (friend, isFriend, name, left, resize) {
+	var tooltip = null;
+	var click = null;
+	var nameHtmlEncoded = mctracker.htmlEncode(name);
+	if (isFriend) {
+		if ( friend.type == FRIEND_TYPE_USER ) {
+			tooltip = "Click to send message to " + nameHtmlEncoded;
+			click = addFriendAsRecipient(friend);
+		} 
+	} else {
+		tooltip = "Click to add " + nameHtmlEncoded + " as your friend";
+		click = function() {inviteFriend(friend.email, name)};
+	}
+	return $('<div/>').avatar({
+		friend : friend,
+		left : left,
+		resize : resize,
+		tooltip : tooltip,
+		click : click 
+	});
+};
+
+var getFriendName = function (friend, full) {
+    if (friend.name) {
+        if (full)
+            return friend.name + ' (' + friend.email + ')';
+        else
+            return friend.name;
+    } else {
+        if (friend.email == "dashboard@rogerth.at") {
+            return full ? "Rogerthat Dashboard (dashboard@rogerth.at)" : "Rogerthat Dashboard";
+        } else
+            return friend.email;
+    }
+};
+
+var sortByName = function (l,r) {
+	var ln = getFriendName(l).toLowerCase();
+	var rn = getFriendName(r).toLowerCase();
+	if (ln == rn)
+		return 0;
+	else
+		return ln < rn ? -1 : 1;
+};
+
+{% if not is_service %}
+$(window).mousewheel(function (e) {
+	// find out if we are hovering the scrollable area
+	return ! $(e.target).parents().is("#scrollable") && ! $(e.target).parents().is("#services_scrollable");
+});
+
+var TAB_SERVICES = 0;
+var TAB_FRIENDS_AND_ME = 1;
+var selectedTab = TAB_SERVICES;
+
+var a2p_inbox_length = 0;
+var p2p_inbox_length = 0;
+
+var setBadge = function (badge, number) {
+	badge.removeClass().addClass('badge'); // removes all classes + add 'badge'
+	if (number > 0) {
+		var number_string = number > 99 ? '99+' : '' + number;
+		badge.show().text(number_string).addClass('badge_' + number_string.length);
+	} else {
+		badge.hide();
+	}
+};
+
+var increase_a2p_badge = function (v) {
+	a2p_inbox_length += v == undefined ? 1 : v;
+	setBadge($("#tmi_services .badge"), a2p_inbox_length);
+};
+
+var increase_p2p_badge = function (v) {
+	p2p_inbox_length += v == undefined ? 1 : v;
+	setBadge($("#tmi_friends .badge"), p2p_inbox_length);
+};
+
+var decrease_p2p_badge = function (v) {
+	increase_p2p_badge(v == undefined ? -1 : -v);
+};
+
+var decrease_a2p_badge = function (v) {
+	increase_a2p_badge(v == undefined ? -1 : -v);
+};
+
+var recalculate_p2p_badge = function () {
+	p2p_inbox_length = 0;
+	$.each(messages, function(i, parent_message) {
+		if (is_thread_dirty(parent_message))
+			p2p_inbox_length++;
+	});
+	setBadge($("#tmi_friends .badge"), p2p_inbox_length);
+}
+
+var is_message_dirty = function (msg) {
+	if (msg.sender == loggedOnUserEmail)
+		return false;
+	var myMember = getMyMemberStatus(msg);
+	return myMember && (myMember.status & STATUS_READ) != STATUS_READ;
+};
+
+var is_thread_dirty = function (parent_message) {
+	if (is_message_dirty(parent_message))
+		return true;
+	for (var i in parent_message.messages)
+		if (is_message_dirty(parent_message.messages[i]))
+			return true;
+	return false;
+};
+{% endif %}
+
+$(function () {
+{% if not is_service %}
+	var loading_label = $("<div></div>").addClass("label").text("Loading ...");
+	var loading_pb = $("<div></div>").addClass("progressbar").progressbar({ value: 0 });
+	var loader = $("<div></div>").addClass("screen_loader").append(
+			$("<div></div>").addClass("screen_loader_content").append(loading_label).append(loading_pb));
+	$("body").prepend(loader);
+	$("body").show();	
+	var loading = true;
+	var progress = 0;
+	var load = function () {
+		if (loading) {
+			progress ++;
+			loading_pb.progressbar('value', progress);
+			setTimeout(load, 100);
+		}
+	};
+	setTimeout(load, 100);
+
+	$('#scrollable').Scroller({
+	    'speed': 4
+	});
+
+    var sendInvitation = function () {
+        var email = $("#friendEmail").val();
+        var name = $("#viaUserCodeName").text();
+        mctracker.call({
+            type: "POST",
+            url: "/mobi/rest/friends/invite",
+            data: { 
+                data: JSON.stringify({
+                    email: email,
+                    message: $("#friendInviteText").val(),
+                    tag: null
+                })
+            },
+            success: function (data, textStatus, XMLHttpRequest) {
+                if (! data) {
+                    $("#addFriendsDialog").dialog('close');
+                    $.gritter.add({
+                        title: 'Friend invitation',
+                        text: 'Invitation was sent successfully to ' + (email.match(/@/) ? email : name)
+                    });
+                } else {
+                    $("#friendInviteError").text(data);
+                }
+            },
+            error: function (data, textStatus, XMLHttpRequest) { 
+                alert("Invitation failed.\nPlease refresh your browser and try again.");
+            }
+        });
+    };
+
+    $("#addFriendsDialog #friendEmail").keypress(function (e) {
+        var code = e.keyCode || e.wich;
+        if (code == 13) {
+            sendInvitation();
+        }
+    });
+
+	$("#addFriendsDialog").dialog({
+		autoOpen: false,
+		modal: true,
+		dragable: false,
+		resizable: false,
+		title: 'Invite friend',
+		width: 430,
+		height: 500,
+		buttons: {
+			'Cancel': function () {
+				$("#addFriendsDialog").dialog('close');
+			},
+			'Invite': sendInvitation
+		},
+		open: function () {
+			$("#friendEmail").focus();
+		}
+	});
+	$("#addFriend").click(function () {
+		inviteFriend('');
+	});
+
+	mctracker.call({
+		hideProcessing: true,
+		url: "/mobi/rest/web/load",
+		success: function (data, textStatus, XMLHttpRequest) {
+			console.log('Got ' + data.messages.messages.length + ' p2p messages, ' + data.service_inbox.messages.length
+				+ ' a2p message and ' + data.friends.length + ' friends');
+			messages = data.messages.messages;
+			messages_cursor = data.messages.cursor;
+			messages_limit = data.messages.batch_size;
+
+			recalculate_p2p_badge();
+			increase_a2p_badge(data.service_inbox.messages.length);
+
+			friendCache = [];
+			serviceCache = [];
+			$.each(data.friends, function (i, friend) {
+				friend.existence = FRIEND_EXISTENCE_ACTIVE;
+				(friend.type == FRIEND_TYPE_SERVICE ? serviceCache : friendCache).push(friend);
+			});
+
+			serviceCache = serviceCache.sort(sortByName);
+			friendCache = friendCache.sort(sortByName);
+
+			var friendsContainer = $("#friends");
+			$.each(friendCache, function (i, friend) {
+				addFriendToMenu(friendsContainer, friend);
+			});
+
+			loadUserStatus(data.user_status);
+			loadStartScreen(data.service_inbox);
+
+			mctracker.loadContainer("messagingContainer", "/static/parts/messaging.html", function () {
+				loading = false;
+				loading_pb.progressbar('value', progress);
+				setTimeout(function () {
+					$("#tab_without_menu").removeClass("mcoutofscreen");
+					$("#tab_with_menu, #tab_with_menu > #left").addClass("mcoutofscreen");
+					loader.fadeOut('fast', function () {
+						loader.remove();
+					});
+				}, 250);
+			});
+		}
+	});
+{% endif %}
+	$("#editProfile").click(editProfile);
+	$("#myProfile").click(editProfile);
+});
+
+var editProfile = function () {
+	mctracker.loadContainer("profileContainer", "/static/parts/profile.html");	
+};
+
+var loadUserStatus = function (data) {
+	var configure_profile = function () {
+		var gritter_id = $.gritter.add({
+			title: 'Notice',
+			text: '<a class="mcgreen action-link editProfile">Configure</a> your profile so other users can identify you easily!',
+			sticky: true,
+			position: 'top-right'
+		});
+		$("a.editProfile").click(function () {
+			$.gritter.remove(gritter_id, { 
+				fade: true, // optional
+				speed: 'slow' // optional
+			});
+			editProfile();
+		});
+	};
+	if (data.profile) {
+		$("#profileName").text(data.profile.name);
+		if (data.profile.name == loggedOnUserEmail || ! data.has_avatar ) {
+			configure_profile();
+		} 
+	} else {
+		configure_profile();
+	}
+{% if not is_service %}
+	if ( data.registered_mobile_count == 0) {
+		var gritter_id = $.gritter.add({
+			title: 'Notice',
+			text: '<a class="mcgreen action-link registerMobile">Register</a> your iPhone or Android to use Rogerthat on your mobile!',
+			sticky: true,
+			position: 'top-right'
+		});	
+		$("a.registerMobile").click(function () {
+			$.gritter.remove(gritter_id, { 
+				fade: true, // optional
+				speed: 'slow' // optional
+			});
+			mctracker.loadContainer("registerDeviceContainer", "/static/parts/register_device.html");
+		});
+	}
+{% endif %}
+};
+
+var inviteFriend = function (email, name) {
+	var viaEmail = !email || email.match(/@/);
+	if (viaEmail) {
+		$("#viaEmail").show();
+		$("#viaUserCode").hide();
+	} else {
+		$("#viaEmail").hide();
+		$("#viaUserCode").show()
+		$("#viaUserCodeName").text(name);
+	}
+	$("#friendEmail").val(email);
+	$("#friendInviteText").val('');
+	$("#friendInviteError").text('');
+	$("#addFriendsDialog").dialog('open');
+};
+
+{% if not is_service %}
+var addFriendAsRecipient = function (friend) {
+	return function() {
+		mctracker.getContainer("messagingContainer", null, function(container) {
+			mctracker.loadContainer("messagingContainer", null);
+			container.addRecipient(friend, true);
+		});
+	};
+};
+
+var getFriendByEmail = function (email, me) {
+	for (var f in friendCache) {
+		if (friendCache[f].email == email)
+			return friendCache[f];
+	}
+	for (var f in serviceCache) {
+		if (serviceCache[f].email == email)
+			return serviceCache[f];
+	}
+	if (email == loggedOnUserEmail)
+		return {
+			email: email,
+			avatarId: loggedOnUserAvatarId,
+			name: me ? "me" : loggedOnUserName
+		}
+	else return {
+		email: email,
+		avatarId: -1
+	};
+};
+
+var isFriend = function (email) {
+	for (var f in friendCache) {
+		if (friendCache[f].email == email)
+			return true;
+	}
+	for (var f in serviceCache) {
+		if (serviceCache[f].email == email)
+			return true;
+	}
+	return false;
+};
+
+var addFriendToMenu = function (friendsContainer, friend) {
+	var name = getFriendName(friend);
+	var html = renderAvatar(friend, true, name, true, true);
+	friendsContainer.append(html);
+};
+
+{% endif %}
+//-->
+</script>
+{% if not is_service %}
+<script type="text/javascript" src="/static/js/messaging.js"></script>
+{% endif %}
+
+
+{% if not is_service %}
+<div class="top-menu">
+	<div id="tmi_services" class="top-menu-item selected-link left-menu-item">
+		<div><a class="servcon">Services</a></div>
+		<div class="badge" style="display: none"></div>
+	</div>
+	<div id="tmi_friends" class="top-menu-item link right-menu-item">
+		<div><a class="friends">Friends &amp; me</a></div>
+		<div class="badge" style="display: none"></div>
+	</div>
+</div>
+{% else %}
+    {% if is_trial_service %}
+<div id="svcIsTrial" class="buble">
+    <div>
+        <span>This is a trial service. Contact Mobicage staff on <a href="mailto:info@mobicage.com">info@mobicage.com</a> for production Rogerthat services.</span>
+    </div>&nbsp;
+    <div id="pending" class="pending" style="display: none;">pending updates</div>
+</div>
+    {% endif %}
+<div id="svcUpdatesPending" style="display: none;" class="buble">
+    <div>
+        <span>There are pending changes. Click here to publish them.</span>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block menu %}
+{% if not is_service %}
+<hr/>
+<a style="  " class="selected-link dashboard" container="messagingContainer">Messages</a>
+<hr/>
+<a class="link friends" container="friendsContainer" container-url="/static/parts/friends.html">My friends</a>
+<a class="link addfriends" container="addfriendsContainer" container-url="/static/parts/addfriends.html">Invite friends</a>
+<a class="link map" container="friendMapContainer" container-url="/static/parts/friendMap.html">Friends on map</a>
+<div id="scrollable">                  
+	<div id="friends" class="span-4 last"></div>
+</div>
+<hr/>
+{% if mobile_count %}
+<a class="link mobset" container="settingsContainer" container-url="/static/parts/settings.html">Mobile devices</a>
+{% else %}
+<a class="link mobreg" container="registerDeviceContainer" container-url="/static/parts/register_device.html">Register mobile device</a>
+{% endif %}
+<br><a class="link feedback" container="feedbackContainer" container-url="/static/parts/feedback.html">Feedback</a>
+{% else %}
+<hr/>
+<a class="selected-link servcon" container="servicePanelContainer" container-url="/static/parts/service.html">Configuration</a>
+<a class="selected-link roles" container="serviceRolesContainer" container-url="/static/parts/service_roles.html">Roles</a>
+<a class="selected-link friends" container="serviceIdentitiesContainer" container-url="/static/parts/service_identities.html">Identities</a>
+<a class="selected-link i18n" container="serviceI18nContainer" container-url="/static/parts/service_i18n.html">Multi-language</a>
+<a class="selected-link logs" container="serviceLogsContainer" container-url="/static/parts/service_logs.html">Logs</a>
+<hr/>
+<a class="selected-link menu" container="serviceMenuContainer" container-url="/static/parts/service_menu.html">Service menu</a>
+<a class="selected-link brand" container="brandingContainer" container-url="/static/parts/branding.html">Screen branding</a>
+<a class="selected-link qrtemplates" container="qrTemplatesContainer" container-url="/static/parts/qrtemplates.html">QR code branding</a>
+<a class="selected-link qrcodes" container="serviceQRCodesContainer" container-url="/static/parts/service_qr_codes.html">My QR codes</a>
+<a class="selected-link mfd" container="messageFlowDesignContainer" container-url="/static/parts/message_flow_designer.html">Message flows</a>
+<a class="selected-link broadcast" container="serviceBroadcastContainer" container-url="/static/parts/service_broadcast.html">Broadcast center</a>
+<hr/>
+<a class="link documentation" href="http://www.rogerthat.net/developers/getting-started/" target="blanc">Developer documentation</a>
+<hr/>
+<a class="link feedback" container="feedbackContainer" container-url="/static/parts/feedback.html">Send feedback</a>
+{% endif %}
+
+{% endblock %}
+
+{% block content %}
+	<div class="span-18 last screen" id="mainContainer">
+	</div>
+{% endblock %}
+
+{% block tab_without_menu %}
+{% if not is_service %}
+	<div id="tab_services">
+		<div id="svc_list" class="screen">
+		</div>
+		<div id="svc_menu" class="screen">
+		</div>
+		<div id="svc_display" class="screen">
+		</div>
+	</div>
+	<div id="svc_service_list_item">
+		<div>
+			<div class="serviceItem">
+				<div class="serviceAvatar"></div>
+				<div class="serviceStatus"><img /></div>
+				<div class="serviceName"></div>
+			</div>
+		</div>
+	</div>
+	<div id="svc_start_screen_template" style="display: none;">
+		<div>
+			<div class="list_section category" style="border-top: 0px;">Inbox</div>
+			<div class="svc_inbox"><div class="no_messages">no messages</div></div>
+			<div class="list_section category">My services</div>
+			<div class="svc_service_list"></div>
+		</div>
+	</div>
+	<div id="svc_search_template" style="display: none;">
+		<div>
+			<div class="svc_search_bar">
+				<button class="svc_search_button">Search</button>
+				<div class="svc_search_textfield_container">
+					<input type="text" class="svc_search_textfield" />
+				</div>
+			</div>
+			<div class="svc_search_results">
+			</div>
+		</div>
+	</div>
+	<div id="svc_menu_template" style="display: none;">
+		<div class="svc_menu">
+			<iframe class="svc_menu_branding" scrolling="no"></iframe>
+			<div class="svc_menu_title light">Service menu</div>
+			<div class="svc_menu_items"></div>
+			<div class="svc_pages"><img src="/static/images/current_page.png" /><img src="/static/images/other_page.png" /></div>
+		</div>
+	</div>
+	<div id="service_about_template" style="display: none;">
+		<div class="about">
+			<div class="service_details">
+				<div class="service_avatar"></div>
+				<div class="service_name"></div>
+				<div class="service_email"></div>			
+			</div>
+			<iframe id="service_about_branding" scrolling="no"></iframe>
+			<div class="service_description"></div>			
+		</div>
+	</div>
+	<div id="service_inbox_message_template" style="display: none;">
+		<div class="inbox_message">
+			<div class="sender_avatar"></div>
+			<div class="inbox_message_details">
+				<div class="inbox_message_timestamp"></div>
+				<div class="inbox_message_recipients"></div>
+				<div class="inbox_message_message"></div>
+			</div>
+		</div>
+	</div>
+	<div id="message_thread_template" style="display: none;">
+		<div class="thread">
+			<div class="thread_timestamp"></div>
+			<div class="thread_recipients"></div>
+			<div class="thread_status"></div>
+			<div class="thread_message_count"></div>
+			<div class="thread_message"></div>
+		</div>
+	</div>
+	<div id="message_thread_details_template" style="display: none;">
+		<div>
+			<div class="thread_header">
+				<div class="thread_sender_avatar"></div>
+				<div class="thread_recipients"></div>
+			</div>
+			<div class="thread_messages"></div>
+		</div>
+	</div>
+	<div id="message_thread_message_template" style="display: none;">
+		<div class="thread_message_container">
+			<div class="thread_message_timestamp"></div>
+			<div class="thread_message"></div>
+			<span class="thread_message_answer"></span>
+		</div>
+	</div>
+	<div id="message_template" style="display: none;">
+		<div class="message">
+			<div class="header">
+				<div class="sender_avatar"></div>
+				<div class="sender_name"></div>
+				<div class="timestamp"></div>
+			</div>
+			<iframe id="message_branding" scrolling="no"></iframe>
+			<div class="message_text"></div>
+			<div class="message_form light"></div>
+			<div class="message_buttons"></div>
+			<div class="recipients"></div>
+		</div>
+	</div> 
+	<div id="message_form_template" style="display: none;"><!-- 
+{% templatetag openvariable %}if message.form.type == "text_line" || message.form.type == "text_block" || message.form.type == "auto_complete"{% templatetag closevariable %}
+				{% templatetag openvariable %}if message.form.type == "text_block"{% templatetag closevariable %}<textarea{% templatetag openvariable %}else{% templatetag closevariable %}<input{% templatetag openvariable %}/if{% templatetag closevariable %}
+					id="${% templatetag openbrace %}widgetId{% templatetag closebrace %}"
+					type="text"
+					class="mcform_${% templatetag openbrace %}message.form.type{% templatetag closebrace %}"
+	{% templatetag openvariable %}if message.isLocked{% templatetag closevariable %}
+					disabled="true"
+	{% templatetag openvariable %}else{% templatetag closevariable %}
+					placeholder="${% templatetag openbrace %}message.form.widget.place_holder{% templatetag closebrace %}"
+	{% templatetag openvariable %}/if{% templatetag closevariable %}
+					maxlength="${% templatetag openbrace %}message.form.widget.max_chars{% templatetag closebrace %}"
+	{% templatetag openvariable %}if message.form.type == "text_block"{% templatetag closevariable %}
+					>${% templatetag openbrace %}message.form.widget.value{% templatetag closebrace %}</textarea>
+	{% templatetag openvariable %}else{% templatetag closevariable %}
+					value="${% templatetag openbrace %}message.form.widget.value{% templatetag closebrace %}" />
+	{% templatetag openvariable %}/if{% templatetag closevariable %}
+
+{% templatetag openvariable %}else message.form.type == "single_select" || message.form.type == "multi_select"{% templatetag closevariable %}
+	{% templatetag openvariable %}each(i, choice) message.form.widget.choices{% templatetag closevariable %}
+				<input
+					id="${% templatetag openbrace %}widgetId{% templatetag closebrace %}_${% templatetag openbrace %}choice.value{% templatetag closebrace %}"
+					type={% templatetag openvariable %}if message.form.type == "multi_select"{% templatetag closevariable %}"checkbox"{% templatetag openvariable %}else{% templatetag closevariable %}"radio"{% templatetag openvariable %}/if{% templatetag closevariable %}
+		{% templatetag openvariable %}if message.isLocked{% templatetag closevariable %}
+					disabled="true"
+		{% templatetag openvariable %}/if{% templatetag closevariable %}
+		{% templatetag openvariable %}if choice._selected{% templatetag closevariable %}
+					checked="true"
+		{% templatetag openvariable %}/if{% templatetag closevariable %}
+					value="${% templatetag openbrace %}choice.value{% templatetag closebrace %}"
+					encoded_value="${% templatetag openbrace %}choice.encoded_value{% templatetag closebrace %}"
+					name="${% templatetag openbrace %}widgetId{% templatetag closebrace %}" />
+				<label for="${% templatetag openbrace %}widgetId{% templatetag closebrace %}_${% templatetag openbrace %}choice.value{% templatetag closebrace %}">${% templatetag openbrace %}choice.label{% templatetag closebrace %}</label>
+				<br/>
+	{% templatetag openvariable %}/each{% templatetag closevariable %}
+
+{% templatetag openvariable %}else message.form.type == "date_select"{% templatetag closevariable %}
+				<label id="${% templatetag openbrace %}widgetId{% templatetag closebrace %}_label" />
+	{% templatetag openvariable %}if !message.isLocked{% templatetag closevariable %}
+				<br />
+				<div id="${% templatetag openbrace %}widgetId{% templatetag closebrace %}" />
+	{% templatetag openvariable %}/if{% templatetag closevariable %}
+
+{% templatetag openvariable %}else message.form.type == "single_slider" || message.form.type == "range_slider"{% templatetag closevariable %}
+				<div id="${% templatetag openbrace %}widgetId{% templatetag closebrace %}_label" class="mcform_${% templatetag openbrace %}message.form.type{% templatetag closebrace %}" ></div>
+				<div id="${% templatetag openbrace %}widgetId{% templatetag closebrace %}" class="mcform_${% templatetag openbrace %}message.form.type{% templatetag closebrace %}"/>
+
+{% templatetag openvariable %}else message.form.type == "photo_upload"{% templatetag closevariable %}
+	{% templatetag openvariable %}if !message.isLocked{% templatetag closevariable %}
+		<iframe id="photoUploadHiddenUploadFrame" name="photoUploadHiddenUploadFrame" style="width: 0px; height: 0px; border: 0px; color: #fff; padding: 0px"></iframe>
+		<form id="photoUploadForm" enctype="multipart/form-data" method="post" target="photoUploadHiddenUploadFrame">
+    		<input id="newPhotoUpload" name="file" type="file" accept="image/*"/>
+        </form>
+	{% templatetag openvariable %}/if{% templatetag closevariable %}
+
+
+{% templatetag openvariable %}/if{% templatetag closevariable %}
+-->
+	</div>
+	<div id="root_message_template" style="display: none;">
+<!--
+<div class="topic{% templatetag openvariable %}if message.branding{% templatetag closevariable %} mcoutofscreen{% templatetag openvariable %}/if{% templatetag closevariable %}" messagekey="${message.key}">
+	<div class="mcrootsenderavatar">
+		<div class="mcsenderavatar" sender="${message.sender}">
+		</div>
+	</div>
+	<div class="mcrootmessage" >
+		<img src="/static/images/site/k.png" class="k" />
+		<div class="mcmessagecontent mcrootmessagecontent{% templatetag openvariable %}if needsAnswer && ! message.branding{% templatetag closevariable %} mcneedsanswer{% templatetag openvariable %}/if{% templatetag closevariable %}">
+			{% templatetag openvariable %}if message.isLocked{% templatetag closevariable %}
+				<img src="/static/images/site/loked-icn.png" class="mclock" title="Message is locked"/>
+			{% templatetag openvariable %}else{% templatetag closevariable %}
+				<img src="/static/images/site/lok-icn.png" class="mclock" title="Lock this message"/>
+			{% templatetag openvariable %}/if{% templatetag closevariable %}
+			<div class="mcmessagemembers{% templatetag openvariable %}if message.branding{% templatetag closevariable %} mcbranded{% templatetag openvariable %}/if{% templatetag closevariable %}">
+				{% templatetag openvariable %}each message.buttons{% templatetag closevariable %}
+				<div class="messagebutton{% templatetag openvariable %}if message.enableButtons && message.myMember.button_id != $value.id{% templatetag closevariable %} mcclickable{% templatetag openvariable %}/if{% templatetag closevariable %}"
+					button="${% templatetag openbrace %}$value.id{% templatetag closebrace %}">
+					<p>
+						${% templatetag openbrace %}$value.caption{% templatetag closebrace %}
+					</p>
+				</div>
+				{% templatetag openvariable %}each $value.members{% templatetag closevariable %}
+				<div friend="${% templatetag openbrace %}$value.member{% templatetag closebrace %}" class="mcmessagememberavatar">
+				</div>
+				{% templatetag openvariable %}/each{% templatetag closevariable %}
+				<br>
+				{% templatetag openvariable %}/each{% templatetag closevariable %}
+                {% templatetag openvariable %}if addDismissThreadButton{% templatetag closevariable %}
+                <div class="messagebutton mcrogerthat" button="">
+                    <p>Roger that!</p>
+                </div>
+                {% templatetag openvariable %}/if{% templatetag closevariable %}
+			</div>
+			<div id="msg"{% templatetag openvariable %}if message.branding{% templatetag closevariable %} class="mcbranded"{% templatetag openvariable %}/if{% templatetag closevariable %}>
+				{% templatetag openvariable %}if message.branding{% templatetag closevariable %}
+				<iframe src="/branding/${% templatetag openbrace %}message.branding{% templatetag closebrace %}/branding_web.html" style="height: 50px;" scrolling="no" frameborder="0"></iframe>
+				{% templatetag openvariable %}else{% templatetag closevariable %}
+				<span class="mcmessagetimestamp mcblue"></span><span class="mcmessagesender mcblue"></span><span class="member-summary"></span>
+				<p class="msg">
+					{% templatetag openvariable %}html message.htmlizedMessage{% templatetag closevariable %}
+				</p>
+				{% templatetag openvariable %}/if{% templatetag closevariable %}
+			</div>
+			{% templatetag openvariable %}if message.form{% templatetag closevariable %}
+			<div id="msg_widget" class="msg_widget" form_message_key="${% templatetag openbrace %}message.key{% templatetag closebrace %}" />
+			{% templatetag openvariable %}/if{% templatetag closevariable %}
+		</div>
+		<div id="messagesToolbar">
+			<a id="viewAllMessages"></a>
+		</div>
+		<div id="messagesPlaceholder" style="display: none"></div>
+		<hr>
+		<div class="mcthreadsummary">
+			<div class="replyPlaceholder"></div>
+			<div class="mcmessagetools">
+				{% templatetag openvariable %}if message.canReply{% templatetag closevariable %}
+				<div class="mcreply">
+					<a id="reply" class="action-link mcreply">reply</a>
+				</div>
+				{% templatetag openvariable %}/if{% templatetag closevariable %}
+				<div class="mcreply">
+					<a id="delete" class="action-link mcdelete">delete</a>
+				</div>
+			</div>
+			<div class="othermembers">
+			{% templatetag openvariable %}each message.members{% templatetag closevariable %}
+			<div member="${% templatetag openbrace %}$value.member{% templatetag closebrace %}" class="mcmessagememberavatar ${% templatetag openbrace %}$value.textstatus{% templatetag closebrace %}">
+			</div>
+			{% templatetag openvariable %}/each{% templatetag closevariable %}
+			</div>
+		</div>
+	</div>
+</div>
+-->
+	</div>
+	<div id="child_message_template" style="display: none;">
+<!--
+<div class="mcmessage{% templatetag openvariable %}if message.branding{% templatetag closevariable %} mcoutofscreen{% templatetag openvariable %}/if{% templatetag closevariable %}" messagekey="${% templatetag openbrace %}message.key{% templatetag closebrace %}">
+    <div class="mcmessagecontent{% templatetag openvariable %}if needsAnswer && ! message.branding{% templatetag closevariable %} mcneedsanswer{% templatetag openvariable %}/if{% templatetag closevariable %}">
+    	<hr>
+		{% templatetag openvariable %}if message.isLocked{% templatetag closevariable %}
+			<img src="/static/images/site/loked-icn.png" class="mclock" title="Message is locked"/>
+		{% templatetag openvariable %}else{% templatetag closevariable %}
+			<img src="/static/images/site/lok-icn.png" class="mclock" title="Lock this message"/>
+		{% templatetag openvariable %}/if{% templatetag closevariable %}
+        <div class="mcmessagemembers{% templatetag openvariable %}if message.branding{% templatetag closevariable %} mcbranded{% templatetag openvariable %}/if{% templatetag closevariable %}">
+            {% templatetag openvariable %}each message.buttons{% templatetag closevariable %}
+            <div class="messagebutton{% templatetag openvariable %}if message.enableButtons && message.myMember.button_id != $value.id{% templatetag closevariable %} mcclickable{% templatetag openvariable %}/if{% templatetag closevariable %}"
+                button="${% templatetag openbrace %}$value.id{% templatetag closebrace %}">
+                <p>
+                	${% templatetag openbrace %}$value.caption{% templatetag closebrace %}
+                </p>
+            </div>
+       		{% templatetag openvariable %}each $value.members{% templatetag closevariable %}
+            <div friend="${% templatetag openbrace %}$value.member{% templatetag closebrace %}" class="mcmessagememberavatar">
+            </div>
+        	{% templatetag openvariable %}/each{% templatetag closevariable %}
+        	<br>
+            {% templatetag openvariable %}/each{% templatetag closevariable %}
+            {% templatetag openvariable %}if addDismissThreadButton{% templatetag closevariable %}
+            <div class="messagebutton mcrogerthat" button="">
+            	<p>
+                	Roger that!
+                </p>
+            </div>
+            {% templatetag openvariable %}/if{% templatetag closevariable %}
+        </div>
+        <div id="msg"{% templatetag openvariable %}if message.branding{% templatetag closevariable %} class="mcbranded"{% templatetag openvariable %}/if{% templatetag closevariable %}>
+            {% templatetag openvariable %}if message.branding{% templatetag closevariable %}
+            <iframe src="/branding/${% templatetag openbrace %}message.branding{% templatetag closebrace %}/branding_web.html" style="height: 50px;" scrolling="no" frameborder="0"></iframe>
+            {% templatetag openvariable %}else{% templatetag closevariable %}
+            <div class="mcsenderavatar" sender="${% templatetag openbrace %}message.sender{% templatetag closebrace %}">
+            </div>
+            <span class="mcmessagetimestamp mcblue"></span><span class="mcmessagesender mcblue"></span>
+            <p class="msg">
+                {% templatetag openvariable %}html message.htmlizedMessage{% templatetag closevariable %}
+            </p>
+            {% templatetag openvariable %}/if{% templatetag closevariable %}
+        </div>
+		{% templatetag openvariable %}if message.form{% templatetag closevariable %}
+		<div id="msg_widget" class="msg_widget" form_message_key="${% templatetag openbrace %}message.key{% templatetag closebrace %}" />
+		{% templatetag openvariable %}/if{% templatetag closevariable %}
+    </div>
+</div>
+-->
+	</div>
+	<div id="button_confirm_dialog">
+		<span id="button_confirmation_text"/>
+	</div>
+{% else %}
+
+
+    <div id="coordsHelpDialog" style="display: none;">
+        Search a location on <a href="https://maps.google.com/" class="action-link" target="_blank">Google Maps</a>.
+        <br>Click right mouse button and select <i>"What's here?"</i>.
+        <br>Copy-paste the coordinates from Google.
+    </div>
+
+    <div id="addressLookupDialog" style="display: none;">
+        Enter address:
+        <input id="address" type="text" style="width: 200px;"/>
+        <a id="lookup_address" class="action-link">Lookup</a>
+        <br>
+        <br>
+        Enter coordinates: <img id="coords_help" src="/static/images/help.png" style="width: 16px; cursor: pointer;"/>
+        <input id="coords" type="text" style="width: 200px;"/>
+        <a id="map_result" target="_blank" class="action-link">View</a>
+        <br>
+        <span id="address_error" class="mcerror"></span>
+    </div>
+    
+    <div id="supportedAppsDialog" style="display:none">
+        Supported apps:
+        <div id="appsContainer"></div>
+    </div>
+
+    <div id="addAdminEmailDialog" style="display: none;">
+        Email:
+        <input id="admin_email" type="text" style="width: 300px;"/>
+        <br>
+        <span id="admin_email_error" class="mcerror"></span>
+    </div>
+
+    <div id="addBeaconDialog" style="display: none;">
+        <table>
+            <tr>
+                <td>UUID:</td>
+                <td><input id="beacon_uuid" type="text" style="width: 300px;"/></td>
+            </tr>
+            <tr>
+                <td>Major:</td>
+                <td><input id="beacon_major" type="text" style="width: 150px;"/></td>
+            </tr>
+            <tr>
+                <td>Minor:</td>
+                <td><input id="beacon_minor" type="text" style="width: 150px;"/></td>
+            </tr>
+            <tr>
+                <td>Tag:</td>
+                <td><input id="beacon_tag" type="text" style="width: 300px;"/></td>
+            </tr>
+        </table>
+        <span id="beacon_error" class="mcerror"></span>
+    </div>
+
+    <div id="createIdentityDialog" style="display: none;">
+        <div>
+            <label>Identity:</label>
+            <input id="identity_identifier" type="text" />
+            <div id="identity_identifier_required" class="mcerror">* required field</div>
+
+            <label>Name:</label>
+            <input id="identity_name" type="text" />
+            <div id="identity_name_required" class="mcerror">* required field</div>
+
+            <label>Description:</label>
+            <textarea rows="3" id="identity_description"></textarea>
+            <input id="identity_description_checkbox" type="checkbox" class="hidefordefault"/>
+            <label class="checkbox hidefordefault" for="identity_description_checkbox">use default</label>
+
+            <label>Description branding:</label>
+            <select id="identity_description_branding">no branding</select>
+            <input id="identity_description_branding_checkbox" type="checkbox" class="hidefordefault"/>
+            <label class="checkbox hidefordefault" for="identity_description_branding_checkbox">use default</label>
+
+            <label>Identity email:</label>
+            <input id="identity_qualified_identifier" type="text" />
+
+            <hr />
+
+            <label>Menu branding:</label>
+            <select id="identity_menu_branding">no branding</select>
+            <input id="identity_menu_branding_checkbox" type="checkbox" class="hidefordefault"/>
+            <label class="checkbox hidefordefault" for="identity_menu_branding_checkbox">use default</label>
+
+            <label>Phone number:</label>
+            <input id="identity_phone_number" type="text"/>
+            <input id="identity_phone_number_checkbox" type="checkbox" class="hidefordefault"/>
+            <label class="checkbox hidefordefault" for="identity_phone_number_checkbox">use default</label>
+
+            <label>Phone number popup text:</label>
+            <input id="identity_phone_popup_text" type="text"/>
+            <input id="identity_phone_popup_text_checkbox" type="checkbox" class="hidefordefault"/>
+            <label class="checkbox hidefordefault" for="identity_phone_popup_text_checkbox">use default</label>
+
+            <label>Recommendation:</label>
+            <input id="identity_share_enabled" type="checkbox" style="margin-left:0px;"/>
+            <label class="checkbox" for="identity_share_enabled">Users can recommend this identity</label>
+
+            <hr />
+
+            <label>Service discovery:</label>
+            <div style="float:left; width:312px;">
+                <input id="identity_search_enabled" type="checkbox" style="margin-left:0px;"/>
+                <label class="checkbox" for="identity_search_enabled">Users can discover this identity</label>
+            </div>
+            <input id="identity_search_checkbox" type="checkbox" class="hidefordefault"/>
+            <label class="checkbox hidefordefault" for ="identity_search_checkbox">use default</label>
+
+            <label>Keywords:</label>
+            <textarea rows="3" id="identity_search_keywords"></textarea>
+
+            <label>Locations:</label>
+            <br>
+            <table>
+                <thead>
+                    <tr>
+                        <th width="200px">Address</th>
+                        <th>Coordinates</th>
+                        <th>&nbsp;</th>
+                        <th><a id="identity_add_search_location" class="action-link" style="float: right;">Add</a></th>
+                    </tr>
+                <thead>
+                <tbody id="identity_search_locations"></tbody>
+            </table>
+
+            <hr />
+
+            <label>Supported apps:</label>
+            <input id="identity_supported_apps_hidden" type="hidden"/>
+            <div class="identity_div">
+                <p id="identity_supported_apps">&nbsp;</p>
+                <br>
+                <a id="identity_supported_apps_update" class="action-link">Update</a>
+            </div>
+            <input id="identity_supported_apps_checkbox" type="checkbox" class="hidefordefault"/>
+            <label class="checkbox hidefordefault" for="identity_supported_apps_checkbox">use default</label>
+
+            <hr />
+
+            <label>Admin emails:</label>
+            <br>
+            <table>
+                <thead>
+                    <tr>
+                        <th width="200px">Admin emails</th>
+                        <th><a id="identity_add_admin_email" class="action-link" style="float: right;">Add</a></th>
+                    </tr>
+                <thead>
+                <tbody id="identity_admin_emails"></tbody>
+            </table>
+
+            <label>Email statistics:</label>
+            <div style="float:left; width:312px;">
+                <input id="identity_email_statistics" type="checkbox" style="margin-left:0px;"/>
+                <label class="checkbox" for="identity_email_statistics">Admins get statistics once a week</label>
+            </div>
+            <input id="identity_email_statistics_checkbox" type="checkbox" class="hidefordefault"/>
+            <label class="checkbox hidefordefault" for ="identity_email_statistics_checkbox">use default</label>
+
+            <hr />
+
+            <label>Beacons:</label>
+            <br>
+            <table style="width: 100%;">
+                <thead>
+                    <tr>
+                        <th width="300px">UUID</th>
+                        <th>Major</th>
+                        <th>Minor</th>
+                        <th width="300px">Tag</th>
+                        <th><a id="identity_add_beacon" class="action-link" style="float: right;">Add</a></th>
+                    </tr>
+                <thead>
+                <tbody id="identity_beacons"></tbody>
+            </table>
+
+        </div>
+    </div>
+{% endif %}
+{% endblock %}
+{% block footer %}{% endblock %}
+{% block body_end %}
+{% if is_service %}
+<!-- begin olark code --><script data-cfasync="false" type='text/javascript'>/*{literal}<![CDATA[*/
+window.olark||(function(c){var f=window,d=document,l=f.location.protocol=="https:"?"https:":"http:",z=c.name,r="load";var nt=function(){f[z]=function(){(a.s=a.s||[]).push(arguments)};var a=f[z]._={},q=c.methods.length;while(q--){(function(n){f[z][n]=function(){f[z]("call",n,arguments)}})(c.methods[q])}a.l=c.loader;a.i=nt;a.p={0:+new Date};a.P=function(u){a.p[u]=new Date-a.p[0]};function s(){a.P(r);f[z](r)}f.addEventListener?f.addEventListener(r,s,false):f.attachEvent("on"+r,s);var ld=function(){function p(hd){hd="head";return["<",hd,"></",hd,"><",i,' onl' + 'oad="var d=',g,";d.getElementsByTagName('head')[0].",j,"(d.",h,"('script')).",k,"='",l,"//",a.l,"'",'"',"></",i,">"].join("")}var i="body",m=d[i];if(!m){return setTimeout(ld,100)}a.P(1);var j="appendChild",h="createElement",k="src",n=d[h]("div"),v=n[j](d[h](z)),b=d[h]("iframe"),g="document",e="domain",o;n.style.display="none";m.insertBefore(n,m.firstChild).id=z;b.frameBorder="0";b.id=z+"-loader";if(/MSIE[ ]+6/.test(navigator.userAgent)){b.src="javascript:false"}b.allowTransparency="true";v[j](b);try{b.contentWindow[g].open()}catch(w){c[e]=d[e];o="javascript:var d="+g+".open();d.domain='"+d.domain+"';";b[k]=o+"void(0);"}try{var t=b.contentWindow[g];t.write(p());t.close()}catch(x){b[k]=o+'d.write("'+p().replace(/"/g,String.fromCharCode(92)+'"')+'");d.close();'}a.P(2)};ld()};nt()})({loader: "static.olark.com/jsclient/loader0.js",name:"olark",methods:["configure","extend","declare","identify"]});
+/* custom configuration goes here (www.olark.com/documentation) */
+olark.identify('9877-477-10-9367');/*]]>{/literal}*/</script><noscript><a href="https://www.olark.com/site/9877-477-10-9367/contact" title="Contact us" target="_blank">Questions? Feedback?</a> powered by <a href="http://www.olark.com?welcome" title="Olark live chat software">Olark live chat software</a></noscript><!-- end olark code -->
+{% endif %}
+{% endblock %}

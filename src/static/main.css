@@ -1,0 +1,565 @@
+html { overflow-y: scroll; }
+
+img.avatar.rounded {
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+    width: 50px;
+    height: 50px;
+}
+
+.stick-right {
+text-align: right;
+direction: rtl;
+}
+
+td.form_table
+{
+padding-top: 0px;
+padding-right: 2px;
+padding-bottom: 0px;
+padding-left: 0px;
+}
+
+td.form_label
+{
+text-align: right;
+}
+
+.selected
+{
+	font-weight: bold;
+}
+
+.hint
+{
+	font-style: italic;
+}
+
+div.active-title
+{
+	font-weight: bold;
+	color: black;
+}
+
+div.inactive-title
+{
+	font-weight: lighter;
+	color: gray;
+}
+
+div.messages
+{
+	text-align: center;
+}
+
+.success
+{
+	color: green;
+	font-weight: bold
+}
+
+button.architecture
+{
+	width: 150;
+}
+
+div.screen
+{
+	height: 600px;
+}
+
+div.full
+{
+	width: 100%;
+	height: 100%;
+}
+
+div.loading
+{
+	width: 100%;
+	text-align: center;
+	position: relative;
+	font-size: x-large;
+	font-weight: bold;
+	color: graytext;
+}
+
+.ellipsis {
+  display: block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.mcwarning {
+	color: orange;
+}
+
+.mcerror {
+	color: #f00;
+}
+
+.mcgreen {
+	color: #99CC33;
+}
+
+.mcblue {
+	color: #003058;
+}
+
+.mcdata {
+	color: #99CC33;
+	font-weight: bold;
+}
+
+.mclabel {
+	cursor: pointer;
+	vertical-align: middle;
+}
+
+.mccollabel {
+	text-align: right;
+	color: #003058;
+	vertical-align: top;
+}
+
+.mchoovered {
+	background-color: gray;
+	border-color: #003058;
+}
+
+.message-body {
+	border: thin dotted;
+	border-color: #003058;
+}
+
+.message-header {
+	border: thin dotted;
+	border-color: #003058;
+}
+
+a:link {
+	color: #003058;
+}
+
+a.mcgreen:link {
+	color: #99CC33;
+}
+
+a:visited {
+	color: #003058;
+}
+
+a:hover {
+	color: #99CC33;
+}
+
+a.action-link {
+	color: #00A8FF;
+	cursor: pointer;
+	font-weight: bold;
+	text-decoration: none;	
+}
+
+a.action-link.mcgreen {
+	color: #99CC33;
+	cursor: pointer;
+	font-weight: bold;
+	text-decoration: none;	
+}
+
+div.expander {
+	text-align: center;
+	line-height: 18px;
+	width: 18px;
+	height: 18px;
+	color: white;
+	cursor: pointer;
+	font-weight: bold;
+	text-decoration: none;	
+	font-size: 18px;
+	background-color: rgba(255, 255, 255, 0.2);
+	font-family: monospace;
+	border-radius: 5px;
+	-moz-border-radios: 5px;
+}
+
+.action-link {
+	cursor: pointer;
+}
+
+a.action-link:hover {
+	color: #99CC33;
+}
+
+a.link {
+	color: #003058;
+	cursor: pointer;
+}
+
+a.green_link {
+	color: #99CC33;
+	cursor: pointer;
+}
+
+a.green_link:visited {
+	color: #99CC33;
+	cursor: pointer;
+}
+
+
+a.link:hover {
+	color: #99CC33;
+}
+
+a.selected-link {
+	color: #99CC33;
+	cursor: pointer;
+	font-weight: bold;
+}
+
+.popup {
+	position: absolute;
+}
+
+.mccenter {
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+
+.mccenter-vertical {
+	margin-top: auto;
+	margin-bottom: auto;
+}
+
+.mcfriendbox {
+	border: thin dotted;
+	border-color: #003058;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+.mclink {
+	cursor: pointer;
+}
+
+/* Inspired by http://www.queness.com/post/2294/useful-and-practical-jquery-image-tooltips-tutorial */
+
+.thumbnail-item {
+    position: relative;
+}
+
+.thumbnail-item-left {
+    position: relative;
+    float: left;
+}
+ 
+img.thumbnail-resize {
+    width: 30px;
+    height: 30px;
+    margin: 0 !important;
+}
+
+.thumbnail-item img.thumbnail {
+}
+
+.tooltip {
+    display: none;
+    position: absolute;
+    background: url(/static/images/mcghtp.png) repeat;
+    padding: 5px;
+    z-index: 300;
+}
+
+/* end inspired */
+
+div.box {
+	background-color: #DDDDDD;
+	padding: 10px;
+}
+
+.watermark {
+	color: #DDDDD;
+}
+
+.messagebuttonwidget {
+	background-color: #BBBBBB;
+	padding: 5px;
+	position: relative;
+}
+
+.messagebuttonwidgettooltip {
+	display: none;
+	position: absolute;
+	background: url(/static/images/mcghtp.png) repeat;
+    padding: 5px;
+    z-index: 30;
+}
+
+.messagebutton {
+	background-color: #888888;
+	padding-left: 5px;
+	padding-right: 5px;
+	margin-right: 5px;
+	position: relative;
+	float: left;
+	color: white;
+	text-decoration: none;
+}
+
+.selectedmessagebutton {
+	background-color: #003058;
+	padding: 3px;
+	margin-right: 5px;
+	position: relative;
+	float: left;
+	color: white;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.mcclickable {
+	cursor: pointer;
+	background-color: #99CC33;
+	color: #000000;
+}
+
+.mcclickable:hover {
+	background-color: #AAAAAA;
+}
+
+.messagebutton_badge_delete {
+	position: absolute;
+	cursor: pointer;
+	top: -4px;
+	right: -4px;
+	z-index: 20;
+}
+
+.mcbuttontext {
+	margin: 3px;
+	cursor: pointer;
+}
+
+div.messagebox {
+	position: relative;	
+}
+
+div.charsleft {
+	position: absolute;
+	bottom: 5px;
+	right: 7px;
+}
+
+div.mcrootmessage {
+	/*background-color: #EEEEEE;*/
+	margin-bottom: 10px;
+}
+
+div.mcmessage {
+	background-color: #FFFFFF;
+	padding: 10px;
+	margin-left: 20px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+div.mcmessagecontent {
+	position: relative;
+}
+
+div.mcmessagemembers {
+	float: right;
+	margin-left: 5px;
+}
+
+div.mcmessagebuttons {
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+div.mcmessagemember {
+	background-color: #D0D0D0;
+	margin-bottom: 3px;
+}
+
+div.mcmessagememberavatar {
+	margin: 3px;
+}
+
+div.mcnewchildmessage {
+	margin-top: 10px;
+	padding-left: 10px;
+}
+
+div.mcsenderavatar {
+	float: left;
+	margin-right: 5px;
+	margin-bottom: 2px;
+}
+
+div.mcreply {
+	float: right;
+	clear: both;
+}
+
+div.mclock {
+	float: right;
+	margin-left: 5px;
+}
+
+div.mccustomreply {
+	margin-top: 10px;
+	background-color: #D0D0D0;
+	padding: 5px;
+	margin-left: 15px;
+}
+
+div.frame {
+	position: fixed;
+	z-index: 100;
+	background-position: 100;
+	background-color: white;
+}
+
+div.center {
+	position: absolute;
+	top: 30%;
+	left: 50%;
+	width: 600px;
+	margin-left: -300px;
+	margin-top: -150px;
+	text-align: center;
+	font-family: monospace;
+	font-size: 30px;
+	font-weight: bold;
+	color: #99CC33;
+}
+
+div.center2 {
+	text-align: center;
+	font-family: monospace;
+	font-size: 30px;
+	font-weight: bold;
+	color: #99CC33;
+}
+
+div.center_bottom {
+	position: absolute;
+	bottom: 5%;
+	left: 50%;
+	width: 300px;
+	margin-left: -150px;
+}
+
+td.center {
+	font-family: monospace;
+	font-size: 30px;
+	font-weight: bold;
+	color: #99CC33;
+}
+
+td.small_center {
+	font-family: "Courier new";
+	font-size: 15px;
+	font-weight: bold;
+	color: #003058;
+}
+
+div.small_center {
+	font-family: "Courier new";
+	font-size: 15px;
+	font-weight: bold;
+	color: #003058;
+}
+
+div.mcanswers_popup {
+	display: none;
+	position: absolute;
+	background-color: orange;
+    padding: 5px;
+    z-index: 10;
+    width: auto;
+}
+
+div.mcanswers_popup .mcmessagememberavatar {
+	float: left;
+}
+
+div.mcanswers_popup .answer_detail {
+	float: left;
+}
+
+div.mcreceived_popup .mcmessagememberavatar {
+	float: left;
+}
+
+div.mcreceived_popup .received_detail {
+	float: left;
+}
+
+div.mcreceived_popup {
+	display: none;
+	position: absolute;
+	background-color: orange;
+    padding: 5px;
+    z-index: 10;
+    width: auto;
+}
+
+span.member-summary {
+	margin-left: 5px;
+	color: #88BB36;
+}
+
+#modules * {
+	width: auto !important;
+}
+
+div.msg_widget {
+	margin: 8px 8px;
+	float: none !important;
+	clear: left;
+}
+
+.msg_widget textarea {
+    height:66px;
+    width:100%;
+}
+
+
+/* saf3+, chrome1+ */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+ #messagingContainer .messagebox textarea#newmessage_message { padding-bottom: 18px; resize: none; }
+}
+
+body > div.screen_loader {
+    z-index: 200;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #004A76;
+    padding-top: 10%;
+}
+body > div.screen_loader > div.screen_loader_content {
+    margin: auto;
+    color: white;
+    width: 200px;
+    height: 50px;
+}
+body > div.screen_loader > div.screen_loader_content > div.label { text-align: center; }
+body > div.screen_loader > div.screen_loader_content > div.progressbar { 
+	height: 10px;
+	border: 1px white solid !important;
+	border-radius: 0px !important;
+	-moz-border-radius: 0px !important;
+}
+
+.ui-autocomplete-loading {
+    background: white url('/static/images/ui-anim_basic_16x16.gif') right center no-repeat !important;
+}
+
+

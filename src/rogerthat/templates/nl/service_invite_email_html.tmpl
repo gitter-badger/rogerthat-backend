@@ -1,0 +1,25 @@
+<html>
+  <body>
+    <p>Beste,</p>
+    <p>Vanaf vandaag kun je de "{{ profile.name }} - App" gebruiken.<br>
+Onze applicatie kan u vinden in de {{ app.name }} {% if app.type == app.APP_TYPE_CITY_APP %}City-App{% else %}app{% endif %}. De installatie op je smartphone gebeurt als volgt:</p>
+	<p>
+      <ul>
+        <li>
+          Stap 1. Installeer de {{ app.name }} {% if app.type == app.APP_TYPE_CITY_APP %}City-App{% else %}app{% endif %} gratis:<br>
+          <a href="{{ BASE_URL }}/install?a={{ app.app_id }}&email">{{ BASE_URL }}/install?a={{ app.app_id }}&email</a><br><br>
+        </li>
+        <li>
+		  Stap 2. Open de {{ app.name }} {% if app.type == app.APP_TYPE_CITY_APP %}City-App{% else %}app{% endif %}, en zoek naar '{{ profile.name }}' onder '{% if app.type == app.APP_TYPE_CITY_APP %}{{ localized_organization_type }}{% else %}Diensten{% endif %}'
+        </li>
+      </ul>
+    </p>
+    <p>&nbsp;</p>
+    {% if message %}
+    <p style="background-color: #f0e68c; padding: 10px; margin-left: 20px; border-radius: 15px; margin-right: 20px; padding-left: 20px; -moz-border-radius: 15px;">
+      {{ message }}
+    </p>
+    {% endif %}
+    <p>{{ profile.name }}</p>
+  </body>
+</html>

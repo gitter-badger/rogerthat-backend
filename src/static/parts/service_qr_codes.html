@@ -1,0 +1,57 @@
+<div id="serviceQRCodesContainer">
+	<script type="text/javascript" src="/static/js/service_qr_codes.js"></script>
+	<a id="reload" class="action-link">Refresh List</a> <a id="create_new" class="action-link" style="float: right;">Create new QR code</a>
+	<table>
+		<thead>
+			<tr>
+				<th style="width: 75px;">&nbsp;</th>
+				<th>Identity</th>
+				<th>Description</th>
+				<th>Tag</th>
+ 				<th>Action</th>
+			</tr>
+		</thead>
+		<tbody id="table_body">
+		</tbody>
+	</table>
+	<a id="more" class="action-link">More</a>
+	<div id="createQRCodeDialog" style="display: none;">
+		<table>
+			<tr id="template_row">
+				<td class="td-label">Template:</td>
+				<td><select id="template"></select><span id="template_required" class="mcerror"><br>* required field</span></td>
+			</tr>
+			<tr id="identities_row">
+				<td class="td-label">Identity:</td>
+				<td><select id="identities"></select></td>
+			</tr>
+            <tr>
+                <td class="td-label">Action description:</td>
+                <td><textarea id="cq_new_description" /><span id="description_required" class="mcerror"><br>* required field</span></td>
+            </tr>
+            <tr>
+                <td class="td-label">Action branding:</td>
+                <td><select id="cq_new_branding"></select></td>
+            </tr>
+			<tr>
+				<td class="td-label">Tag:</td>
+				<td><textarea id="cq_new_tag" /><span id="tag_required" class="mcerror"><br>* required field</span></td>
+			</tr>
+			<tr>
+				<td class="td-label">Behavior:</td>
+				<td>
+					<input type="radio" name="qr_behavior" id="qr_radio_web_callback" value="qr_radio_web_callback" checked="true" />
+					<label for="qr_radio_web_callback">Web callback (advanced)</label>
+					<br>
+					<input type="radio" name="qr_behavior" id="qr_radio_start_flow" value="qr_radio_start_flow" />
+					<label for="qr_radio_start_flow">Start flow</label>
+				</td>
+			</tr>
+			<tr id="qr_behavior_start_flow" style="display:none">
+				<td class="td-label">Start flow:</td>
+				<td><select id="static_flow"></select></td>
+			</tr>
+		</table>
+	</div>
+	
+</div>

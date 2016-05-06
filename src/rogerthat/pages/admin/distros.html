@@ -1,0 +1,110 @@
+{% extends "../base.html" %} 
+
+{% block header %}
+{{ block.super }}
+<script type="text/javascript"><!--
+
+$(window).load(function() {
+	$("#publishDialog").dialog({
+		resizable: false,
+		draggable: false,
+		title: 'publish app',
+		autoOpen: false,
+		buttons: {
+			'Ok': function () {
+				var recipients = [];
+				$("#publishDialog input[type=checkbox]:enabled:checked").each(function (index, element) {
+					recipients[recipients.length] = $(element).val();
+				});
+				var id = $("#publishDialog #distroId").val();
+				$.ajax({
+					data: {
+						id: id,
+						to: recipients.join(',')
+					},
+					url: '/mobiadmin/distros/publish',
+					type: 'POST',
+					success: function () {
+						alert("publish successfull");
+						$("#publishDialog").dialog('close');
+					},
+					fail: function () {
+						alert("publish failed");
+					}
+				});
+			},
+			'Cancel': function () {
+				$("#publishDialog").dialog('close');
+			}
+		}
+	});
+	mctracker.mainHasLoaded();
+	$("#left").show();
+
+});
+
+var publish = function (id, version) {
+	$("#publishDialog #distroId").val(id);
+	$("#publishDialog span#version").text(version);
+	$("#publishDialog input[type=checkbox]").attr('checked', false);
+	$("#publishDialog").dialog('open');
+};
+-->
+</script>
+{% endblock %}
+{% block menu %}
+<a href="/mobiadmin/distros" class="selected">Rogerthat distros</a><br>
+<a href="/mobiadmin/users">Beta users</a><br>
+<a href="/mobiadmin/explorer">App engine explorer</a><br>
+{% endblock %} {% block content %}
+
+<p>Post new client package:</p>
+<form method="POST" enctype="multipart/form-data"
+	action="{{ upload_url }}">
+<p>Pick type:<br />
+<input type="radio" name="type" value="1" checked />Android<br />
+<input type="radio" name="type" value="2" />IPhone<br />
+<input type="radio" name="type" value="3" />BlackBerry</p>
+<p>Version:<br />
+<input type="text" name="version" value="1.0" /></p>
+<p>Release notes:<br />
+<textarea rows="10" cols="30" name="notes"></textarea></p>
+<p>Package:<br />
+<input type="file" name="package" /></p>
+<input type="submit" value="upload now" /></form>
+<hr />
+<table>
+	<thead>
+		<tr>
+			<td>Posted by</td>
+			<td>Timestamp</td>
+			<td>Type</td>
+			<td>Version</td>
+			<td>Release Notes</td>
+			<td>Package</td>
+			<td>&nbsp;</td>
+		</tr>
+	</thead>
+	<tbody>
+		{% for distro in distros %}
+		<tr>
+			<td>{{ distro.user }}</td>
+			<td>{{ distro.timestamp }}</td>
+			<td>{{ distro.type }}</td>
+			<td>{{ distro.version }}</td>
+			<td>{{ distro.releaseNotes }}</td>
+			<td><a
+				href="/unauthenticated/mobi/distros/get/{{ distro.id }}">https://mobicagecloud.appspot.com/unauthenticated/mobi/distros/get/{{ distro.id }}</a></td>
+			<td><button onclick="javascript: publish({{ distro.id }}, '{{ distro.version }}');">publish</button></td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+<div id="publishDialog" style="display: none"><input id="distroId" type="hidden">
+	Publish rogerthat <span id="version"></span> to:<br>
+	<input id="chkGeert" type="checkbox" value="geert" checked>Geert<br>
+	<input id="chkCarl" type="checkbox" value="carl" checked>Carl<br>
+	<input id="chkMobicage" type="checkbox" value="mobicage" checked>Mobicage<br>
+	<input id="chkAll" type="checkbox" value="all" checked>Everybody
+</div>
+{% endblock %}

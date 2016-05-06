@@ -1,0 +1,88 @@
+<div id="serviceBroadcastContainer" class="span-18 last">
+    <script type="text/javascript" src="/static/js/service_broadcast.js"></script>
+    <div class="panel" helpUrl="http://www.rogerthat.net/guide/broadcast-center/#Broadcast_types">
+        <h3>Broadcast types</h3>
+        <div class="span-17 last">
+            <ul id="broadcastTypeList">
+            </ul>
+            <br>
+            <a id="addNewBroadcastType" href="javascript:;" class="action-link">Add new broadcast type</a>
+        </div>
+    </div>
+    <br>&nbsp;<br>
+    <div class="panel" helpUrl="http://www.rogerthat.net/guide/broadcast-center/#Test_persons">
+        <h3>Test persons</h3>
+        <div class="span-17 last">
+            <ul id="testPersonList">
+            </ul>
+            <br>
+            <a id="addNewTestPerson" href="javascript:;" class="action-link">Add test person</a>
+        </div>
+    </div>
+    <br>&nbsp;<br>
+    <div class="panel" helpUrl="http://www.rogerthat.net/guide/broadcast-center/#Broadcast_message">
+        <h3>New broadcast</h3>
+        <div class="span-17 last">
+            <div id="row_warnings" style="display: none;">
+                <label>Warnings:</label>
+                <ul id="warnings"></ul>
+                <br>
+                <br>
+            </div>
+            <table>
+                <tr>
+                    <td width="130px">
+                        <label for="newBroadcastName">Name:</label>
+                    </td>
+                    <td>
+                        <input id="newBroadcastName" type="text" placeholder="Optional name or description" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="newBroadcastTag">Tag:</label>
+                    </td>
+                    <td>
+                        <input id="newBroadcastTag" type="text" placeholder="Optional tag" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="broadcastTypeSelect">Broadcast type:</label>
+                    </td>
+                    <td>
+                        <select id="broadcastTypeSelect">
+                            <option value="">[Select broadcast type]</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="broadcastFlowSelect">Message flow:</label>
+                    </td>
+                    <td>
+                        <select id="broadcastFlowSelect">
+                            <option value="">[Select message flow]</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <button id="testNewBroadcast">Send to test persons</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <br>&nbsp;<br>
+    <div class="panel">
+        <h3>Broadcasts</h3>
+        <div class="span-17 last">
+            <br>
+            <ol id="broadcastList">
+            </ol>
+        </div>
+    </div>
+    <div id="tmplBroadcastType" style="display: none"></div>
+    <div id="tmplTestPerson" style="display: none"></div>
+</div>
