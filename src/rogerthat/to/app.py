@@ -19,6 +19,7 @@ from add_1_monkey_patches import DEBUG
 from rogerthat.models import QRTemplate
 from rogerthat.models.properties.app import AutoConnectedService
 from rogerthat.models.properties.friend import FriendDetail
+from rogerthat.models.properties.oauth import OAuthSettings
 from rogerthat.to.beacon import BeaconRegionTO
 from rogerthat.utils.app import get_human_user_from_app_user
 from mcfw.properties import bool_property, unicode_property, long_property, typed_property, unicode_list_property, \
@@ -146,6 +147,7 @@ class AppUserListResultTO(object):
 class AppSettingsTO(object):
     wifi_only_downloads = bool_property('1')
     background_fetch_timestamps = long_list_property('2')
+    oauth = typed_property('3', OAuthSettings, False)
 
 
 class CreateAppRequestTO(object):

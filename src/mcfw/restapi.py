@@ -30,6 +30,11 @@ _exposed = dict()
 _precall_hooks = list()
 _postcall_hooks = list()
 
+
+class BadRequestResponse(Exception):
+    pass
+
+
 class InjectedFunctions(object):
 
     def __init__(self):
@@ -123,8 +128,11 @@ class GenericRESTRequestHandler(webapp2.RequestHandler):
             return
         f = _exposed[key]
         kwargs = dict(((name, self.ctype(type_, self.request.GET[name])) for name, type_ in f.meta["kwarg_types"].iteritems() if name in self.request.GET))
-        result = self.run(f, kwargs, kwargs)
         self.response.headers['Content-Type'] = 'text/json'
+        try:
+            result = self.run(f, kwargs, kwargs)
+        except BadRequestResponse as exception:
+            self.abort(400)
         self.response.out.write(json.dumps(result))
 
     def post(self):

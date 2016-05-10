@@ -167,7 +167,7 @@ def privatize(data, anonimize=False):
                     value = privatize(value, anonimize)
             elif value and key in ("message", "caption", "latitude", "longitude", "password", "qrcode", "icon",
                                    "avatar", "chunk", "static_flow", "staticFlow", "shareDescription", "app_data", "appData",
-                                   "userData", "profileData", "cursor", "content", "description"):
+                                   "userData", "profileData", "cursor", "content", "description", "secret"):
                 value = "*****" if isinstance(value, (str, unicode)) else "#####"
             elif anonimize and key in ("member", "email", "sender", "qualifiedIdentifier", "qualified_identifier", "user"):
                 value = hash_user_identifier(value)

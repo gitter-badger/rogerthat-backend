@@ -14,7 +14,6 @@
 # limitations under the License.
 #
 # @@license_version:1.1@@
-
 from mcfw.properties import long_property, unicode_property
 
 
@@ -79,3 +78,19 @@ class AccountTO(object):
 
     def to_dict(self):
         return dict(user=self.user, server=self.server, password=self.password, account=self.account)
+
+
+class OAuthInfoTO(object):
+    authorize_url = unicode_property('1')
+    scopes = unicode_property('2')
+    state = unicode_property('3')
+    client_id = unicode_property('4')
+
+    @classmethod
+    def create(cls, authorize_url, scopes, state, client_id):
+        to = cls()
+        to.authorize_url = authorize_url
+        to.scopes = scopes
+        to.state = state
+        to.client_id = client_id
+        return to

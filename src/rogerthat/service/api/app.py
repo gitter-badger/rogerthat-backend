@@ -184,7 +184,7 @@ def put_settings(settings, app_id=None):
         app_id = get_default_service_identity(service_user).app_id
 
     validate_app_admin(service_user, [app_id])
-    bizz_app.put_settings(service_user, app_id, settings)
+    bizz_app.put_settings(app_id, settings)
 
 
 @service_api(function=u'app.put_loyalty_user')

@@ -14,16 +14,17 @@
 # limitations under the License.
 #
 # @@license_version:1.1@@
-
-from rogerthat.bizz.registration import register_mobile
-from rogerthat.rpc import users
-from rogerthat.to.registration import AccountTO
-from mcfw.restapi import rest
-from mcfw.rpc import returns, arguments
+from mcfw.properties import unicode_property, long_property, typed_property
 
 
-@rest("/mobi/rest/devices/mobiles/register", "post")
-@returns(AccountTO)
-@arguments()
-def rest_register_mobile():
-    return register_mobile(users.get_current_user())
+class OauthUserInfoTO(object):
+    username = unicode_property('1')
+
+
+class OauthAccessTokenTO(object):
+    access_token = unicode_property('1')
+    expires_in = long_property('2')
+    refresh_token = unicode_property('3')
+    token_type = unicode_property('4')
+    scopes = unicode_property('5')
+    info = typed_property('6', OauthUserInfoTO)

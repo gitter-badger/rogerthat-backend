@@ -16,23 +16,33 @@
 # @@license_version:1.1@@
 
 import base64
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
 import json
 import logging
 import os
 import random
 import re
 import uuid
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
+import webapp2
+from google.appengine.api import xmpp
+from google.appengine.ext import webapp, db, deferred
+from google.appengine.ext.webapp import template
+
+from mcfw.consts import MISSING
+from mcfw.rpc import parse_complex_value, serialize_complex_value
+from mcfw.utils import chunks
 from rogerthat import utils
 from rogerthat.bizz.friends import get_service_profile_via_user_code, REGISTRATION_ORIGIN_QR, ACCEPT_ID, \
     ACCEPT_AND_CONNECT_ID
 from rogerthat.bizz.i18n import get_translator
-from rogerthat.bizz.profile import get_profile_for_facebook_user, FailedToBuildFacebookProfileException
-from rogerthat.bizz.registration import register_mobile
+from rogerthat.bizz.oauth import get_oauth_access_token
+from rogerthat.bizz.profile import get_profile_for_facebook_user, FailedToBuildFacebookProfileException, \
+    create_user_profile
+from rogerthat.bizz.registration import register_mobile, log_installation_step
 from rogerthat.dal import parent_key, put_and_invalidate_cache
-from rogerthat.dal.app import get_app_by_id
+from rogerthat.dal.app import get_app_by_id, get_app_settings
 from rogerthat.dal.beacon import get_beacon
 from rogerthat.dal.friend import get_friends_map
 from rogerthat.dal.mobile import get_user_active_mobiles_count
@@ -50,7 +60,7 @@ from rogerthat.settings import get_server_settings
 from rogerthat.templates import render
 from rogerthat.to.beacon import GetBeaconRegionsResponseTO
 from rogerthat.to.location import BeaconDiscoveredRequestTO
-from rogerthat.to.registration import MobileInfoTO, DeprecatedMobileInfoTO
+from rogerthat.to.registration import MobileInfoTO, DeprecatedMobileInfoTO, OAuthInfoTO
 from rogerthat.to.service import UserDetailsTO
 from rogerthat.translations import localize, DEFAULT_LANGUAGE
 from rogerthat.utils import get_country_code_by_ipaddress, countries, now, azzert, send_mail_via_mime, bizz_check
@@ -60,11 +70,6 @@ from rogerthat.utils.crypto import sha256_hex
 from rogerthat.utils.languages import get_iso_lang
 from rogerthat.utils.service import remove_slash_default, create_service_identity_user, \
     get_identity_from_service_identity_user
-from google.appengine.api import xmpp
-from google.appengine.ext import webapp, db, deferred
-from google.appengine.ext.webapp import template
-from mcfw.rpc import parse_complex_value, serialize_complex_value
-from mcfw.utils import chunks
 
 
 class RegisterMobileViaGoogleOrFacebookHandler(webapp.RequestHandler):
@@ -769,3 +774,93 @@ class InitServiceAppHandler(webapp.RequestHandler):
                                                          ysaaa=True)
         self.response.out.write(json.dumps(dict(result="success", account=account.to_dict(),
                                                 age_and_gender_set=age_and_gender_set)))
+
+
+class GetRegistrationOauthInfoHandler(webapp2.RequestHandler):
+    def post(self):
+        version = self.request.get("version", None)
+        install_id = self.request.get("install_id", None)
+        registration_time = self.request.get("registration_time", None)
+        device_id = self.request.get("device_id", None)
+        registration_id = self.request.get("registration_id", None)
+        signature = self.request.get("signature", None)
+        app_id = self.request.get("app_id", App.APP_ID_ROGERTHAT)
+
+        server_settings = get_server_settings()
+
+        email_sig = base64.b64decode(server_settings.registrationMainSignature.encode('utf8'))
+        calculated_signature = sha256_hex(version + " " + install_id + " " + registration_time + " " + device_id + " " +
+                                          registration_id + " " + 'oauth' + email_sig)
+
+        if signature.upper() != calculated_signature.upper():
+            logging.error("Invalid request signature.")
+            self.response.set_status(400)
+            return
+
+        log_installation_step(version, registration_id, install_id, 'Oauth registration started')
+        oauth = get_app_settings(app_id).oauth
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps(serialize_complex_value(OAuthInfoTO.create(oauth.authorize_url, oauth.scopes,
+                                                                                      install_id, oauth.client_id),
+                                                                   OAuthInfoTO, False)))
+
+
+class OauthRegistrationHandler(webapp2.RequestHandler):
+    def post(self):
+        version = self.request.get("version", None)
+        install_id = self.request.get("install_id", None)
+        registration_time = self.request.get("registration_time", None)
+        device_id = self.request.get("device_id", None)
+        registration_id = self.request.get("registration_id", None)
+        request_signature = self.request.get("signature", None)
+        app_id = self.request.get("app_id", App.APP_ID_ROGERTHAT)
+        code = self.request.get('code')
+        use_xmpp_kick_channel = self.request.get('use_xmpp_kick', 'true') == 'true'
+        GCM_registration_id = self.request.get('GCM_registration_id', '')
+        language = self.request.get('language', None)
+        email_sig = base64.b64decode(get_server_settings().registrationMainSignature.encode('utf8'))
+        calculated_signature = sha256_hex(version + " " + install_id + " " + registration_time + " " + device_id + " " +
+                                          registration_id + " " + code + email_sig)
+        if request_signature.upper() != calculated_signature.upper():
+            self.abort(400)
+            return
+
+        self.response.headers['Content-Type'] = 'application/json'
+        try:
+            oauth = get_app_settings(app_id).oauth
+            access_token = get_oauth_access_token(oauth.token_url, oauth.client_id, oauth.secret, code,
+                                                  'oauth-%s://x-callback-url' % app_id, install_id)
+            # todo: store access token
+            if access_token.info is not MISSING and access_token.info.username is not MISSING:
+                username = access_token.info.username
+            else:
+                # todo: get oauth identity
+                # username = get_oauth_identity(oauth.identity_url, access_token, variable_type)
+                raise NotImplementedError()
+            email = u'%s@%s' % (username, oauth.domain)
+            app_user = create_app_user(users.User(email), app_id)
+            profile = get_user_profile(app_user, False)
+            if not profile:
+                profile = create_user_profile(app_user, username)
+            registration = Registration(parent=parent_key(app_user), key_name=registration_id)
+            registration.put()
+            installation = log_installation_step(version, registration_id, install_id, 'Oauth registration authorized',
+                                                 registration)
+            registration.timestamp = int(registration_time)
+            registration.device_id = device_id
+            registration.pin = -1
+            registration.timesleft = -1
+            registration.installation = installation
+            registration.language = language
+            registration.put()
+            human_user = get_human_user_from_app_user(app_user)
+            account, registration.mobile, age_and_gender_set = register_mobile(human_user, app_id=app_id,
+                                                                               use_xmpp_kick_channel=use_xmpp_kick_channel,
+                                                                               GCM_registration_id=GCM_registration_id,
+                                                                               language=registration.language)
+            response = dict(account=account.to_dict(), email=human_user.email(), age_and_gender_set=age_and_gender_set)
+        except BusinessException as exception:
+            self.response.out.write(json.dumps(dict(error=exception.message)))
+            self.abort(500)
+            return
+        self.response.out.write(json.dumps(response))

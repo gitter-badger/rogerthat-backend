@@ -34,6 +34,7 @@ from rogerthat.models.properties.friend import FriendDetailsProperty
 from rogerthat.models.properties.keyvalue import KeyValueProperty
 from rogerthat.models.properties.messaging import ButtonsProperty, MemberStatusesProperty, JsFlowDefinitionsProperty, \
     AttachmentsProperty, SpecializedList
+from rogerthat.models.properties.oauth import OAuthSettingsProperty
 from rogerthat.models.properties.profiles import MobileDetailsProperty
 from rogerthat.models.utils import get_meta, add_meta
 from rogerthat.rpc import users
@@ -49,6 +50,7 @@ from google.appengine.ext.db import polymodel
 from mcfw.cache import CachedModelMixIn, invalidate_cache
 from mcfw.serialization import deserializer, ds_model, register, s_model, s_long, ds_long, serializer, \
     model_deserializer
+
 
 class ArchivedModel(object):
 
@@ -80,6 +82,7 @@ class ArchivedModel(object):
 class AppSettings(CachedModelMixIn, db.Model):
     wifi_only_downloads = db.BooleanProperty(indexed=False, default=False)
     background_fetch_timestamps = db.ListProperty(int, indexed=False)  # seconds since midnight, UTC
+    oauth = OAuthSettingsProperty()
 
     @property
     def app_id(self):

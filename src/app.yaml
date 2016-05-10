@@ -162,9 +162,6 @@ handlers:
 - url: /mobi/rest/mdp/.*
   script: rogerthat_unauthenticated.app
 
-- url: /unauthenticated/mobi/logging/exception
-  script: rogerthat_unauthenticated.app
-
 - url: /mobi/rest/.*
   script: rogerthat_rest.app
   secure: always

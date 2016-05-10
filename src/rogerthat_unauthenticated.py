@@ -17,6 +17,7 @@
 
 from add_1_monkey_patches import dummy2
 from add_2_zip_imports import dummy
+from mcfw.restapi import rest_functions
 from rogerthat.pages.admin.apps import UploadAppAppleCertsHandler
 from rogerthat.pages.admin.client_distro import GetClientDistroPackageHandler
 from rogerthat.pages.app import AppUrlHandler
@@ -36,7 +37,8 @@ from rogerthat.pages.profile import GetAvatarHandler, GetCachedAvatarHandler
 from rogerthat.pages.qrinstall import QRInstallRequestHandler
 from rogerthat.pages.register_mobile import RegisterMobileViaGoogleOrFacebookHandler, FinishRegistrationHandler, \
     InitiateRegistrationViaEmailVerificationHandler, VerifyEmailWithPinHandler, RegisterInstallIdentifierHandler, \
-    RegisterMobileViaFacebookHandler, LogRegistrationStepHandler, InitServiceAppHandler, RegisterMobileViaQRHandler
+    RegisterMobileViaFacebookHandler, LogRegistrationStepHandler, InitServiceAppHandler, RegisterMobileViaQRHandler, \
+    GetRegistrationOauthInfoHandler, OauthRegistrationHandler
 from rogerthat.pages.service_disabled import ServiceDisabledHandler
 from rogerthat.pages.service_interact import ServiceInteractRequestHandler, ServiceInteractQRCodeRequestHandler
 from rogerthat.pages.service_map import ServiceMapHandler
@@ -51,8 +53,6 @@ from rogerthat.rpc.http import JSONRPCRequestHandler
 from rogerthat.rpc.service import ServiceApiHandler, register_service_api_calls, CallbackResponseReceiver
 from rogerthat.service.api import app, friends, messaging, qr, XMLSchemaHandler, system
 from rogerthat.wsgi import RogerthatWSGIApplication
-from mcfw.restapi import rest_functions
-
 
 dummy2()
 dummy()
@@ -72,6 +72,8 @@ handlers = [
     ('/unauthenticated/mobi/registration/finish', FinishRegistrationHandler),
     ('/unauthenticated/mobi/registration/log_registration_step', LogRegistrationStepHandler),
     ('/unauthenticated/mobi/registration/init_service_app', InitServiceAppHandler),
+    ('/unauthenticated/mobi/registration/oauth/info', GetRegistrationOauthInfoHandler),
+    ('/unauthenticated/mobi/registration/oauth/registered', OauthRegistrationHandler),
     ('/unauthenticated/mobi/distros/get/(.*)', GetClientDistroPackageHandler),
     ('/unauthenticated/mobi/cached/avatar/(.*)', GetCachedAvatarHandler),
     ('/unauthenticated/mobi/avatar/(.*)', GetAvatarHandler),

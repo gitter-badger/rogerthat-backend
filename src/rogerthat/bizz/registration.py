@@ -45,7 +45,7 @@ from rogerthat.dal.profile import get_user_profile_key, get_user_profile, get_de
 from rogerthat.dal.registration import get_registration_by_mobile
 from rogerthat.dal.service import get_service_identity
 from rogerthat.models import MobileSettings, InstallationLog, Message, UserInteraction, ProfilePointer, ActivationLog, \
-    App, AppSettings, ServiceIdentity
+    App, AppSettings, ServiceIdentity, Installation, Registration
 from rogerthat.models.properties.profiles import MobileDetails
 from rogerthat.rpc import users
 from rogerthat.rpc.models import Mobile
@@ -366,6 +366,18 @@ def _finishup_mobile_registration_step2(mobile_key, invitor_code, invitor_secret
 
     xg_on = db.create_transaction_options(xg=True)
     db.run_in_transaction_options(xg_on, trans)
+
+
+@returns(Installation)
+@arguments(version=unicode, install_id=unicode, description=unicode, app_id=unicode, registration=Registration)
+def log_installation_step(version, install_id, description, app_id, registration=None):
+    installation = Installation.get_by_key_name(install_id)
+    if not installation:
+        installation = Installation(key_name=install_id, version=version, timestamp=now(), app_id=app_id)
+        installation.put()
+    InstallationLog(version=version, description=description, parent=installation, timestamp=now(),
+                    registration=registration).put()
+    return installation
 
 
 def _finishup_mobile_registration(mobile, accounts, invitor_code, invitor_secret, ipaddress, ms_key):

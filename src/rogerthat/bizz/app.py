@@ -18,6 +18,11 @@
 import logging
 import re
 
+from google.appengine.ext import db, deferred
+
+from mcfw.consts import MISSING
+from mcfw.properties import get_members
+from mcfw.rpc import returns, arguments
 from rogerthat.bizz.job import run_job, hookup_with_default_services
 from rogerthat.bizz.service import ServiceWithEmailDoesNotExistsException
 from rogerthat.bizz.system import update_settings_response_handler
@@ -28,6 +33,7 @@ from rogerthat.dal.profile import get_user_profile_keys_by_app_id, get_user_prof
 from rogerthat.dal.service import get_service_identities_by_service_identity_users
 from rogerthat.models import App, AppSettings, UserProfile
 from rogerthat.models.properties.app import AutoConnectedService
+from rogerthat.models.properties.oauth import OAuthSettings
 from rogerthat.rpc import users
 from rogerthat.rpc.models import Mobile
 from rogerthat.rpc.rpc import logError
@@ -35,9 +41,6 @@ from rogerthat.rpc.service import ServiceApiException, BusinessException
 from rogerthat.to.app import AppSettingsTO
 from rogerthat.to.system import UpdateSettingsRequestTO, SettingsTO
 from rogerthat.utils.service import add_slash_default
-from google.appengine.ext import db, deferred
-from mcfw.consts import MISSING
-from mcfw.rpc import returns, arguments
 
 
 class AppDoesNotExistException(ServiceApiException):
@@ -145,14 +148,16 @@ def del_user_regexes(service_user, app_id, regexes):
 
 
 @returns(AppSettings)
-@arguments(service_user=users.User, app_id=unicode, settings=AppSettingsTO)
-def put_settings(service_user, app_id, settings):
+@arguments(app_id=unicode, settings=AppSettingsTO)
+def put_settings(app_id, settings):
     def trans():
         updated = False
+        update_mobiles = False
         app_settings = get_app_settings(app_id)
         if not app_settings:
             app_settings = AppSettings(key=AppSettings.create_key(app_id))
             updated = True
+            update_mobiles = True
 
         if settings.wifi_only_downloads is not MISSING \
                 and app_settings.wifi_only_downloads != settings.wifi_only_downloads:
@@ -163,9 +168,21 @@ def put_settings(service_user, app_id, settings):
                 and app_settings.background_fetch_timestamps != settings.background_fetch_timestamps:
             app_settings.background_fetch_timestamps = settings.background_fetch_timestamps
             updated = True
+            update_mobiles = True
+
+        if settings.oauth is not MISSING:
+            if not app_settings.oauth:
+                app_settings.oauth = OAuthSettings()
+            _, simple_properties = get_members(OAuthSettings)
+            for prop, _ in simple_properties:
+                updated_property = getattr(settings.oauth, prop)
+                if updated_property is not MISSING and getattr(app_settings.oauth, prop) != updated_property:
+                    setattr(app_settings.oauth, prop, updated_property)
+                    updated = True
 
         if updated:
             app_settings.put()
+        if update_mobiles:
             deferred.defer(_app_settings_updated, app_id, _transactional=True)
 
         return app_settings
@@ -178,7 +195,6 @@ def put_settings(service_user, app_id, settings):
 def _app_settings_updated(app_id):
     run_job(get_user_profiles_by_app_id, [app_id],
             push_app_settings_to_user, [app_id])
-
 
 @returns()
 @arguments(user_profile=UserProfile, app_id=unicode)
