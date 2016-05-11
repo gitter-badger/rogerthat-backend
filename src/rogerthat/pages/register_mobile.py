@@ -289,7 +289,7 @@ class InitiateRegistrationViaEmailVerificationHandler(webapp.RequestHandler):
                 server_settings = get_server_settings()
                 for pin, static_email in chunks(server_settings.staticPinCodes, 2):
                     if email == static_email and len(pin) == 4:
-                        registration.pin = pin
+                        registration.pin = int(pin)
                         pin_str = unicode(registration.pin).rjust(4, '0')
                         utils.send_mail(server_settings.dashboardEmail,
                                         server_settings.supportWorkers,
